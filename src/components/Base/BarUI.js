@@ -17,36 +17,53 @@ import { useEffect, useState } from "react";
 //   exited: { opacity: 1, backgroundColor: gray },
 // };
 
-const Singlebar = ({ height, color, justChanged }) => {
-  return justChanged ? (
-    <div
-      style={{
-        width: 6,
-        height: height,
-        backgroundColor: color,
-        marginRight: 4,
-        borderRadius: 2,
-        transition: "all 1s ease",
-        WebkitTransition: "all 1s ease",
-        MozTransition: "all 1s ease",
-      }}
-    ></div>
-  ) : (
-    <div
-      style={{
-        width: 6,
-        height: height,
-        backgroundColor: color,
-        marginRight: 4,
-        borderRadius: 2,
-      }}
-    ></div>
+const Singlebar = ({
+  height,
+  color,
+  justChanged,
+  index,
+  setClickMusicLocation,
+}) => {
+  return (
+    <div onClick={() => setClickMusicLocation(index)}>
+      {justChanged ? (
+        <div
+          style={{
+            width: 6,
+            height: height,
+            backgroundColor: color,
+            marginRight: 1.5,
+            marginLeft: 1.5,
+            borderRadius: 2,
+            transition: "all 1s ease",
+            WebkitTransition: "all 1s ease",
+            MozTransition: "all 1s ease",
+          }}
+        ></div>
+      ) : (
+        <div
+          style={{
+            width: 6,
+            height: height,
+            backgroundColor: color,
+            marginRight: 1.5,
+            marginLeft: 1.5,
+            borderRadius: 2,
+          }}
+        ></div>
+      )}
+    </div>
   );
 };
 
-const BarUI = ({ length, secondsInBars }) => {
-  const heights = [40, 60, 55, 45];
-  console.log(secondsInBars);
+const BarUI = ({
+  length,
+  secondsInBars,
+  designHeightsArray,
+  setClickMusicLocation,
+}) => {
+  const heights = [25, 30, 35, 40, 45, 50, 60, 65, 70, 75];
+  // console.log(secondsInBars);
   var chooseColor = gray;
   // const [inProp, setInProp] = useState(false);
 
@@ -57,10 +74,11 @@ const BarUI = ({ length, secondsInBars }) => {
         display: "flex",
         height: 60,
         alignItems: "center",
+        // border: "2px solid black",
       }}
     >
       {[...Array(length)].map((val, ind) => {
-        console.log(ind);
+        // console.log(ind);
         // console.log(val);
         if (ind < secondsInBars) {
           chooseColor = purple;
@@ -70,9 +88,11 @@ const BarUI = ({ length, secondsInBars }) => {
         return (
           <Singlebar
             key={ind}
-            height={heights[ind % 4]}
+            height={heights[designHeightsArray[ind]]}
             color={chooseColor}
             justChanged={ind == secondsInBars - 1}
+            index={ind}
+            setClickMusicLocation={setClickMusicLocation}
             // inProp={inProp}
           ></Singlebar>
         );

@@ -1,0 +1,25 @@
+.frame {
+    overflow-y: auto;
+    /* border: 1px solid black; */
+    height: 500;
+    width: 100%;
+    line-height: 1em;
+}
+
+.frame::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.frame::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+/* .frame::-webkit-scrollbar:horizontal {
+    height: 11px;
+} */
+
+.frame::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: 0px solid rgba(165, 74, 197, 0.75);
+    background-color: rgba(0, 0, 0, .5);
+}

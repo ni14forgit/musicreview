@@ -8,8 +8,8 @@ import useInterval from "../metafunctions/useInterval";
 import nish from "../nish.jpg";
 import ProfileCommenter from "./Small/ProfileCommenter";
 import TextButton from "./Useful/TextButton";
-import CommentBox from "./Useful/CommentBox";
-import CommentsList from "./Useful/CommentsList";
+import CommentBox from "./Small/CommentBox";
+import CommentsList from "./Small/CommentsList";
 import skrollTop from "skrolltop";
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]

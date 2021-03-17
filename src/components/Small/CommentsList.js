@@ -1,6 +1,6 @@
 import ProfileCommenter from "../Small/ProfileCommenter";
 import nish from "../../nish.jpg";
-import TextButton from "./TextButton";
+import TextButton from "../Useful/TextButton";
 // import { createRef } from "react";
 // import skrollTop from "skrolltop";
 // import "./scroll";

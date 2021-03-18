@@ -1,10 +1,10 @@
-import { background_purple } from "../constants";
-import InvertedTextButton from "./Useful/InvertedTextButton";
-import Text from "./Useful/Text";
+import { background_purple } from "../../constants";
+import InvertedTextButton from "../Useful/InvertedTextButton";
+import Text from "../Useful/Text";
 import { useState, useEffect } from "react";
-import FileUploader from "../metafunctions/FileUploader";
-import FakeBarUI from "../components/Small/FakeBarUI";
-import ToggleSelectOption from "./Useful/ToggleSelectOption";
+import FileUploader from "../../metafunctions/FileUploader";
+import FakeBarUI from "../Small/FakeBarUI";
+import ToggleSelectOption from "../Useful/ToggleSelectOption";
 
 const listOfGenres = [
   "lo-fi",
@@ -22,7 +22,7 @@ const listOfGenres = [
   "lo-fi",
 ];
 
-const AddQuestions = () => {
+const SubmitMusic = () => {
   var starterArray = new Array(listOfGenres.length);
   const chooseSong = () => {};
   const [file, setFile] = useState(null);
@@ -76,21 +76,20 @@ const AddQuestions = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "100px",
+          marginTop: "60px",
         }}
       >
         {file ? (
-          <div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "left",
-              }}
-            >
-              <Text text={file.name} size={12} color="white" />
-              <FakeBarUI length={40} />
-            </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "left",
+              // border: "2px solid black",
+            }}
+          >
+            <Text text={file.name} size={12} color="white" />
+            <FakeBarUI length={40} />
           </div>
         ) : (
           <Text
@@ -149,4 +148,4 @@ const AddQuestions = () => {
   );
 };
 
-export default AddQuestions;
+export default SubmitMusic;

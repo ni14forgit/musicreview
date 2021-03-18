@@ -1,8 +1,8 @@
 // import {useState} from "react"
 import { purple, white } from "../../constants";
 const ToggleSelectOption = ({ selected, text, onClick }) => {
-  const horizontalpaddingHalf = 10;
-  const verticaalpaddingHalf = 3;
+  const horizontalpaddingHalf = 12;
+  const verticaalpaddingHalf = 6;
 
   return (
     <div>
@@ -20,6 +20,7 @@ const ToggleSelectOption = ({ selected, text, onClick }) => {
             paddingBottom: verticaalpaddingHalf,
             border: "1px solid white",
             color: purple,
+            fontWeight: "bold",
             // fontWeight: fontWeight,
             outline: 0,
           }}
@@ -39,8 +40,9 @@ const ToggleSelectOption = ({ selected, text, onClick }) => {
             paddingLeft: horizontalpaddingHalf,
             paddingTop: verticaalpaddingHalf,
             paddingBottom: verticaalpaddingHalf,
-            border: "1px solid #a54ac5",
+            border: "1px solid white",
             color: white,
+            fontWeight: "bold",
             // fontWeight: fontWeight,
             outline: 0,
           }}

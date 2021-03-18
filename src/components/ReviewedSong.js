@@ -9,7 +9,7 @@ import nish from "../nish.jpg";
 import ProfileCommenter from "./Small/ProfileCommenter";
 import TextButton from "./Useful/TextButton";
 import CommentBox from "./Small/CommentBox";
-import CommentsList from "./Small/ReviewCommentsList";
+import StaticCommentsList from "./Small/StaticCommentsList";
 import skrollTop from "skrolltop";
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]
@@ -20,7 +20,7 @@ const getAudioContext = () => {
   return audioContent;
 };
 
-function Player() {
+function ReviewedSong({ listOfComments }) {
   let audioContext;
   //   let durationOfSong = 10;
   const [bufferSource, setBufferSource] = useState(null);
@@ -31,8 +31,8 @@ function Player() {
   const [valOfBar, setValOfBar] = useState(2);
   const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
-  const [currentCommentValue, setCurrentCommentValue] = useState("");
-  const [listOfComments, setListOfComments] = useState([]);
+  //   const [currentCommentValue, setCurrentCommentValue] = useState("");
+  //   const [listOfComments, setListOfComments] = useState([]);
 
   // const uncleanComments = [{ timestamp: 40, id: 1, photo: nish }];
 
@@ -53,6 +53,7 @@ function Player() {
     console.log(Math.floor(audioBuffer.duration) / numberOfBars);
 
     setBufferSource(audioBuffer);
+    console.log("review set source!");
   }
 
   const convertTime = (seconds) => {
@@ -105,10 +106,8 @@ function Player() {
   };
 
   useEffect(() => {
-    getSong();
+    getSong().then(setLoading(false));
     createDesignArray();
-
-    setLoading(false);
   }, []);
 
   // useEffect(() => {
@@ -165,58 +164,9 @@ function Player() {
   // };
   // onKeyDown={handleSpacePauseResume}
 
-  // const convertCommentsToBarStamped = (timestampedComments) => {
-  //   let mapOfComments = new Map();
-  //   for (var i = 0; i < timestampedComments.length; i++) {
-  //     var index = Math.floor(timestampedComments[i].timestamp / valOfBar);
-  //     if (mapOfComments.has(index)) {
-  //       var currentCommentsAtIndex = mapOfComments.get(index);
-  //       currentCommentsAtIndex.push({
-  //         photo: timestampedComments[i].photo,
-  //         ind: i,
-  //       });
-  //       mapOfComments.set(index, currentCommentsAtIndex);
-  //     } else {
-  //       var newList = [];
-  //       newList.push({ photo: timestampedComments[i].photo, ind: i });
-  //       mapOfComments.set(index, newList);
-  //     }
-  //   }
-  //   console.log(mapOfComments);
-  //   return mapOfComments;
-  // };
-
-  const submitComment = () => {
-    if (currentCommentValue == "") {
-      return;
-    }
-
-    var updatedArray = [
-      ...listOfComments,
-      {
-        comment: currentCommentValue,
-        timestamp: timeOfSong,
-        uitimestamp: convertTime(timeOfSong),
-        photo: nish,
-      },
-    ];
-
-    updatedArray.sort((a, b) =>
-      a.timestamp < b.timestamp
-        ? -1
-        : a.timestamp === b.timestamp
-        ? true
-          ? 1
-          : -1
-        : 1
-    );
-    setListOfComments(updatedArray);
-    setCurrentCommentValue("");
-  };
-
-  const deleteComment = (ind) => {
-    setListOfComments(listOfComments.filter((comment, index) => index !== ind));
-  };
+  //   const deleteComment = (ind) => {
+  //     setListOfComments(listOfComments.filter((comment, index) => index !== ind));
+  //   };
 
   function getStyle(element) {
     if (typeof getComputedStyle !== "undefined") {
@@ -309,18 +259,11 @@ function Player() {
           );
         })}
       </div>
-      <div style={{ display: "flex", flexDirection: "horizontal" }}>
-        <CommentBox
-          currentValue={currentCommentValue}
-          setCurrentValue={setCurrentCommentValue}
-        />
-        <TextButton text="comment" onClick={submitComment} />
-      </div>
       <div style={{ border: "0px solid black", maxHeight: "100px" }}>
-        <CommentsList comments={listOfComments} deleteComment={deleteComment} />
+        <StaticCommentsList comments={listOfComments} />
       </div>
     </div>
   );
 }
 
-export default Player;
+export default ReviewedSong;

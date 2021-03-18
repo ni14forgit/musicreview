@@ -1,4 +1,4 @@
-import ProfileCommenter from "../Small/ProfileCommenter";
+import ProfileCommenter from "./ProfileCommenter";
 import nish from "../../nish.jpg";
 import TextButton from "../Useful/TextButton";
 // import { createRef } from "react";

@@ -1,7 +1,12 @@
 // import { purple, white } from "../../constants";
-const Text = ({ text, color, fontsize, bold = "normal" }) => {
+const Text = ({ text, color, fontsize, bold = "normal", onClick }) => {
   return (
-    <p style={{ fontSize: fontsize, color: color, fontWeight: bold }}>{text}</p>
+    <div
+      onClick={onClick}
+      style={{ fontSize: fontsize, color: color, fontWeight: bold }}
+    >
+      {text}
+    </div>
   );
 };
 

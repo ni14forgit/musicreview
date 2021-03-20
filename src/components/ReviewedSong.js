@@ -11,6 +11,7 @@ import TextButton from "./Useful/TextButton";
 import CommentBox from "./Small/CommentBox";
 import StaticCommentsList from "./Small/StaticCommentsList";
 import skrollTop from "skrolltop";
+import ToggleCommenter from "./Small/ToggleCommenter";
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]
 
@@ -29,8 +30,11 @@ function ReviewedSong({ listOfComments }) {
   const [timeOfSong, setTimeOfSong] = useState(0);
   const [designSongHeight, setDesignSongHeight] = useState([]);
   const [valOfBar, setValOfBar] = useState(2);
-  const [comments, setComments] = useState({});
+  const [commentsAfterFiltering, setCommentsAfterFiltering] = useState(
+    listOfComments
+  );
   const [loading, setLoading] = useState(true);
+  const [commentersSelected, setCommentersSelected] = useState([true, true]);
   //   const [currentCommentValue, setCurrentCommentValue] = useState("");
   //   const [listOfComments, setListOfComments] = useState([]);
 
@@ -175,6 +179,27 @@ function ReviewedSong({ listOfComments }) {
     return element.currentStyle; // Old IE
   }
 
+  const toggleCommenter = (ind) => {
+    var copyOfCommenters = [...commentersSelected];
+
+    console.log(copyOfCommenters);
+
+    for (var i = 0; i < commentersSelected.length; i++) {
+      if (ind == i) {
+        copyOfCommenters[i] = !copyOfCommenters[i];
+        break;
+      }
+    }
+
+    if (!copyOfCommenters[0]) {
+      setCommentsAfterFiltering([]);
+    } else {
+      setCommentsAfterFiltering(listOfComments);
+    }
+
+    setCommentersSelected(copyOfCommenters);
+  };
+
   const showComment = (id) => {
     var height = 0;
     for (var i = 0; i < id; i++) {
@@ -203,64 +228,92 @@ function ReviewedSong({ listOfComments }) {
         paddingBottom: 40,
         paddingLeft: 15,
         paddingRight: 15,
-        // minWidth: "200px",
-        width: "600px",
+        width: "800px",
       }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "horizontal",
-          marginBottom: "-30px",
+          justifyContent: "space-between",
         }}
       >
-        <div style={{ marginRight: "10px" }}>
-          <h2 style={{ color: white }}>firsttake.mp4</h2>
-        </div>
-        <TextButton
-          text={isPlaying ? "pause" : "play"}
-          onClick={isPlaying ? pauseSong : playSong}
-          fontWeight="bold"
-        />
-      </div>
-      <p style={{ color: "white" }}>{convertTime(timeOfSong)}</p>
-
-      <BarUI
-        length={numberOfBars}
-        secondsInBars={Math.floor(timeOfSong / valOfBar)}
-        designHeightsArray={designSongHeight}
-        setClickMusicLocation={setMusicLocationClick}
-        // comments={comments}
-      />
-      <div
-        style={{
-          marginTop: 20,
-          marginBottom: 60,
-          position: "relative",
-          // border: "2px solid black",
-        }}
-      >
-        {listOfComments.map((val, ind) => {
-          return (
-            <div
-              style={{
-                position: "absolute",
-                left: (val.timestamp * (40 * 12)) / bufferSource.duration - 10,
-              }}
-            >
-              <ProfileCommenter
-                // showComment={showComment}
-                ind={ind}
-                profile_source={val.photo}
-                size={20}
-                showComment={showComment}
-              />
+        <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "horizontal",
+              marginBottom: "-30px",
+            }}
+          >
+            <div style={{ marginRight: "10px" }}>
+              <h2 style={{ color: white }}>firsttake.mp4</h2>
             </div>
-          );
-        })}
+            <TextButton
+              text={isPlaying ? "pause" : "play"}
+              onClick={isPlaying ? pauseSong : playSong}
+              fontWeight="bold"
+            />
+          </div>
+          <p style={{ color: "white" }}>{convertTime(timeOfSong)}</p>
+          <BarUI
+            length={numberOfBars}
+            secondsInBars={Math.floor(timeOfSong / valOfBar)}
+            designHeightsArray={designSongHeight}
+            setClickMusicLocation={setMusicLocationClick}
+            // comments={comments}
+          />
+          <div
+            style={{
+              marginTop: 20,
+              marginBottom: 60,
+              position: "relative",
+              // border: "2px solid black",
+            }}
+          >
+            {bufferSource
+              ? commentsAfterFiltering.map((val, ind) => {
+                  return (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left:
+                          (val.timestamp * (40 * 12)) / bufferSource.duration -
+                          10,
+                      }}
+                    >
+                      <ProfileCommenter
+                        // showComment={showComment}
+                        ind={ind}
+                        profile_source={val.photo}
+                        size={20}
+                        showComment={showComment}
+                      />
+                    </div>
+                  );
+                })
+              : null}
+          </div>
+        </div>
+
+        <div
+          style={{ display: "flex", flexDirection: "column", marginTop: 30 }}
+        >
+          {commentersSelected.map((val, ind) => {
+            return (
+              <div style={{ marginBottom: 8 }}>
+                <ToggleCommenter
+                  photo={nish}
+                  onChange={() => toggleCommenter(ind)}
+                  selected={commentersSelected[ind]}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div style={{ border: "0px solid black", maxHeight: "100px" }}>
-        <StaticCommentsList comments={listOfComments} />
+        <StaticCommentsList comments={commentsAfterFiltering} />
       </div>
     </div>
   );

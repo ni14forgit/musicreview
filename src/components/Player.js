@@ -39,7 +39,7 @@ function Player() {
   async function getSong() {
     const myurl =
       // "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3";
-      Eric;
+      James;
     const response = await axios.get(myurl, {
       responseType: "arraybuffer",
     });
@@ -126,6 +126,7 @@ function Player() {
       if (bufferSource) {
         if (timeOfSong < bufferSource.duration) {
           setTimeOfSong((timeOfSong) => timeOfSong + 1);
+          // setTimeOfSong(timeOfSong + 1);
         }
       } else {
         setTimeOfSong((timeOfSong) => timeOfSong + 1);
@@ -254,7 +255,7 @@ function Player() {
         paddingLeft: 15,
         paddingRight: 15,
         // minWidth: "200px",
-        width: "600px",
+        // width: "600px",
       }}
     >
       <div

@@ -96,7 +96,9 @@ function ReviewedSong({ listOfComments }) {
     // if (!isPlaying) {
     //   return;
     // }
-    playerSource.stop();
+    if (playerSource) {
+      playerSource.stop();
+    }
     // setPausedAt(Date.now() - startedAt);
     setIsPlaying(false);
   };
@@ -112,6 +114,9 @@ function ReviewedSong({ listOfComments }) {
   useEffect(() => {
     getSong().then(setLoading(false));
     createDesignArray();
+    return () => {
+      pauseSong();
+    };
   }, []);
 
   // useEffect(() => {

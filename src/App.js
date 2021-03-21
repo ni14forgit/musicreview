@@ -12,6 +12,11 @@ import Profile from "./components/Pages/Profile";
 import Feedback from "./components/Pages/Feedback";
 import YourSongReviewed from "./components/Pages/YourSongReviewed";
 import OtherArtistsSong from "./components/Pages/OtherArtistsSong";
+// import OtherArtistsSong from "./components/Pages/MusicToReview";
+import { useHistory, Route } from "react-router-dom";
+import { useEffect } from "react";
+import MusicToReview from "./components/Pages/MusicToReview";
+import Submit from "./components/Pages/Submit";
 
 const comments = [
   {
@@ -22,27 +27,38 @@ const comments = [
   },
 ];
 function App() {
+  const history = useHistory();
+  useEffect(() => {
+    // history.replace("/home");
+    history.replace("/submit");
+  });
   return (
-    // <div style={{ marginLeft: 10, marginTop: 10 }}>
-    //   {/* <ExternalPlayer /> */}
-    //   {/* <Player /> */}
-    //   <div style={{ marginTop: 30, marginBottom: 30 }}>
-    //     {/* <SubmitMusic /> */}
-    //     {/* <InstructionsUI title="HIHIH" blurb="HIHIH" bullets={["hi", "lol"]} /> */}
-    //     {/* <AddQuestions /> */}
-    //     {/* <ReviewedSong listOfComments={comments} /> */}
-    //     {/* <OverallReview
-    //       name={"Nishant Iyengar"}
-    //       profession={"Rapper, Lyricist"}
-    //     /> */}
-    //     {/* <GeneralFeedback /> */}
-    //   </div>
-    // </div>
-    // <Home list_of_artist_ids={[nish, nish, nish, nish, nish]} />
-    // <Profile nish={nish} />
-    // <Feedback />
-    // <YourSongReviewed />
-    <OtherArtistsSong />
+    <div>
+      <Route
+        path="/home"
+        render={({ match }) => (
+          <Home list_of_artist_ids={[nish, nish, nish, nish]} />
+        )}
+      />
+      <Route path="/profile">
+        <Profile nish={nish} />
+      </Route>
+      <Route path="/feedback">
+        <Feedback />
+      </Route>
+      <Route path="/musictoreview">
+        <MusicToReview />
+      </Route>
+      <Route path="/songtoreview">
+        <OtherArtistsSong />
+      </Route>
+      <Route path="/songfeedback">
+        <YourSongReviewed />
+      </Route>
+      <Route path="/submit">
+        <Submit />
+      </Route>
+    </div>
   );
 }
 

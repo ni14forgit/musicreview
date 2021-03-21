@@ -91,7 +91,9 @@ function Player() {
     // if (!isPlaying) {
     //   return;
     // }
-    playerSource.stop();
+    if (playerSource) {
+      playerSource.stop();
+    }
     // setPausedAt(Date.now() - startedAt);
     setIsPlaying(false);
   };
@@ -107,8 +109,10 @@ function Player() {
   useEffect(() => {
     getSong();
     createDesignArray();
-
     setLoading(false);
+    return () => {
+      pauseSong();
+    };
   }, []);
 
   // useEffect(() => {

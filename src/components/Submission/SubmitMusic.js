@@ -57,8 +57,9 @@ const SubmitMusic = () => {
       style={{
         backgroundColor: background_purple,
         width: "80%",
-        height: 400,
+        // height: 400,
         borderRadius: 5,
+        padding: 10,
       }}
     >
       <div
@@ -67,6 +68,7 @@ const SubmitMusic = () => {
           justifyContent: "flex-end",
           marginRight: 10,
           marginTop: 10,
+          // border: "2px solid black",
         }}
       >
         {/* <InvertedTextButton text="upload" onClick={chooseSong} /> */}
@@ -75,8 +77,11 @@ const SubmitMusic = () => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
-          marginTop: "60px",
+          justifyContent: "space-around",
+          flexDirection: "column",
+          alignItems: "center",
+          height: 300,
+          // border: "2px solid black",
         }}
       >
         {file ? (
@@ -88,8 +93,12 @@ const SubmitMusic = () => {
               // border: "2px solid black",
             }}
           >
-            <Text text={file.name} size={12} color="white" />
-            <FakeBarUI length={40} />
+            <div style={{ marginBottom: 20 }}>
+              <Text text={file.name} size={12} color="white" />
+            </div>
+            <div>
+              <FakeBarUI length={40} />
+            </div>
           </div>
         ) : (
           <Text
@@ -99,48 +108,37 @@ const SubmitMusic = () => {
             text={"Drag & Drop Your Music!"}
           />
         )}
-      </div>
-
-      {file ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "left",
-            marginTop: "30px",
-            marginLeft: "30px",
-          }}
-        >
-          <Text
-            text="What genre(s) best capture your music (you can select multiple)? "
-            size={12}
-            color="white"
-            bold="bold"
-          />
-          <div style={{ display: "flex", flexDirection: "horizontal" }}>
-            {listOfGenres.map((val, ind) => {
-              return (
-                <div style={{ marginRight: 8 }}>
-                  <ToggleSelectOption
-                    text={val}
-                    selected={selectedOptions[ind]}
-                    onClick={() => toggleAnOption(ind)}
-                  />
-                </div>
-              );
-            })}
+        {file ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "left",
+            }}
+          >
+            <div style={{ marginBottom: 15 }}>
+              <Text
+                text="What genre(s) best capture your music (you can select multiple)? "
+                size={12}
+                color="white"
+                bold="bold"
+              />
+            </div>
+            <div style={{ display: "flex", flexDirection: "horizontal" }}>
+              {listOfGenres.map((val, ind) => {
+                return (
+                  <div style={{ marginRight: 8 }}>
+                    <ToggleSelectOption
+                      text={val}
+                      selected={selectedOptions[ind]}
+                      onClick={() => toggleAnOption(ind)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ) : null}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginRight: 10,
-          marginTop: 10,
-        }}
-      >
-        {file ? <InvertedTextButton text="Next" /> : null}
+        ) : null}
       </div>
 
       {/* {file} */}

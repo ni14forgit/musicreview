@@ -1,7 +1,9 @@
 import { background_purple } from "../../constants";
 import PlainTextButton from "../Useful/PlainTextButton";
+import { useHistory } from "react-router-dom";
 
 const Header = () => {
+  const history = useHistory();
   return (
     <div>
       <div
@@ -21,6 +23,7 @@ const Header = () => {
             text="noname"
             fontsize={30}
             bold="bold"
+            onClick={() => history.push("/home")}
           />
         </div>
         <div style={{ marginRight: 15 }}>
@@ -29,6 +32,7 @@ const Header = () => {
             text="Logout"
             fontsize={16}
             bold="bold"
+            onClick={() => history.push("/home")}
           />
         </div>
       </div>
@@ -49,6 +53,7 @@ const Header = () => {
             text="Profile"
             fontsize={16}
             bold="bold"
+            onClick={() => history.push("/profile")}
           />
         </div>
         <div style={{ marginRight: 25 }}>
@@ -57,6 +62,7 @@ const Header = () => {
             text="Feedback"
             fontsize={16}
             bold="bold"
+            onClick={() => history.push("/feedback")}
           />
         </div>
         <div style={{ marginRight: 25 }}>
@@ -65,9 +71,7 @@ const Header = () => {
             text="Music To Review"
             fontsize={16}
             bold="bold"
-            onClick={() => {
-              console.log("hi");
-            }}
+            onClick={() => history.push("/musictoreview")}
           />
         </div>
       </div>

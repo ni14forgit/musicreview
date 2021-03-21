@@ -8,6 +8,7 @@ import TextButton from "../Useful/TextButton";
 import Eric from "../../Eric.wav";
 import { FiEdit2 } from "react-icons/fi";
 import Header from "../Navigation/Header";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 const defaultStyle = {
   backgroundColor: "transparent",
@@ -152,6 +153,31 @@ const Profile = ({ nish }) => {
             handleFileInput={imageHandleFileInput}
             Button={MdAddAPhoto}
           />
+        </div>
+        <div style={{ marginBottom: 25 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "horizontal",
+              marginTop: 4,
+              marginLeft: -2,
+            }}
+          >
+            <div style={{ marginRight: 8 }}>
+              <Text
+                text={"Feedback Rating: "}
+                color={background_purple}
+                fontsize={16}
+              />
+            </div>
+            {[1, 2, 3, 4, 5].map((val, ind) => {
+              if (3 >= val) {
+                return <AiFillStar size={18} color={background_purple} />;
+              } else {
+                return <AiOutlineStar size={18} color={background_purple} />;
+              }
+            })}
+          </div>
         </div>
         <div style={{ marginBottom: 25 }}>
           <InputBox

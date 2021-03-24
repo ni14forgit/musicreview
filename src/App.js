@@ -13,7 +13,7 @@ import Feedback from "./components/Pages/Feedback";
 import YourSongReviewed from "./components/Pages/YourSongReviewed";
 import OtherArtistsSong from "./components/Pages/OtherArtistsSong";
 // import OtherArtistsSong from "./components/Pages/MusicToReview";
-import { useHistory, Route } from "react-router-dom";
+import { useHistory, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import MusicToReview from "./components/Pages/MusicToReview";
 import Submit from "./components/Pages/Submit";
@@ -49,12 +49,14 @@ function App() {
       <Route path="/musictoreview">
         <MusicToReview />
       </Route>
-      <Route path="/songtoreview">
-        <OtherArtistsSong />
-      </Route>
-      <Route path="/songfeedback">
-        <YourSongReviewed />
-      </Route>
+      <Switch>
+        <Route path="/songtoreview">
+          <OtherArtistsSong />
+        </Route>
+        <Route path="/songfeedback">
+          <YourSongReviewed />
+        </Route>
+      </Switch>
       <Route path="/submit">
         <Submit />
       </Route>

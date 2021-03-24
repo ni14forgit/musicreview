@@ -11,6 +11,9 @@ import TextButton from "./Useful/TextButton";
 import CommentBox from "./Small/CommentBox";
 import CommentsList from "./Small/ReviewCommentsList";
 import skrollTop from "skrolltop";
+import Text from "../components/Useful/Text";
+import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
+
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]
 
@@ -20,7 +23,10 @@ const getAudioContext = () => {
   return audioContent;
 };
 
+let nonStateBufferSource;
+
 function Player() {
+  const val = useRef();
   let audioContext;
   //   let durationOfSong = 10;
   const [bufferSource, setBufferSource] = useState(null);
@@ -82,7 +88,7 @@ function Player() {
     source.connect(audioContext.destination);
     source.onended = onEnded;
     setPlayerSource(source);
-
+    nonStateBufferSource = source;
     source.start(0, timeOfSong);
     setIsPlaying(true);
   };
@@ -92,6 +98,7 @@ function Player() {
     //   return;
     // }
     if (playerSource) {
+      console.log("stopped because not null");
       playerSource.stop();
     }
     // setPausedAt(Date.now() - startedAt);
@@ -110,19 +117,16 @@ function Player() {
     getSong();
     createDesignArray();
     setLoading(false);
+    console.log("MOUNTED!");
     return () => {
-      pauseSong();
+      // pauseSong();
+      nonStateBufferSource.stop();
+      console.log("UNMOUNTED!");
+      // pauseSong();
+      // playerSource.stop();
+      // val.source.stop();
     };
   }, []);
-
-  // useEffect(() => {
-  //   setComments(convertCommentsToBarStamped(listOfComments));
-  // }, [listOfComments]);
-
-  // useEffect(() => {
-  //comments?
-
-  // }, )
 
   useInterval(() => {
     // Your custom logic here
@@ -154,6 +158,7 @@ function Player() {
       source.connect(audioContext.destination);
       source.onended = onEnded;
       setPlayerSource(source);
+      nonStateBufferSource = source;
       source.start(0, Math.floor(ind * valOfBar));
     }
   };
@@ -266,19 +271,41 @@ function Player() {
         style={{
           display: "flex",
           flexDirection: "horizontal",
-          marginBottom: "-30px",
+          alignItems: "center",
+          marginLeft: -5,
         }}
       >
-        <div style={{ marginRight: "10px" }}>
-          <h2 style={{ color: white }}>firsttake.mp4</h2>
+        <div style={{ marginRight: 10 }}>
+          {isPlaying ? (
+            <AiFillPauseCircle onClick={pauseSong} color={white} size={45} />
+          ) : (
+            <AiFillPlayCircle onClick={playSong} color={white} size={45} />
+          )}
         </div>
-        <TextButton
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "20px",
+            marginTop: "20px",
+          }}
+        >
+          <div style={{ marginRight: "10px" }}>
+            <Text
+              text="firsttake.mp4"
+              color={white}
+              fontsize={30}
+              bold={"bold"}
+            />
+          </div>
+          <Text text={convertTime(timeOfSong)} color={white} fontsize={20} />
+        </div>
+        {/* <TextButton
           text={isPlaying ? "pause" : "play"}
           onClick={isPlaying ? pauseSong : playSong}
           fontWeight="bold"
-        />
+        /> */}
       </div>
-      <p style={{ color: "white" }}>{convertTime(timeOfSong)}</p>
 
       <BarUI
         length={numberOfBars}

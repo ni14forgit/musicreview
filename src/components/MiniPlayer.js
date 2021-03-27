@@ -17,7 +17,7 @@ const getAudioContext = () => {
   const audioContent = new AudioContext();
   return audioContent;
 };
-
+let nonStateBufferSource;
 function MiniPlayer({ song }) {
   let audioContext;
   const numberOfBars = 35;
@@ -79,6 +79,7 @@ function MiniPlayer({ song }) {
     source.connect(audioContext.destination);
     source.onended = onEnded;
     setPlayerSource(source);
+    nonStateBufferSource = source;
 
     source.start(0, timeOfSong);
     setIsPlaying(true);
@@ -109,7 +110,9 @@ function MiniPlayer({ song }) {
     createDesignArray();
     setLoading(false);
     return () => {
-      pauseSong();
+      if (nonStateBufferSource) {
+        nonStateBufferSource.stop();
+      }
     };
   }, []);
 
@@ -151,6 +154,7 @@ function MiniPlayer({ song }) {
       source.connect(audioContext.destination);
       source.onended = onEnded;
       setPlayerSource(source);
+      nonStateBufferSource = source;
       source.start(0, Math.floor(ind * valOfBar));
     }
   };

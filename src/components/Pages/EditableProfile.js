@@ -79,7 +79,7 @@ const FileUploader = ({ handleFileInput, Button, ind }) => {
   );
 };
 
-const Profile = ({ nish }) => {
+const EditableProfile = ({ nish }) => {
   const [picture, setPicture] = useState(null);
   const [imageData, setImageData] = useState(nish);
   const [soundcloudProfile, setSoundcloudProfile] = useState(
@@ -231,4 +231,4 @@ const Profile = ({ nish }) => {
   );
 };
 
-export default Profile;
+export default EditableProfile;

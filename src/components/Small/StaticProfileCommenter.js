@@ -16,6 +16,7 @@ const StaticProfileCommenter = ({ size, photo }) => {
           opacity: 1,
           zIndex: 100,
           marginRight: 5,
+          overflow: "hidden",
           //   marginTop: calculated_margin,
         }}
       >
@@ -24,6 +25,7 @@ const StaticProfileCommenter = ({ size, photo }) => {
             width: size,
             height: size,
             borderRadius: size / 2,
+            overflow: "hidden",
             opacity: 1,
             zIndex: 100,
           }}

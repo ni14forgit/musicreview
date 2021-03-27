@@ -12,6 +12,8 @@ import CommentBox from "./Small/CommentBox";
 import StaticCommentsList from "./Small/StaticCommentsList";
 import skrollTop from "skrolltop";
 import ToggleCommenter from "./Small/ToggleCommenter";
+import { FaFilter } from "react-icons/fa";
+import Text from "./Useful/Text";
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]
 
@@ -21,6 +23,7 @@ const getAudioContext = () => {
   return audioContent;
 };
 
+let nonStateBufferSource;
 function ReviewedSong({ listOfComments }) {
   let audioContext;
   //   let durationOfSong = 10;
@@ -87,6 +90,7 @@ function ReviewedSong({ listOfComments }) {
     source.connect(audioContext.destination);
     source.onended = onEnded;
     setPlayerSource(source);
+    nonStateBufferSource = source;
 
     source.start(0, timeOfSong);
     setIsPlaying(true);
@@ -115,7 +119,9 @@ function ReviewedSong({ listOfComments }) {
     getSong().then(setLoading(false));
     createDesignArray();
     return () => {
-      pauseSong();
+      if (nonStateBufferSource) {
+        nonStateBufferSource.stop();
+      }
     };
   }, []);
 
@@ -157,6 +163,7 @@ function ReviewedSong({ listOfComments }) {
       source.connect(audioContext.destination);
       source.onended = onEnded;
       setPlayerSource(source);
+      nonStateBufferSource = source;
       source.start(0, Math.floor(ind * valOfBar));
     }
   };
@@ -300,21 +307,52 @@ function ReviewedSong({ listOfComments }) {
               : null}
           </div>
         </div>
-
         <div
-          style={{ display: "flex", flexDirection: "column", marginTop: 30 }}
+          style={{
+            marginTop: 30,
+            display: "flex",
+            flexDirection: "horizontal",
+            // alignItems: "center",
+            // border: "2px solid black",
+          }}
         >
-          {commentersSelected.map((val, ind) => {
-            return (
-              <div style={{ marginBottom: 8 }}>
-                <ToggleCommenter
-                  photo={nish}
-                  onChange={() => toggleCommenter(ind)}
-                  selected={commentersSelected[ind]}
-                />
-              </div>
-            );
-          })}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignContent: "center",
+              alignItems: "center",
+              marginRight: 40,
+              // maxWidth: 30,
+            }}
+          >
+            {/* <FaFilter color="white" size={18} />
+            <div style={{ marginTop: 10, textAlign: "center" }}>
+              <Text text="Filter" color="white" fontsiz={8} bold="bold" />
+              
+            </div> */}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            {commentersSelected.map((val, ind) => {
+              return (
+                <div style={{ marginBottom: 8 }}>
+                  <ToggleCommenter
+                    photo={nish}
+                    onChange={() => toggleCommenter(ind)}
+                    selected={commentersSelected[ind]}
+                  />
+                </div>
+              );
+            })}
+            <Text text="filter responses" color="white" fontsiz={6} />
+          </div>
         </div>
       </div>
       <div style={{ border: "0px solid black", maxHeight: "100px" }}>

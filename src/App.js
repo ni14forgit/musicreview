@@ -8,7 +8,7 @@ import nish from "./nish.jpg";
 import OverallReview from "./components/OverallReview";
 import GeneralFeedback from "./components/Small/GeneralFeedback";
 import Home from "./components/Pages/Home";
-import Profile from "./components/Pages/Profile";
+import EditableProfile from "./components/Pages/EditableProfile";
 import Feedback from "./components/Pages/Feedback";
 import YourSongReviewed from "./components/Pages/YourSongReviewed";
 import OtherArtistsSong from "./components/Pages/OtherArtistsSong";
@@ -17,6 +17,7 @@ import { useHistory, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import MusicToReview from "./components/Pages/MusicToReview";
 import Submit from "./components/Pages/Submit";
+import VisitProfile from "./components/Pages/VisitProfile";
 
 const comments = [
   {
@@ -30,7 +31,7 @@ function App() {
   const history = useHistory();
   useEffect(() => {
     // history.replace("/home");
-    history.replace("/submit");
+    history.replace("/visitprofile");
   });
   return (
     <div>
@@ -41,7 +42,10 @@ function App() {
         )}
       />
       <Route path="/profile">
-        <Profile nish={nish} />
+        <EditableProfile nish={nish} />
+      </Route>
+      <Route path="/visitprofile">
+        <VisitProfile />
       </Route>
       <Route path="/feedback">
         <Feedback />

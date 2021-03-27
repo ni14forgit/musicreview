@@ -39,7 +39,11 @@ const BarToWebpage = ({
       <div style={{ position: "absolute", left: first }}>
         <Text color={textColor} text={song_title} fontsize={15} bold="bold" />
       </div>
+
       <div style={{ position: "absolute", left: second }}>
+        <StaticProfileCommenter photo={nish} size={30} />
+      </div>
+      <div style={{ position: "absolute", left: third }}>
         <Text
           color={textColor}
           text={isDoneStatus ? "COMPLETE" : "TO DO"}
@@ -47,10 +51,7 @@ const BarToWebpage = ({
           bold="bold"
         />
       </div>
-      <div style={{ position: "absolute", left: third }}>
-        <StaticProfileCommenter photo={nish} size={30} />
-      </div>
-      <div
+      {/* <div
         style={{
           display: "flex",
           flexDirection: "horizontal",
@@ -68,12 +69,12 @@ const BarToWebpage = ({
             </div>
           );
         })}
-      </div>
+      </div> */}
       <div style={{ position: "absolute", left: fifth }}>
         <Text color={textColor} text={date} fontsize={15} bold="bold" />
       </div>
-      {isDoneStatus ? (
-        <div style={{ position: "absolute", left: sixth }}>
+      <div style={{ position: "absolute", left: sixth }}>
+        {isDoneStatus ? (
           <div
             style={{
               display: "flex",
@@ -89,8 +90,15 @@ const BarToWebpage = ({
               }
             })}
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <Text
+            color={textColor}
+            text={"no score assigned"}
+            fontsize={15}
+            bold="bold"
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -120,7 +120,11 @@ function Player() {
     console.log("MOUNTED!");
     return () => {
       // pauseSong();
-      nonStateBufferSource.stop();
+
+      if (nonStateBufferSource) {
+        nonStateBufferSource.stop();
+      }
+
       console.log("UNMOUNTED!");
       // pauseSong();
       // playerSource.stop();

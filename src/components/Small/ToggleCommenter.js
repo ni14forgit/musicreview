@@ -16,7 +16,7 @@ const ToggleCommenter = ({ onChange, selected, photo }) => {
         // uncheckedIcon={false}
         // handleDiameter={20}
         height={13}
-        handleDiameter={20}
+        handleDiameter={25}
         width={40}
       />
     </div>

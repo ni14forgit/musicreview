@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 
 const defaultStyle = {
   backgroundColor: "transparent",
-  width: "93%",
+  width: "100%",
   height: "100%",
   outline: 0,
   border: "2px solid white",

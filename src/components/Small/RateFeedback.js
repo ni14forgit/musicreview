@@ -1,6 +1,8 @@
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { background_purple } from "../../constants";
 import Text from "../Useful/Text";
+
+//DELETE THIS FILE, SHOULD BE BROKEN DOWN
 const RateFeedback = ({ score, name }) => {
   return (
     <div>

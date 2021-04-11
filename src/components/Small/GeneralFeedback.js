@@ -21,7 +21,6 @@ const defaultStyle = {
 };
 const GeneralFeedback = ({ setCurrentValue, currentValue }) => {
   const textareaRef = useRef(null);
-  //   const [currentValue, setCurrentValue] = useState("");
   useEffect(() => {
     textareaRef.current.style.height = "0px";
     const scrollHeight = textareaRef.current.scrollHeight;
@@ -34,12 +33,9 @@ const GeneralFeedback = ({ setCurrentValue, currentValue }) => {
         class="wideInput"
         style={defaultStyle}
         type="text"
-        // value="hi dfjh df dfhj dfjh dfjhd fj djhfdj dfjhd fj dfhdf dfjdh fdjfhdf jdhf"
-        // onChange={(event) => console.log("value changed!")}
         value={currentValue}
         onChange={(e) => {
           setCurrentValue(e.target.value);
-          //to do something with value, maybe callback?
         }}
       />
     </div>

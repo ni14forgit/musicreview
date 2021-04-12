@@ -7,19 +7,66 @@ import Text from "../Useful/Text";
 import CommentBox from "../Small/CommentBox";
 
 // validURL checker taken from stackoverflow post
-// function validURL(str) {
-//     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-//       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-//       '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-//       '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-//       '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-//       '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-//     return !!pattern.test(str);
-//   }
+function validURL(str) {
+  var pattern = new RegExp(
+    "^(https?:\\/\\/)?" + // protocol
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
+  ); // fragment locator
+  return !!pattern.test(str);
+}
+
+const ErrorMessage = () => {
+  return <div style={{ color: "red" }}>Not a valid URL</div>;
+};
+
+const spotifychecker = (spotify_link) => {
+  return (
+    (validURL(spotify_link) && spotify_link.includes("spotify.com")) ||
+    !spotify_link
+  );
+};
+
+const soundcloudchecker = (soundcloud_link) => {
+  return (
+    (validURL(soundcloud_link) && soundcloud_link.includes("soundcloud.com")) ||
+    !soundcloud_link
+  );
+};
+
+const instagramchecker = (instagram_link) => {
+  return (
+    (validURL(instagram_link) && instagram_link.includes("instagram.com")) ||
+    !instagram_link
+  );
+};
 
 // bool passed = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)
 
 const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
+  const [staleLinks, setstaleLinks] = useState(null);
+
+  useEffect(() => {
+    const myCopy = { ...links };
+    setstaleLinks(JSON.parse(JSON.stringify(myCopy)));
+    console.log("hshshshshh");
+    return () => {
+      setstaleLinks(JSON.parse(JSON.stringify(myCopy)));
+    };
+  }, [open]);
+
+  const closeAndRestore = () => {
+    const copyOfLinks = { ...staleLinks };
+    console.log("copy of links \n");
+    console.log(copyOfLinks);
+    setLinks(copyOfLinks);
+    setPopUpOpen(false);
+  };
+
   const setSpotify = (val) => {
     const copyOfLinks = { ...links };
     copyOfLinks.spotify = val;
@@ -60,7 +107,7 @@ const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
           }}
         >
           <div style={{ marginLeft: 15, marginTop: 10 }}>
-            <IoMdClose color={white} size={23} />
+            <IoMdClose color={white} size={23} onClick={closeAndRestore} />
           </div>
         </div>
         <div
@@ -74,7 +121,7 @@ const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
             marginLeft: 10,
           }}
         >
-          <div style={{ width: 500 }}>
+          <div style={{ width: 500, marginBottom: 20 }}>
             <div style={{ marginBottom: 8 }}>
               <Text
                 text="Spotify Profile"
@@ -87,8 +134,9 @@ const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
               currentValue={links.spotify}
               setCurrentValue={setSpotify}
             />
+            {spotifychecker(links.spotify) ? null : <ErrorMessage />}
           </div>
-          <div style={{ width: 500 }}>
+          <div style={{ width: 500, marginBottom: 20 }}>
             <div style={{ marginBottom: 8 }}>
               <Text
                 text="Soundcloud Profile"
@@ -101,6 +149,7 @@ const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
               currentValue={links.soundcloud}
               setCurrentValue={setSoundcloud}
             />
+            {soundcloudchecker(links.soundcloud) ? null : <ErrorMessage />}
           </div>
           <div style={{ width: 500 }}>
             <div style={{ marginBottom: 8 }}>
@@ -115,8 +164,27 @@ const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
               currentValue={links.instagram}
               setCurrentValue={setInstagram}
             />
+            {instagramchecker(links.instagram) ? null : <ErrorMessage />}
           </div>
         </div>
+        {instagramchecker(links.instagram) &&
+        soundcloudchecker(links.soundcloud) &&
+        spotifychecker(links.spotify) ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "horizontal",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div style={{ marginRight: 15 }}>
+              <InvertedTextButton
+                text="Save"
+                onClick={() => setPopUpOpen(false)}
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
     </Popup>
   );

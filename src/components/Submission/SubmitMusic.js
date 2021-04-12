@@ -38,6 +38,8 @@ const SubmitMusic = () => {
   const toggleAnOption = (ind) => {
     var copyOfOptions = [...selectedOptions];
 
+    // why am i doing a for loop here?
+
     for (var i = 0; i < selectedOptions.length; i++) {
       if (ind == i) {
         copyOfOptions[i] = !copyOfOptions[i];

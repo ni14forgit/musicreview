@@ -27,7 +27,7 @@ const ProfileEditMilestone = ({
     return () => {
       setStaleAccomplishment(JSON.parse(JSON.stringify(myCopy[index])));
     };
-  }, []);
+  }, [open]);
 
   const closeAndRestore = () => {
     const accomplishmentsCopy = [...accomplishments];

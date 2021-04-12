@@ -20,6 +20,8 @@ import ProfileAddSong from "../PopUp/ProfileAddSong";
 import ProfileEditMilestone from "../PopUp/ProfileEditMilestone";
 import ProfileAddMilestone from "../PopUp/ProfileAddMilestone";
 import ProfileEditSocialLink from "../PopUp/ProfileEditSocialLink";
+import ProfileEditSingleLine from "../PopUp/ProfileEditSingleLine";
+import ProfileAddSelectedOptions from "../PopUp/ProfileAddSelectedOptions";
 
 const Accomplishment = ({
   title,
@@ -139,17 +141,27 @@ const ImageFileUploader = ({ handleFileInput, ind }) => {
   );
 };
 
+const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
+
 const EditableProfile = ({ nish }) => {
+  var starterArrayGenres = new Array(GENRES.length);
   const [picture, setPicture] = useState(null);
   const [imageData, setImageData] = useState(nish);
 
   const [socialLinks, setSocialLinks] = useState({
-    spotify: "add spotify profile",
-    soundcloud: "add soundcloud profile",
-    instagram: "add instagram profile",
+    spotify: "",
+    soundcloud: "",
+    instagram: "",
   });
 
+  const [name, setName] = useState("Jessica Smith");
+
   const [socialPopUpOpen, setSocialPopUpOpen] = useState(false);
+
+  const [namePopUpOpen, setNamePopUpOpen] = useState(false);
+
+  const [genres, setGenres] = useState(starterArrayGenres.fill(false));
+  const [genrePopUpOpen, setGenrePopUpOpen] = useState(false);
 
   //   const [songSource, setSongSource] =
   const [songs, setSongs] = useState([Eric, Eric]);
@@ -185,6 +197,19 @@ const EditableProfile = ({ nish }) => {
 
   const deleteSong = (ind) => {
     setSongs(songs.filter((song, index) => index !== ind));
+  };
+
+  const convertGenreToText = (options) => {
+    var genrestring = "";
+
+    for (var i = 0; i < GENRES.length; i++) {
+      if (options[i]) {
+        genrestring += GENRES[i] + ", ";
+      }
+    }
+    genrestring = genrestring.slice(0, -2);
+
+    return genrestring;
   };
 
   const imageHandleFileInput = (e) => {
@@ -246,14 +271,25 @@ const EditableProfile = ({ nish }) => {
             }}
           >
             <Text
-              text={"Jessica Smith"}
+              text={name}
               fontsize={20}
               color={background_purple}
               bold={"bold"}
             />
             <div style={{ marginLeft: 10 }}>
-              <FiEdit3 color={background_purple} size={20} />
+              <FiEdit3
+                color={background_purple}
+                size={20}
+                onClick={() => setNamePopUpOpen(true)}
+              />
             </div>
+            <ProfileEditSingleLine
+              title="Name"
+              open={namePopUpOpen}
+              setPopUpOpen={setNamePopUpOpen}
+              setText={setName}
+              text={name}
+            />
           </div>
           <div
             style={{
@@ -280,14 +316,26 @@ const EditableProfile = ({ nish }) => {
             }}
           >
             <Text
-              text={"R&B, Pop"}
+              text={convertGenreToText(genres)}
               fontsize={17}
               color={light_purple}
               bold={"bold"}
             />
             <div style={{ marginLeft: 10 }}>
-              <FiEdit3 color={background_purple} size={20} />
+              <FiEdit3
+                color={background_purple}
+                size={20}
+                onClick={() => setGenrePopUpOpen(true)}
+              />
             </div>
+            <ProfileAddSelectedOptions
+              open={genrePopUpOpen}
+              setPopUpOpen={setGenrePopUpOpen}
+              selectedOptions={genres}
+              setSelectedOptions={setGenres}
+              title={"Genres"}
+              constantCategories={GENRES}
+            />
           </div>
           <div
             style={{

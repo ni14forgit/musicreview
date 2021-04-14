@@ -74,7 +74,12 @@ const SubmitMusic = () => {
         }}
       >
         {/* <InvertedTextButton text="upload" onClick={chooseSong} /> */}
-        <FileUploader onFileSelect={(file) => setFile(file)} />
+        <FileUploader
+          Button={InvertedTextButton}
+          onFileSelect={(file) => setFile(file)}
+          ind={0}
+          color="purple"
+        />
       </div>
       <div
         style={{

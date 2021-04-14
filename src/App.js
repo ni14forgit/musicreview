@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import MusicToReview from "./components/Pages/MusicToReview";
 import Submit from "./components/Pages/Submit";
 import VisitProfile from "./components/Pages/VisitProfile";
+import Authenticate from "./components/Pages/Authenticate";
 
 const comments = [
   {
@@ -31,7 +32,8 @@ function App() {
   const history = useHistory();
   useEffect(() => {
     // history.replace("/home");
-    history.replace("/visitprofile");
+    // history.replace("/visitprofile");
+    history.replace("/authenticate");
   });
   return (
     <div>
@@ -52,6 +54,9 @@ function App() {
       </Route>
       <Route path="/musictoreview">
         <MusicToReview />
+      </Route>
+      <Route path="/authenticate">
+        <Authenticate />
       </Route>
       <Switch>
         <Route path="/songtoreview">

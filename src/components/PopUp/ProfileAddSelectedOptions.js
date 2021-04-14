@@ -59,7 +59,7 @@ const ProfileAddSelectedOptions = ({
         style={{
           backgroundColor: purple,
           width: 600,
-          height: 550,
+          height: 250,
           borderRadius: 10,
         }}
       >
@@ -77,12 +77,12 @@ const ProfileAddSelectedOptions = ({
         </div>
         <div
           style={{
-            height: 250,
+            height: 140,
             width: 600,
             marginLeft: 10,
           }}
         >
-          <div style={{ width: 500 }}>
+          <div style={{ width: 500, marginTop: 30, marginLeft: 40 }}>
             <div style={{ marginBottom: 8 }}>
               <Text text={title} color={white} size={18} bold="bold" />
             </div>
@@ -90,22 +90,25 @@ const ProfileAddSelectedOptions = ({
               style={{
                 display: "flex",
                 flexDirection: "horizontal",
-                justifyContent: "center",
+                justifyContent: "left",
                 alignItems: "center",
               }}
             >
               {constantCategories.map((val, ind) => {
                 return (
-                  <ToggleSelectOption
-                    text={val}
-                    selected={selectedOptions[ind]}
-                    onClick={() => toggleOption(ind)}
-                  />
+                  <div style={{ marginRight: 5 }}>
+                    <ToggleSelectOption
+                      text={val}
+                      selected={selectedOptions[ind]}
+                      onClick={() => toggleOption(ind)}
+                    />
+                  </div>
                 );
               })}
             </div>
-
-            {!isNothingSelected(selectedOptions) ? null : <ErrorMessage />}
+            <div style={{ marginTop: 10 }}>
+              {!isNothingSelected(selectedOptions) ? null : <ErrorMessage />}
+            </div>
           </div>
         </div>
         {!isNothingSelected(selectedOptions) ? (

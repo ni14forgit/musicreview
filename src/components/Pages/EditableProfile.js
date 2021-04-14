@@ -142,9 +142,11 @@ const ImageFileUploader = ({ handleFileInput, ind }) => {
 };
 
 const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
+const PROFESSIONS = ["Singer", "Songwriter", "Audio Engineer", "Producer"];
 
 const EditableProfile = ({ nish }) => {
   var starterArrayGenres = new Array(GENRES.length);
+  var starterArrayProfessions = new Array(PROFESSIONS.length);
   const [picture, setPicture] = useState(null);
   const [imageData, setImageData] = useState(nish);
 
@@ -162,6 +164,11 @@ const EditableProfile = ({ nish }) => {
 
   const [genres, setGenres] = useState(starterArrayGenres.fill(false));
   const [genrePopUpOpen, setGenrePopUpOpen] = useState(false);
+
+  const [professions, setProfessions] = useState(
+    starterArrayProfessions.fill(false)
+  );
+  const [professionsPopUpOpen, setProfessionsPopUpOpen] = useState(false);
 
   //   const [songSource, setSongSource] =
   const [songs, setSongs] = useState([Eric, Eric]);
@@ -212,6 +219,19 @@ const EditableProfile = ({ nish }) => {
     return genrestring;
   };
 
+  const convertProfessionToText = (options) => {
+    var professionstring = "";
+
+    for (var i = 0; i < PROFESSIONS.length; i++) {
+      if (options[i]) {
+        professionstring += PROFESSIONS[i] + ", ";
+      }
+    }
+    professionstring = professionstring.slice(0, -2);
+
+    return professionstring;
+  };
+
   const imageHandleFileInput = (e) => {
     if (e.target.files[0]) {
       if (
@@ -258,7 +278,7 @@ const EditableProfile = ({ nish }) => {
         {/* LEFT SIDE of HEADER */}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div>
-            <StaticProfileCommenter photo={musicianpic} size={120} />
+            <StaticProfileCommenter photo={imageData} size={120} />
             <div style={{ marginLeft: 120, marginTop: -25 }}>
               <ImageFileUploader handleFileInput={imageHandleFileInput} />
             </div>
@@ -299,14 +319,26 @@ const EditableProfile = ({ nish }) => {
             }}
           >
             <Text
-              text={"Singer, Songwriter"}
+              text={convertProfessionToText(professions)}
               fontsize={17}
               color={light_purple}
               bold={"bold"}
             />
             <div style={{ marginLeft: 10 }}>
-              <FiEdit3 color={background_purple} size={20} />
+              <FiEdit3
+                color={background_purple}
+                size={20}
+                onClick={() => setProfessionsPopUpOpen(true)}
+              />
             </div>
+            <ProfileAddSelectedOptions
+              open={professionsPopUpOpen}
+              setPopUpOpen={setProfessionsPopUpOpen}
+              selectedOptions={professions}
+              setSelectedOptions={setProfessions}
+              title={"Strengths"}
+              constantCategories={PROFESSIONS}
+            />
           </div>
           <div
             style={{

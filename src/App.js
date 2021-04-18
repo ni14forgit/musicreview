@@ -23,10 +23,10 @@ const comments = [
 function App() {
   const history = useHistory();
   useEffect(() => {
-    // history.replace("/home");
+    history.replace("/home");
     // history.replace("/visitprofile");
     // history.replace("/authenticate");
-    history.replace("registerinitialprofile");
+    // history.replace("registerinitialprofile");
   });
   return (
     <div>

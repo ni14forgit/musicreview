@@ -15,7 +15,7 @@ const ReviewHeader = () => {
         display: "flex",
         alignItems: "center",
         flexDirection: "horizontal",
-        marginTop: 20,
+
         // justifyContent: "space-around",
       }}
     >

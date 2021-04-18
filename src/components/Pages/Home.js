@@ -15,7 +15,7 @@ const Home = ({ list_of_artist_ids }) => {
   return (
     <div>
       <Header />
-      <div
+      {/* <div
         style={{
           marginBottom: 25,
           alignItems: "center",
@@ -28,16 +28,16 @@ const Home = ({ list_of_artist_ids }) => {
         }}
       >
         <IconTextButton onClick={() => history.push("/submit")} />
-      </div>
-      <div style={{ marginLeft: 20 }}>
+      </div> */}
+      <div style={{ marginLeft: 20, marginTop: 20 }}>
         <div style={{ marginBottom: 40 }}>
           <Text
-            text="Recent Feedback"
+            text="feedback received"
             color={background_purple}
-            fontsize={24}
+            fontsize={22}
             bold={"bold"}
           />
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginTop: 5 }}>
             <FeedbackHeader />
             {[1, 2].map((val, ind) => {
               return (
@@ -55,12 +55,12 @@ const Home = ({ list_of_artist_ids }) => {
         </div>
         <div style={{ marginBottom: 40 }}>
           <Text
-            text="Songs to Review"
+            text="feedback to give"
             color={background_purple}
-            fontsize={24}
+            fontsize={22}
             bold={"bold"}
           />
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginTop: 5 }}>
             <ReviewHeader />
             {[1, 2].map((val, ind) => {
               return (
@@ -76,7 +76,7 @@ const Home = ({ list_of_artist_ids }) => {
             })}
           </div>
         </div>
-        <div style={{ marginBottom: 20 }}>
+        {/* <div style={{ marginBottom: 20 }}>
           <Text
             text="Artist Friends!"
             color={background_purple}
@@ -93,7 +93,7 @@ const Home = ({ list_of_artist_ids }) => {
             {list_of_artist_ids.map((val, ind) => {
               return (
                 <div style={{ marginRight: 0 }}>
-                  {/* <StaticProfileCommenter photo={val} size={28} /> */}
+               
                   <ArtistCard
                     image={musicianpic}
                     name={"Jessie Smith"}
@@ -104,7 +104,7 @@ const Home = ({ list_of_artist_ids }) => {
               );
             })}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

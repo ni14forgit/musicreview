@@ -6,6 +6,7 @@ const ModifiableTextBox = ({
   currentValue,
   fontSize,
   placeholder,
+  expands,
 }) => {
   const defaultStyle = {
     backgroundColor: "transparent",
@@ -29,11 +30,13 @@ const ModifiableTextBox = ({
 
   const textareaRef = useRef(null);
   //   const [currentValue, setCurrentValue] = useState("");
-  //   useEffect(() => {
-  //     textareaRef.current.style.height = "0px";
-  //     const scrollHeight = textareaRef.current.scrollHeight;
-  //     textareaRef.current.style.height = scrollHeight + "px";
-  //   }, [currentValue]);
+  useEffect(() => {
+    if (expands) {
+      textareaRef.current.style.height = "0px";
+      const scrollHeight = textareaRef.current.scrollHeight;
+      textareaRef.current.style.height = scrollHeight + "px";
+    }
+  }, [currentValue]);
   return (
     <div
       style={{
@@ -46,7 +49,7 @@ const ModifiableTextBox = ({
         class="wideInput"
         style={defaultStyle}
         type="text"
-        rows="1"
+        rows="3"
         placeholder={placeholder}
         className="Authenticate"
         // value="hi dfjh df dfhj dfjh dfjhd fj djhfdj dfjhd fj dfhdf dfjdh fdjfhdf jdhf"

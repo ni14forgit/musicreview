@@ -33,7 +33,15 @@ const Signup = ({
   setPasswordOne,
   setPasswordTwo,
   switchLogin,
+  signupAction,
 }) => {
+  const signupAfterChecking = () => {
+    if (email && passwordOne && passwordTwo) {
+      if (passwordOne == passwordTwo) {
+        signupAction();
+      }
+    }
+  };
   return (
     <div
       style={{
@@ -75,6 +83,7 @@ const Signup = ({
           backgroundColor="#5988FF"
           textColor="white"
           text={"Sign Up"}
+          onClick={signupAfterChecking}
         />
       </div>
 

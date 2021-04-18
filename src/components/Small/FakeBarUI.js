@@ -6,7 +6,7 @@ import nish from "../../nish.jpg";
 
 const bottom_margin = 40;
 
-const FakeSinglebar = ({ height }) => {
+const FakeSinglebar = ({ height, scale }) => {
   // console.log(comments);
   // var calculated_margin = bottom_margin + (75 - height) / 2;
   var calculated_margin = 0;
@@ -17,12 +17,12 @@ const FakeSinglebar = ({ height }) => {
   return (
     <div
       style={{
-        width: 6,
-        height: height,
+        width: 6 * scale,
+        height: height * scale,
         backgroundColor: white,
-        marginRight: 3,
-        marginLeft: 3,
-        borderRadius: 2,
+        marginRight: 3 * scale,
+        marginLeft: 3 * scale,
+        borderRadius: 2 * scale,
       }}
     ></div>
   );
@@ -30,6 +30,7 @@ const FakeSinglebar = ({ height }) => {
 
 const FakeBarUI = ({
   length,
+  scale = 1,
   // comments,
 }) => {
   const heights = [25, 30, 35, 40, 45, 50, 60, 65, 70, 75];
@@ -98,6 +99,7 @@ const FakeBarUI = ({
               height={heights[designHeightsArray[ind]]}
               color={chooseColor}
               index={ind}
+              scale={scale}
             ></FakeSinglebar>
           );
         })}

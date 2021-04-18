@@ -1,0 +1,26 @@
+textarea::-webkit-input-placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+textarea:-moz-placeholder {
+  /* Firefox 18- */
+  color: white;
+  opacity: 0.8;
+}
+
+textarea::-moz-placeholder {
+  /* Firefox 19+ */
+  color: white;
+  opacity: 0.8;
+}
+
+textarea:-ms-input-placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+textarea::placeholder {
+  color: white;
+  opacity: 0.8;
+}

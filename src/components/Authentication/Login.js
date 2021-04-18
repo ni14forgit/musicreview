@@ -31,7 +31,15 @@ const Login = ({
   passwordOne,
   switchSignUp,
   setPasswordOne,
+  loginAction,
 }) => {
+  const loginAfterChecking = () => {
+    if (email && passwordOne) {
+      loginAction();
+    } else {
+      console.log("not correct?");
+    }
+  };
   return (
     <div
       style={{
@@ -65,6 +73,7 @@ const Login = ({
           backgroundColor="#5988FF"
           textColor="white"
           text={"Login"}
+          onClick={loginAfterChecking}
         />
       </div>
 

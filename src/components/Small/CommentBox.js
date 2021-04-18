@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import "./CommentBox.css";
 
 const defaultStyle = {
   backgroundColor: "transparent",
@@ -17,9 +18,13 @@ const defaultStyle = {
   borderRadius: 5,
   resize: "none",
 };
-const CommentBox = ({ setCurrentValue, currentValue }) => {
+const CommentBox = ({
+  setCurrentValue,
+  currentValue,
+  placeholder,
+  maxLength,
+}) => {
   const textareaRef = useRef(null);
-  //   const [currentValue, setCurrentValue] = useState("");
   useEffect(() => {
     textareaRef.current.style.height = "0px";
     const scrollHeight = textareaRef.current.scrollHeight;
@@ -37,6 +42,9 @@ const CommentBox = ({ setCurrentValue, currentValue }) => {
         class="wideInput"
         style={defaultStyle}
         type="text"
+        rows={"2"}
+        maxLength={maxLength}
+        placeholder={placeholder}
         // value="hi dfjh df dfhj dfjh dfjhd fj djhfdj dfjhd fj dfhdf dfjdh fdjfhdf jdhf"
         // onChange={(event) => console.log("value changed!")}
         value={currentValue}

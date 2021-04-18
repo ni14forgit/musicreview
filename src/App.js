@@ -1,24 +1,16 @@
-import Player from "./components/Player";
-import ExternalPlayer from "./components/Wrapper/ExternalPlayer";
-import SubmitMusic from "./components/Submission/SubmitMusic";
-import AddQuestions from "./components/Submission/AddQuestions";
-import InstructionsUI from "./components/Small/InstructionsUI";
-import ReviewedSong from "./components/ReviewedSong";
 import nish from "./nish.jpg";
-import OverallReview from "./components/OverallReview";
-import GeneralFeedback from "./components/Small/GeneralFeedback";
 import Home from "./components/Pages/Home";
 import EditableProfile from "./components/Pages/EditableProfile";
 import Feedback from "./components/Pages/Feedback";
 import YourSongReviewed from "./components/Pages/YourSongReviewed";
 import OtherArtistsSong from "./components/Pages/OtherArtistsSong";
-// import OtherArtistsSong from "./components/Pages/MusicToReview";
 import { useHistory, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import MusicToReview from "./components/Pages/MusicToReview";
 import Submit from "./components/Pages/Submit";
 import VisitProfile from "./components/Pages/VisitProfile";
 import Authenticate from "./components/Pages/Authenticate";
+import RegisterInitialProfile from "./components/Pages/RegisterInitialProfile";
 
 const comments = [
   {
@@ -33,7 +25,8 @@ function App() {
   useEffect(() => {
     // history.replace("/home");
     // history.replace("/visitprofile");
-    history.replace("/authenticate");
+    // history.replace("/authenticate");
+    history.replace("registerinitialprofile");
   });
   return (
     <div>
@@ -57,6 +50,9 @@ function App() {
       </Route>
       <Route path="/authenticate">
         <Authenticate />
+      </Route>
+      <Route path="/registerinitialprofile">
+        <RegisterInitialProfile />
       </Route>
       <Switch>
         <Route path="/songtoreview">

@@ -1,11 +1,12 @@
 import { purple, white } from "../../constants";
-const TextButton = ({ text, onClick, fontWeight }) => {
+const TextButton = ({ text, onClick, fontWeight, disabled }) => {
   return (
     <button
       style={{
         background: purple,
         maxHeight: 50,
         borderRadius: 5,
+        opacity: disabled ? 0.5 : 1,
         alignSelf: "center",
         textAlign: "center",
         paddingRight: "12px",
@@ -17,6 +18,7 @@ const TextButton = ({ text, onClick, fontWeight }) => {
         fontWeight: fontWeight,
         outline: 0,
       }}
+      disabled={disabled}
       onClick={onClick}
     >
       {text}

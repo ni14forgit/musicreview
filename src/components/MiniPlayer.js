@@ -13,7 +13,7 @@ import skrollTop from "skrolltop";
 // const comments = [{ timestamp: 40, photo: nish }]
 
 const getAudioContext = () => {
-  AudioContext = window.AudioContext || window.webkitAudioContext;
+  var AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContent = new AudioContext();
   return audioContent;
 };
@@ -44,12 +44,25 @@ function MiniPlayer({ song }) {
     // create audio context
     audioContext = getAudioContext();
     // create audioBuffer (decode audio file)
-    const audioBuffer = await audioContext.decodeAudioData(response.data);
-    // setDurationOfSong(Math.floor(audioBuffer.duration));
-    setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
-    console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+    // const audioBuffer = await audioContext.decodeAudioData(response.data);
 
-    setBufferSource(audioBuffer);
+    audioContext.decodeAudioData(
+      response.data,
+      (audioBuffer) => {
+        setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
+        console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+
+        setBufferSource(audioBuffer);
+      },
+      (e) => {
+        // reject(e);
+      }
+    );
+    // setDurationOfSong(Math.floor(audioBuffer.duration));
+    // setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
+    // console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+
+    // setBufferSource(audioBuffer);
   }
 
   const convertTime = (seconds) => {

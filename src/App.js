@@ -23,11 +23,17 @@ const comments = [
 function App() {
   const history = useHistory();
   useEffect(() => {
-    history.replace("/home");
-    // history.replace("/visitprofile");
+    // history.replace("/home");
+    history.replace("/visitprofile");
     // history.replace("/authenticate");
     // history.replace("registerinitialprofile");
   });
+
+  //   <Route
+  //   path="/article/:id"
+  //   render={({ match }) => <Article match={match} />}
+  // />
+  // history.replace("article/" + id);
   return (
     <div>
       <Route

@@ -10,12 +10,91 @@ import ReviewHeader from "../Small/Bars/ReviewHeader";
 import FeedbackHeader from "../Small/Bars/FeedbackHeader";
 import ArtistCard from "../Small/Social/ArtistCard";
 import musicianpic from "../../musicianpic.jpeg";
+
+const RemainingTextTile = ({ remaining, receivedBoolean, onClick }) => {
+  const receivedSubtitle = "artists have completed or updated feedback!";
+  const givenSubtitle = "artists are waiting on your reviews!";
+  return (
+    <div
+      style={{
+        width: 270,
+        height: 290,
+        padding: "12px 12px 12px 12px",
+        border: `4px solid ${background_purple}`,
+        borderRadius: 10,
+        display: "flex",
+        justifyContent: "space-around",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+      onClick={onClick}
+    >
+      <Text
+        color={background_purple}
+        text={remaining}
+        fontsize={100}
+        bold="bold"
+      />
+      <div>
+        <Text
+          color={background_purple}
+          text={receivedBoolean ? receivedSubtitle : givenSubtitle}
+          fontsize={24}
+          bold={"bold"}
+          textAlign={"center"}
+        />
+      </div>
+    </div>
+  );
+};
 const Home = ({ list_of_artist_ids }) => {
   const history = useHistory();
   return (
     <div>
       <Header />
-      {/* <div
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 40,
+        }}
+      >
+        <IconTextButton onClick={() => history.push("/submit")} />
+        <div
+          style={{
+            // marginLeft: 40,
+            marginTop: 80,
+            display: "flex",
+            flexDirection: "horizontal",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ marginRight: 15 }}>
+            <RemainingTextTile
+              receivedBoolean={true}
+              remaining={"2"}
+              onClick={() => history.push("/feedback")}
+            />
+          </div>
+          <div style={{ marginLeft: 15 }}>
+            <RemainingTextTile
+              receivedBoolean={false}
+              remaining={"1"}
+              onClick={() => history.push("/musictoreview")}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Home;
+
+{
+  /* <div
         style={{
           marginBottom: 25,
           alignItems: "center",
@@ -28,11 +107,13 @@ const Home = ({ list_of_artist_ids }) => {
         }}
       >
         <IconTextButton onClick={() => history.push("/submit")} />
-      </div> */}
-      <div style={{ marginLeft: 20, marginTop: 20 }}>
+      </div> */
+}
+{
+  /* <div style={{ marginLeft: 20, marginTop: 20 }}>
         <div style={{ marginBottom: 40 }}>
           <Text
-            text="feedback received"
+            text="received feedback"
             color={background_purple}
             fontsize={22}
             bold={"bold"}
@@ -55,7 +136,7 @@ const Home = ({ list_of_artist_ids }) => {
         </div>
         <div style={{ marginBottom: 40 }}>
           <Text
-            text="feedback to give"
+            text="given feedback"
             color={background_purple}
             fontsize={22}
             bold={"bold"}
@@ -75,8 +156,10 @@ const Home = ({ list_of_artist_ids }) => {
               );
             })}
           </div>
-        </div>
-        {/* <div style={{ marginBottom: 20 }}>
+        </div> */
+}
+{
+  /* <div style={{ marginBottom: 20 }}>
           <Text
             text="Artist Friends!"
             color={background_purple}
@@ -104,10 +187,8 @@ const Home = ({ list_of_artist_ids }) => {
               );
             })}
           </div>
-        </div> */}
-      </div>
-    </div>
-  );
-};
-
-export default Home;
+        </div> */
+}
+{
+  /* </div> */
+}

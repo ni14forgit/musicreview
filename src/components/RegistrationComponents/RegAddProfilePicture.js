@@ -36,7 +36,7 @@ const RegAddProfilePicture = ({ enableNextButton, setPicture, picture }) => {
         console.log(ind);
         const reader = new FileReader();
         reader.addEventListener("load", () => {
-          setPicture(reader.result);
+          setPicture({ imgdata: reader.result, imgfile: e.target.files[0] });
           setLoading(false);
           enableNextButton(true);
           setFileInRange(false);
@@ -62,7 +62,7 @@ const RegAddProfilePicture = ({ enableNextButton, setPicture, picture }) => {
         setError(false);
         const reader = new FileReader();
         reader.addEventListener("load", () => {
-          setPicture(reader.result);
+          setPicture({ imgdata: reader.result, imgfile: files[0] });
           setLoading(false);
           enableNextButton(true);
           setFileInRange(false);

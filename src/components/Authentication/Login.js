@@ -35,7 +35,7 @@ const Login = ({
 }) => {
   const loginAfterChecking = () => {
     if (email && passwordOne) {
-      loginAction();
+      loginAction({ email: email, password: passwordOne });
     } else {
       console.log("not correct?");
     }

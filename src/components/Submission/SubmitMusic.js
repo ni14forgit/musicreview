@@ -1,154 +1,269 @@
-import { background_purple } from "../../constants";
+import { background_purple, light_purple, white } from "../../constants";
 import InvertedTextButton from "../Useful/InvertedTextButton";
 import Text from "../Useful/Text";
 import { useState, useEffect } from "react";
 import FileUploader from "../../metafunctions/FileUploader";
 import FakeBarUI from "../Small/FakeBarUI";
 import ToggleSelectOption from "../Useful/ToggleSelectOption";
+import { IoMdClose } from "react-icons/io";
 
-const listOfGenres = [
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-  "lo-fi",
-];
+const SubmitMusic = ({
+  song,
+  setSong,
+  enableNextButton,
+  selectedOptions,
+  setSelectedOptions,
+  constantCategories,
+}) => {
+  const [fileInRange, setFileInRange] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-const SubmitMusic = () => {
-  var starterArray = new Array(listOfGenres.length);
-  const chooseSong = () => {};
-  const [file, setFile] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState(
-    starterArray.fill(false)
-  );
-  //   const [designSongHeight, setDesignSongHeight] = useState([]);
-
-  useEffect(() => {
-    console.log(file);
-  }, [file]);
-
-  const toggleAnOption = (ind) => {
-    var copyOfOptions = [...selectedOptions];
-
-    // why am i doing a for loop here?
-
-    for (var i = 0; i < selectedOptions.length; i++) {
-      if (ind == i) {
-        copyOfOptions[i] = !copyOfOptions[i];
-        break;
+  const isNothingSelected = (options) => {
+    for (var i = 0; i < options.length; i++) {
+      if (options[i]) {
+        return false;
       }
     }
-
-    setSelectedOptions(copyOfOptions);
+    return true;
   };
 
   useEffect(() => {
-    console.log(selectedOptions);
-  }, []);
+    if (song && !isNothingSelected(selectedOptions)) {
+      enableNextButton(true);
+    } else {
+      enableNextButton(false);
+    }
+  }, [song, selectedOptions]);
+
+  const deleteSong = () => {
+    setSong(null);
+  };
+
+  const addImageHandleFileInput = (e, ind) => {
+    if (e.target.files[0]) {
+      if (
+        e.target.files[0].type.includes("wav") ||
+        e.target.files[0].type.includes("mp3")
+      ) {
+        console.log(e.target.files[0]);
+        setError(false);
+        console.log(ind);
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setSong({ song: reader.result, name: e.target.files[0].name });
+
+          setLoading(false);
+          enableNextButton(true);
+          setFileInRange(false);
+        });
+        reader.readAsDataURL(e.target.files[0]);
+        setLoading(true);
+      } else {
+        console.log("error triggeered");
+        setError(true);
+      }
+    }
+    return false;
+  };
+
+  const dragAddImageHandleFileInput = (e) => {
+    console.log("drag music triggered");
+    let files = [...e.dataTransfer.files];
+    if (files && files.length > 0) {
+      if (files[0].type.includes("wav") || files[0].type.includes("mp3")) {
+        setError(false);
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          setSong({ song: reader.result, name: files[0].name });
+          setLoading(false);
+          enableNextButton(true);
+          setFileInRange(false);
+        });
+        reader.readAsDataURL(files[0]);
+        // setPopUpOpen(false);
+        setLoading(true);
+      } else {
+        setError(true);
+      }
+    }
+    return false;
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = "copy";
+    setFileInRange(true);
+  };
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFileInRange(false);
+  };
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFileInRange(true);
+  };
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dragAddImageHandleFileInput(e);
+  };
+
+  const toggleOption = (ind) => {
+    const copyOfSelectedOptions = [...selectedOptions];
+    copyOfSelectedOptions[ind] = !copyOfSelectedOptions[ind];
+    setSelectedOptions(copyOfSelectedOptions);
+    if (isNothingSelected(selectedOptions)) {
+      enableNextButton(false);
+    } else {
+      enableNextButton(true);
+    }
+  };
 
   return (
     <div
       style={{
-        backgroundColor: background_purple,
-        width: "80%",
-        // height: 400,
-        borderRadius: 5,
-        padding: 10,
+        backgroundColor: fileInRange ? light_purple : background_purple,
+        width: 600,
+        height: 260 + (song ? 75 : 0),
+        borderRadius: 10,
       }}
     >
       <div
         style={{
           display: "flex",
+          flexDirection: "horizontal",
           justifyContent: "flex-end",
-          marginRight: 10,
-          marginTop: 10,
-          // border: "2px solid black",
-        }}
-      >
-        {/* <InvertedTextButton text="upload" onClick={chooseSong} /> */}
-        <FileUploader
-          Button={InvertedTextButton}
-          onFileSelect={(file) => setFile(file)}
-          ind={0}
-          color="purple"
-        />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          flexDirection: "column",
           alignItems: "center",
-          height: 300,
-          // border: "2px solid black",
         }}
       >
-        {file ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "left",
-              // border: "2px solid black",
-            }}
-          >
-            <div style={{ marginBottom: 20 }}>
-              <Text text={file.name} size={12} color="white" />
-            </div>
-            <div>
-              <FakeBarUI length={40} />
-            </div>
+        <div style={{ marginRight: 15, marginTop: 5 }}>
+          <FileUploader
+            Button={InvertedTextButton}
+            onFileSelect={addImageHandleFileInput}
+            color={background_purple}
+            ind={0}
+          />
+        </div>
+      </div>
+
+      <div
+        className={"drag-drop-zone"}
+        onDrop={(e) => handleDrop(e)}
+        onDragOver={(e) => handleDragOver(e)}
+        onDragEnter={(e) => handleDragEnter(e)}
+        onDragLeave={(e) => handleDragLeave(e)}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          //   border: "2px solid black",
+        }}
+      >
+        {song ? (
+          <div>
+            {!loading ? (
+              <div>
+                <div>
+                  <div style={{ marginBottom: 25, marginTop: -40 }}>
+                    <div
+                      style={{
+                        marginBottom: 5,
+                        display: "flex",
+                        flexDirection: "horizontal",
+                        justifyContent: "space-between",
+                        width: 270,
+                        // border: "2px solid black",
+                      }}
+                    >
+                      <div style={{ width: "80%" }}>
+                        <Text text={song.name} size={12} color="white" />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "horizontal",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <IoMdClose
+                          size={19}
+                          color={white}
+                          onClick={deleteSong}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <FakeBarUI length={30} scale={0.75} />
+                    </div>
+                  </div>
+                </div>
+                <div style={{ marginBottom: 15 }}>
+                  <Text
+                    text="What genre(s) best capture your music (you can select multiple)? "
+                    size={12}
+                    color="white"
+                    bold="bold"
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "horizontal" }}>
+                  {constantCategories.map((val, ind) => {
+                    return (
+                      <div style={{ marginRight: 8 }}>
+                        <ToggleSelectOption
+                          text={val}
+                          selected={selectedOptions[ind]}
+                          onClick={() => toggleOption(ind)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <Text color={white} text="loading..." fontsize={14} bold="bold" />
+            )}
           </div>
         ) : (
-          <Text
-            fontsize={30}
-            color="white"
-            bold="medium"
-            text={"Drag & Drop Your Music!"}
-          />
+          <div style={{ marginTop: -80 }}>
+            <Text
+              color={white}
+              text="drag/upload up to 3 songs or clips you're proud of!"
+              fontsize={18}
+              bold="bold"
+            />
+          </div>
         )}
-        {file ? (
+        {error ? (
           <div
             style={{
+              backgroundColor: "gray",
+              width: 200,
+              height: 50,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "left",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 10,
+              marginTop: 20,
             }}
           >
-            <div style={{ marginBottom: 15 }}>
-              <Text
-                text="What genre(s) best capture your music (you can select multiple)? "
-                size={12}
-                color="white"
-                bold="bold"
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "horizontal" }}>
-              {listOfGenres.map((val, ind) => {
-                return (
-                  <div style={{ marginRight: 8 }}>
-                    <ToggleSelectOption
-                      text={val}
-                      selected={selectedOptions[ind]}
-                      onClick={() => toggleAnOption(ind)}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+            <Text
+              color={white}
+              text="File must be .wav or mp3"
+              fontsize={14}
+              bold="bold"
+            />
           </div>
         ) : null}
       </div>
-
-      {/* {file} */}
     </div>
   );
 };

@@ -7,6 +7,7 @@ const ModifiableTextBox = ({
   fontSize,
   placeholder,
   expands,
+  style,
 }) => {
   const defaultStyle = {
     backgroundColor: "transparent",
@@ -26,6 +27,7 @@ const ModifiableTextBox = ({
     paddingBottom: 6,
     borderRadius: 5,
     resize: "none",
+    ...style,
   };
 
   const textareaRef = useRef(null);

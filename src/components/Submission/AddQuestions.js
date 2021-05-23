@@ -1,4 +1,4 @@
-import { background_purple } from "../../constants";
+import { background_purple, white } from "../../constants";
 import InvertedTextButton from "../Useful/InvertedTextButton";
 import Text from "../Useful/Text";
 import { useState, useEffect } from "react";
@@ -9,29 +9,30 @@ import CommentBox from "../Small/CommentBox";
 import CommentsList from "../Small/ReviewCommentsList";
 import QuestionsCommentsList from "../Small/QuestionsCommentsList";
 import TextButton from "../Useful/TextButton";
+import { FaCommentAlt } from "react-icons/fa";
+import ModifiableTextBox from "../Useful/ModifiableTextBox";
 
-const AddQuestions = () => {
+const AddQuestions = ({
+  listOfComments,
+  setListOfComments,
+  selectedOptions,
+  setSelectedOptions,
+  constantCategories,
+  enableNextButton,
+}) => {
   const [currentCommentValue, setCurrentCommentValue] = useState("");
-  const [listOfComments, setListOfComments] = useState([]);
-  const listOfGenres = ["lo-fi", "lo-fi", "lo-fi", "lo-fi"];
-  var starterArray = new Array(listOfGenres.length);
-  const [canMoveOn, setCanMoveOn] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState(
-    starterArray.fill(false)
-  );
-
   useEffect(() => {
-    if (!listOfComments) {
-      setCanMoveOn(false);
+    if (listOfComments.length == 0) {
+      enableNextButton(false);
       return;
     }
     for (var i = 0; i < selectedOptions.length; i++) {
       if (selectedOptions[i]) {
-        setCanMoveOn(true);
+        enableNextButton(true);
         return;
       }
     }
-    setCanMoveOn(false);
+    enableNextButton(false);
   }, [selectedOptions, listOfComments]);
 
   const toggleAnOption = (ind) => {
@@ -56,7 +57,7 @@ const AddQuestions = () => {
   };
 
   const submitComment = () => {
-    if (currentCommentValue == "") {
+    if (!currentCommentValue) {
       return;
     }
 
@@ -75,117 +76,78 @@ const AddQuestions = () => {
   };
 
   return (
-    <div style={{ width: "80%" }}>
-      <div
-        style={{
-          backgroundColor: background_purple,
-
-          height: 400,
-          borderRadius: 5,
-          // padding: 1,
-          // position: "relative",
-        }}
-      >
+    <div
+      style={{
+        backgroundColor: background_purple,
+        height: 400,
+        borderRadius: 5,
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "horizontal",
+      }}
+    >
+      <div style={{ marginLeft: 10, marginTop: 10, minWidth: "60%" }}>
+        <Text
+          text="add questions about your music you want answered"
+          bold="bold"
+          color="white"
+          fontsize={15}
+        />
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
-
-            // maxWidth: 500,
-            // width: 500,
-            // border: "2px solid black",
+            flexDirection: "horizontal",
+            alignItems: "center",
+            marginTop: 15,
           }}
         >
-          <div style={{ marginLeft: 10, marginTop: 10 }}>
-            <Text
-              text="lyrics, production quality, base melody, vibe - feel free to add timestamps (ex: @1:01)"
-              bold="bold"
-              color="white"
+          <div style={{ width: "90%" }}>
+            <ModifiableTextBox
+              currentValue={currentCommentValue}
+              setCurrentValue={setCurrentCommentValue}
+              placeholder="lyrics, production quality, base melody, vibe - feel free to add timestamps (ex: @1:01)"
+              expands={true}
+              style={{ width: 550, fontWeight: "semi-bold" }}
             />
-            <div style={{ display: "flex", flexDirection: "horizontal" }}>
-              <CommentBox
-                currentValue={currentCommentValue}
-                setCurrentValue={setCurrentCommentValue}
-              />
-              <TextButton text="comment" onClick={submitComment} />
-            </div>
-            <div style={{ border: "0px solid black" }}>
-              <QuestionsCommentsList
-                comments={listOfComments}
-                deleteComment={deleteComment}
-              />
-            </div>
           </div>
-          <div style={{ marginTop: 10, marginRight: 0, width: 300 }}>
-            <Text
-              text="Who do you want reviewing your music?"
-              color="white"
-              bold="bold"
-            />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "horizontal",
-                flexWrap: "wrap",
-              }}
-            >
-              {["Engineer", "Producer", "Lyricist", "Lyricist"].map(
-                (val, ind) => {
-                  return (
-                    <div style={{ marginRight: 8, marginBottom: 12 }}>
-                      <ToggleSelectOption
-                        text={val}
-                        selected={selectedOptions[ind]}
-                        onClick={() => toggleAnOption(ind)}
-                      />
-                    </div>
-                  );
-                }
-              )}
-            </div>
+          <div style={{ marginLeft: 30 }}>
+            <FaCommentAlt color={white} size={21} onClick={submitComment} />
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "100px",
-          }}
-        >
-          <div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "left",
-              }}
-            ></div>
-          </div>
+        <div style={{ border: "0px solid black" }}>
+          <QuestionsCommentsList
+            comments={listOfComments}
+            deleteComment={deleteComment}
+          />
         </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginRight: 10,
-            marginTop: 10,
-          }}
-        ></div>
       </div>
-      {canMoveOn ? (
+      <div style={{ marginTop: 10, marginRight: 0, width: "30%" }}>
+        <Text
+          text="Who do you want reviewing your music?"
+          color="white"
+          bold="bold"
+        />
         <div
           style={{
             display: "flex",
-            // flexDirection: "column",
-            marginTop: 10,
-            // border: "2px solid black",
-            justifyContent: "space-around",
+            flexDirection: "horizontal",
+            flexWrap: "wrap",
+            marginTop: 15,
           }}
         >
-          <TextButton text="Back" fontWeight="bold" />
-          <TextButton text="Next" fontWeight="bold" />
+          {constantCategories.map((val, ind) => {
+            return (
+              <div style={{ marginRight: 8, marginBottom: 12 }}>
+                <ToggleSelectOption
+                  text={val}
+                  selected={selectedOptions[ind]}
+                  onClick={() => toggleAnOption(ind)}
+                />
+              </div>
+            );
+          })}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 };

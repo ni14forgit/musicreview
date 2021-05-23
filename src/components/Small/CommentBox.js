@@ -17,6 +17,7 @@ const defaultStyle = {
   paddingBottom: 2,
   borderRadius: 5,
   resize: "none",
+  fontFamily: "sans-serif",
 };
 const CommentBox = ({
   setCurrentValue,

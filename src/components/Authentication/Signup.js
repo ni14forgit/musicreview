@@ -1,6 +1,8 @@
 import { background_purple } from "../../constants";
 import ModifiableTextBox from "../Useful/ModifiableTextBox";
 import Text from "../Useful/Text";
+import { useHistory } from "react-router-dom";
+
 // import CommentBox from "../Small/CommentBox";
 
 const AuthenticateButton = ({ backgroundColor, textColor, text, onClick }) => {
@@ -35,10 +37,20 @@ const Signup = ({
   switchLogin,
   signupAction,
 }) => {
-  const signupAfterChecking = () => {
+  const history = useHistory();
+
+  const signupAfterChecking = async () => {
     if (email && passwordOne && passwordTwo) {
       if (passwordOne == passwordTwo) {
-        signupAction();
+        if (!(await signupAction({ email: email, password: passwordOne }))) {
+          console.log("user does not exist yay!");
+          history.push({
+            pathname: "/registerinitialprofile",
+            state: { email: email, password: passwordOne },
+          });
+        } else {
+          console.log("user already exists nay");
+        }
       }
     }
   };

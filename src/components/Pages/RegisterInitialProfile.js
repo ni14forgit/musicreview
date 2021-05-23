@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegAddSingleLine from "../RegistrationComponents/RegAddSingleLine";
 import RegAddSocialLink from "../RegistrationComponents/RegAddSocialLink";
 import RegAddSelectedOptions from "../RegistrationComponents/RegAddSelectedOptions";
@@ -6,17 +6,41 @@ import RegAddProfilePicture from "../RegistrationComponents/RegAddProfilePicture
 import RegAddMilestone from "../RegistrationComponents/RegAddMilestone";
 import TextButton from "../Useful/TextButton";
 import RegAddSongs from "../RegistrationComponents/RegAddSongs";
+import { useHistory } from "react-router-dom";
+import { register } from "../../api_functions/api_authenticate";
 
 const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
 const PROFESSIONS = ["Singer", "Songwriter", "Audio Engineer", "Producer"];
 const RegisterInitialProfile = () => {
+  const history = useHistory();
+
+  // useEffect(() => {
+  //   const email = history.location.state.email;
+  //   const password = history.location.state.password;
+  //   console.log(email);
+  //   console.log(password);
+  // }, []);
+
+  const registerUser = async () => {
+    register(imageData, songs, {
+      email: history.location.state.email,
+      password: history.location.state.password,
+      name: name,
+      genres: genres,
+      professions: professions,
+      spotify: socialLinks.spotify,
+      soundcloud: socialLinks.soundcloud,
+      instagram: socialLinks.instagram,
+    });
+  };
+
   var starterArrayGenres = new Array(GENRES.length);
   var starterArrayProfessions = new Array(PROFESSIONS.length);
-  const [step, setStep] = useState(6);
+  const [step, setStep] = useState(0);
   const [nextButtonEnable, setNextButtonEnable] = useState(false);
 
   // PROFILE PICTURE
-  const [imageData, setImageData] = useState(null);
+  const [imageData, setImageData] = useState({ imgdata: null, imgfile: null });
 
   // SOUNDCLOUD, SPOTIFY, INSTAGRAM
   const [socialLinks, setSocialLinks] = useState({
@@ -91,17 +115,9 @@ const RegisterInitialProfile = () => {
           <RegAddProfilePicture
             enableNextButton={setNextButtonEnable}
             setPicture={setImageData}
-            picture={imageData}
+            picture={imageData.imgdata}
           />
         );
-      // case 5:
-      //   return (
-      //     <RegAddMilestone
-      //       enableNextButton={setNextButtonEnable}
-      //       setAccomplishments={setAccomplishments}
-      //       accomplishments={accomplishments}
-      //     />
-      //   );
       case 5:
         return (
           <RegAddSongs
@@ -121,7 +137,7 @@ const RegisterInitialProfile = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        border: "2px solid black",
+        // border: "2px solid black",
       }}
     >
       {renderStep(step)}
@@ -152,9 +168,10 @@ const RegisterInitialProfile = () => {
             />
           ) : (
             <TextButton
-              text="Finish Profile"
+              text="Register Profile"
               disabled={!nextButtonEnable}
-              onClick={() => setStep(step + 1)}
+              // onClick={() => setStep(step + 1)}
+              onClick={registerUser}
             />
           )}
         </div>

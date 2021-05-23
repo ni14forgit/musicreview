@@ -1,10 +1,8 @@
 import ProfileCommenter from "./ProfileCommenter";
 import nish from "../../nish.jpg";
 import TextButton from "../Useful/TextButton";
-// import { createRef } from "react";
-// import skrollTop from "skrolltop";
-// import "./scroll";
-// import "./CommentsList.css";
+import { IoMdClose } from "react-icons/io";
+import { white } from "../../constants";
 const IndividualComment = ({ text, timestamp, photo, ind, deleteComment }) => {
   return (
     <div
@@ -14,22 +12,23 @@ const IndividualComment = ({ text, timestamp, photo, ind, deleteComment }) => {
         flexDirection: "horizontal",
         alignItems: "center",
         // marginBottom: "1px",
+        // border: "2px solid black",
       }}
     >
-      <div style={{ width: "90%" }}>
+      <div style={{ width: 480 }}>
         <p
           style={{
             marginLeft: "1px",
-            fontSize: 11,
+            fontSize: 13,
             color: "white",
-            //   border: "2px solid black",
+            // border: "2px solid black",
           }}
         >
           {text}
         </p>
       </div>
-      <div style={{ width: "10%" }}>
-        <TextButton text="x" onClick={() => deleteComment(ind)} />
+      <div style={{ width: "10%", marginBottom: -5, marginLeft: 10 }}>
+        <IoMdClose color={white} size={20} onClick={() => deleteComment(ind)} />
       </div>
     </div>
   );
@@ -51,7 +50,6 @@ const QuestionsCommentsList = ({ comments, deleteComment }) => {
         }}
       >
         {comments.map((val, ind) => {
-          // ref={refs[ind]
           return (
             <li id={"c" + ind} key={ind}>
               <IndividualComment

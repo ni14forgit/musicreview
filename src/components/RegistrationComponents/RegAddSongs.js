@@ -42,7 +42,7 @@ const RegAddSongs = ({ enableNextButton, setSongs, songs }) => {
         reader.addEventListener("load", () => {
           setSongs((prevSongs) => [
             ...prevSongs,
-            { song: reader.result, name: e.target.files[0].name },
+            { songdata: reader.result, songfile: e.target.files[0] },
           ]);
 
           setLoading(false);
@@ -68,7 +68,8 @@ const RegAddSongs = ({ enableNextButton, setSongs, songs }) => {
         reader.addEventListener("load", () => {
           setSongs((prevSongs) => [
             ...prevSongs,
-            { song: reader.result, name: files[0].name },
+
+            { songdata: reader.result, songfile: files[0] },
           ]);
           setLoading(false);
           enableNextButton(true);
@@ -174,7 +175,11 @@ const RegAddSongs = ({ enableNextButton, setSongs, songs }) => {
                         }}
                       >
                         <div style={{ width: "80%" }}>
-                          <Text text={val.name} size={12} color="white" />
+                          <Text
+                            text={val.songfile.name}
+                            size={12}
+                            color="white"
+                          />
                         </div>
                         <div
                           style={{

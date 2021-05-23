@@ -12,20 +12,12 @@ import VisitProfile from "./components/Pages/VisitProfile";
 import Authenticate from "./components/Pages/Authenticate";
 import RegisterInitialProfile from "./components/Pages/RegisterInitialProfile";
 
-const comments = [
-  {
-    comment: "yo what's good",
-    timestamp: 40,
-    uitimestamp: "0:40",
-    photo: nish,
-  },
-];
 function App() {
   const history = useHistory();
   useEffect(() => {
     // history.replace("/home");
-    history.replace("/visitprofile");
-    // history.replace("/authenticate");
+    // history.replace("/visitprofile");
+    history.replace("/authenticate");
     // history.replace("registerinitialprofile");
   });
 

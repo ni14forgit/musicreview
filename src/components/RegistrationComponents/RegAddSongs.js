@@ -68,7 +68,6 @@ const RegAddSongs = ({ enableNextButton, setSongs, songs }) => {
         reader.addEventListener("load", () => {
           setSongs((prevSongs) => [
             ...prevSongs,
-
             { songdata: reader.result, songfile: files[0] },
           ]);
           setLoading(false);

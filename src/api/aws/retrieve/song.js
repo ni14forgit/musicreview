@@ -23,4 +23,4 @@ const retrieve_song = async () => {
   return data.photo;
 };
 
-export default retrieve_song;
+export { retrieve_song };

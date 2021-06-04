@@ -1,6 +1,8 @@
+import { useEffect, useState, useRef } from "react";
 import { background_purple } from "../../constants";
 import ModifiableTextBox from "../Useful/ModifiableTextBox";
 import Text from "../Useful/Text";
+
 // import CommentBox from "../Small/CommentBox";
 
 const AuthenticateButton = ({ backgroundColor, textColor, text, onClick }) => {
@@ -23,8 +25,6 @@ const AuthenticateButton = ({ backgroundColor, textColor, text, onClick }) => {
   );
 };
 
-// "#5988FF",
-
 const Login = ({
   email,
   setEmail,
@@ -33,9 +33,28 @@ const Login = ({
   setPasswordOne,
   loginAction,
 }) => {
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
+  const [accountNonexistent, setAccountNonexistent] = useState(false);
+  // email is not valid
+
+  // useEffect(() => {
+  //   console.log("changed");
+  //   console.log(incorrectPassword);
+  // }, [incorrectPassword]);
+
   const loginAfterChecking = () => {
     if (email && passwordOne) {
-      loginAction({ email: email, password: passwordOne });
+      // setIsAttemptingLogin(true);
+      loginAction({ email: email, password: passwordOne }).then((resp) => {
+        // setIsAttemptingLogin(false);
+        console.log(resp);
+        if (!resp.success) {
+          console.log("not successful");
+          console.log(resp.errors.incorrectPasswordError);
+          setAccountNonexistent(resp.errors.acountDoesNotExistError);
+          setIncorrectPassword(resp.errors.incorrectPasswordError);
+        }
+      });
     } else {
       console.log("not correct?");
     }
@@ -66,8 +85,31 @@ const Login = ({
           currentValue={passwordOne}
           fontSize={16}
           placeholder="password"
+          isPassword={true}
         />
       </div>
+
+      {accountNonexistent ? (
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text text={"This account hasn't been created!"} color="red" />
+        </div>
+      ) : null}
+
+      {incorrectPassword ? (
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text text={"Incorrect password!"} color="red" />
+        </div>
+      ) : null}
       <div style={{ marginTop: 20 }}>
         <AuthenticateButton
           backgroundColor="#5988FF"

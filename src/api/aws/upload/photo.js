@@ -1,17 +1,14 @@
 import axios from "axios";
+import { aws_upload_photo } from "../../urls/URLS";
 
 const upload_photo = async (photo = null) => {
   console.log(photo);
   console.log("UPLOAD PHOTO called");
   const formData = new FormData();
-  formData.append("file", photo.imgfile);
+  formData.append("file", photo);
   formData.append("name", "image");
   const photoResult = await axios
-    .post("http://localhost:4000/api/aws/uploadprofilePhoto", formData)
-    // .then((res) => {
-    //   // console.log(res);
-    //   return res.json();
-    // })
+    .post(aws_upload_photo, formData)
     .then((resp) => {
       return resp.data;
     })
@@ -19,4 +16,4 @@ const upload_photo = async (photo = null) => {
   return photoResult;
 };
 
-export default upload_photo;
+export { upload_photo };

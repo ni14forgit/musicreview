@@ -35,7 +35,7 @@ const GeneralFeedback = ({ setCurrentValue, currentValue }) => {
         type="text"
         value={currentValue}
         onChange={(e) => {
-          setCurrentValue(e.target.value);
+          setCurrentValue({ altered: true, value: e.target.value });
         }}
       />
     </div>

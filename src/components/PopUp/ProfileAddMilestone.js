@@ -8,7 +8,12 @@ import CommentBox from "../Small/CommentBox";
 // import DatePicker from "react-datepicker";
 import "react-day-picker/lib/style.css";
 import DayPicker from "react-day-picker";
-const ProfileAddMilestone = ({ open, setPopUpOpen, setAccomplishments }) => {
+const ProfileAddMilestone = ({
+  open,
+  setPopUpOpen,
+  setAccomplishments,
+  addToDatabase,
+}) => {
   const [title, setTitle] = useState("Milestone Title");
   const [description, setDescription] = useState("Description Title");
   const [date, setDate] = useState(null);
@@ -20,9 +25,15 @@ const ProfileAddMilestone = ({ open, setPopUpOpen, setAccomplishments }) => {
     setPopUpOpen(false);
   };
 
-  const closeAndSave = () => {
+  const closeAndSave = async () => {
+    const waiter = await addToDatabase({
+      date: date,
+      description: description,
+      title: title,
+    });
+    console.log(waiter.id);
     setAccomplishments((prevList) => [
-      { date: date, description: description, title: title },
+      { id: waiter.id, date: date, description: description, title: title },
       ...prevList,
     ]);
     setPopUpOpen(false);

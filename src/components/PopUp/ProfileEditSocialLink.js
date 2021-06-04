@@ -47,8 +47,19 @@ const instagramchecker = (instagram_link) => {
 
 // bool passed = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)
 
-const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
+const ProfileEditSocialLink = ({
+  open,
+  setPopUpOpen,
+  links,
+  setLinks,
+  api_edit_call,
+}) => {
   const [staleLinks, setstaleLinks] = useState(null);
+
+  const saveFunc = () => {
+    api_edit_call(links);
+    setPopUpOpen(false);
+  };
 
   useEffect(() => {
     const myCopy = { ...links };
@@ -178,10 +189,7 @@ const ProfileEditSocialLink = ({ open, setPopUpOpen, links, setLinks }) => {
             }}
           >
             <div style={{ marginRight: 15 }}>
-              <InvertedTextButton
-                text="Save"
-                onClick={() => setPopUpOpen(false)}
-              />
+              <InvertedTextButton text="Save" onClick={saveFunc} />
             </div>
           </div>
         ) : null}

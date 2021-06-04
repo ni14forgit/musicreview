@@ -2,19 +2,25 @@ import Signup from "../Authentication/Signup";
 import { useState } from "react";
 import Login from "../Authentication/Login";
 import { useHistory } from "react-router-dom";
-import {
-  login,
-  register,
-  checkExistence,
-} from "../../api_functions/api_authenticate";
+import { login } from "../../api/accounts/login";
+import { checkExistence } from "../../api/accounts/checkexistence";
+import LoadingSpinner from "../Small/LoadingSpinner";
 
 const Authenticate = () => {
   const [email, setEmail] = useState("");
   const [passwordOne, setPasswordOne] = useState("");
   const [passwordTwo, setPasswordTwo] = useState("");
   const [isLogin, setIsLogin] = useState(true);
-
+  // const [isAttemptingLogin, setIsAttemptingLogin] = useState(false);
   const history = useHistory();
+
+  // const loginWrapper = () => {
+
+  // }
+
+  // const switchToSignUp = () => {
+  //   setIsLogin(false)
+  // }
 
   return (
     <div>
@@ -25,8 +31,10 @@ const Authenticate = () => {
           passwordOne={passwordOne}
           setPasswordOne={setPasswordOne}
           switchSignUp={() => setIsLogin(false)}
+          // setIsAttemptingLogin={setIsAttemptingLogin}
           // loginAction={() => history.push("home")}
           loginAction={login}
+          // loginAction={() => setIsAttemptingLogin(true)}
         />
       ) : (
         <Signup
@@ -37,6 +45,7 @@ const Authenticate = () => {
           passwordTwo={passwordTwo}
           setPasswordTwo={setPasswordTwo}
           switchLogin={() => setIsLogin(true)}
+          // setIsAttemptingLogin={setIsAttemptingLogin}
           // signupAction={() => history.push("registerinitialprofile")}
           signupAction={checkExistence}
         />

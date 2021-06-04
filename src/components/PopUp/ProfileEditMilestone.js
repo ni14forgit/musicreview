@@ -14,10 +14,17 @@ const ProfileEditMilestone = ({
   setAccomplishments,
   accomplishments,
   index,
+  editToDatabase,
+  id,
 }) => {
   //   const [startDate, setStartDate] = useState(new Date());
 
   const [staleAccomplishment, setStaleAccomplishment] = useState(null);
+
+  const saveFunc = () => {
+    editToDatabase(id, accomplishments[index]);
+    setPopUpOpen(false);
+  };
 
   useEffect(() => {
     const myCopy = [...accomplishments];
@@ -151,10 +158,7 @@ const ProfileEditMilestone = ({
           }}
         >
           <div style={{ marginRight: 15 }}>
-            <InvertedTextButton
-              text="Save"
-              onClick={() => setPopUpOpen(false)}
-            />
+            <InvertedTextButton text="Save" onClick={saveFunc} />
           </div>
         </div>
       </div>

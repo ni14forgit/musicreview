@@ -7,35 +7,39 @@ import RegAddMilestone from "../RegistrationComponents/RegAddMilestone";
 import TextButton from "../Useful/TextButton";
 import RegAddSongs from "../RegistrationComponents/RegAddSongs";
 import { useHistory } from "react-router-dom";
-import { register } from "../../api_functions/api_authenticate";
+import { register } from "../../api/profiles/register";
+import LoadingSpinner from "../Small/LoadingSpinner";
+import {
+  convertGenresListToDict,
+  convertProfessionsListToDict,
+  GENRES,
+  PROFESSIONS,
+  starterArrayGenres,
+  starterArrayProfessions,
+} from "../../metafunctions/genProfHelper";
 
-const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
-const PROFESSIONS = ["Singer", "Songwriter", "Audio Engineer", "Producer"];
 const RegisterInitialProfile = () => {
   const history = useHistory();
 
-  // useEffect(() => {
-  //   const email = history.location.state.email;
-  //   const password = history.location.state.password;
-  //   console.log(email);
-  //   console.log(password);
-  // }, []);
+  const [isAttemptingLogin, setIsAttemptingLogin] = useState(false);
 
   const registerUser = async () => {
-    register(imageData, songs, {
+    // setIsAttemptingLogin(true);
+    register(imageData.imgfile, songs, {
       email: history.location.state.email,
       password: history.location.state.password,
       name: name,
-      genres: genres,
-      professions: professions,
+      genres: convertGenresListToDict(genres),
+      professions: convertProfessionsListToDict(professions),
       spotify: socialLinks.spotify,
       soundcloud: socialLinks.soundcloud,
       instagram: socialLinks.instagram,
+    }).then((resp) => {
+      setIsAttemptingLogin(false);
+      // move on to next page?
     });
   };
 
-  var starterArrayGenres = new Array(GENRES.length);
-  var starterArrayProfessions = new Array(PROFESSIONS.length);
   const [step, setStep] = useState(0);
   const [nextButtonEnable, setNextButtonEnable] = useState(false);
 
@@ -129,7 +133,9 @@ const RegisterInitialProfile = () => {
     }
   };
 
-  return (
+  return isAttemptingLogin ? (
+    <LoadingSpinner />
+  ) : (
     <div
       style={{
         display: "flex",
@@ -159,6 +165,7 @@ const RegisterInitialProfile = () => {
             />
           ) : null}
         </div>
+
         <div style={{ marginLeft: 30 }}>
           {step < 5 ? (
             <TextButton

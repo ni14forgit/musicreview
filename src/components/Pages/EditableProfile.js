@@ -1,6 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-// import StaticProfileCommenter from "../Small/StaticProfileCommenter";
-import { MdAddAPhoto } from "react-icons/md";
 import {
   background_purple,
   light_purple,
@@ -9,13 +7,9 @@ import {
 } from "../../constants";
 import Text from "../Useful/Text";
 import MiniPlayer from "../MiniPlayer";
-import TextButton from "../Useful/TextButton";
-import Eric from "../../Eric.wav";
-import { FiEdit2 } from "react-icons/fi";
 import Header from "../Navigation/Header";
 import { AiFillCamera } from "react-icons/ai";
 import { FaMinusCircle } from "react-icons/fa";
-import musicianpic from "../../musicianpic.jpeg";
 import { FiEdit3 } from "react-icons/fi";
 import Stars from "../Small/Feedback/Stars";
 import { GrSoundcloud, GrSpotify, GrInstagram } from "react-icons/gr";
@@ -27,8 +21,32 @@ import ProfileAddMilestone from "../PopUp/ProfileAddMilestone";
 import ProfileEditSocialLink from "../PopUp/ProfileEditSocialLink";
 import ProfileEditSingleLine from "../PopUp/ProfileEditSingleLine";
 import ProfileAddSelectedOptions from "../PopUp/ProfileAddSelectedOptions";
-import StaticProfileCommenter from "../Small/StaticProfileCommenter";
 import FacebookFriends from "../Small/Social/FacebookFriends";
+import {
+  edit_genres,
+  edit_name,
+  edit_professions,
+  edit_sociallinks,
+  edit_profilephoto,
+  edit_deletesong,
+  edit_deleteaccomplishment,
+  edit_addaccomplishment,
+  edit_accomplishment,
+} from "../../api/profiles/edits";
+import { retrieve_profile } from "../../api/profiles/retrieve";
+// import { delete_photo } from "../../api/aws/delete/photo";
+import {
+  convertGenreToText,
+  convertProfessionToText,
+  // convertGenreTextToList,
+  // convertProfessionsTextToList,
+  convertGenresListToDict,
+  convertProfessionsListToDict,
+  GENRES,
+  PROFESSIONS,
+  convertGenresDictToList,
+  convertProfessionsDictToList,
+} from "../../metafunctions/genProfHelper";
 
 const Accomplishment = ({
   title,
@@ -142,26 +160,6 @@ const ProfilePicEditable = ({
   );
 };
 
-const ImageFileUploader = ({ handleFileInput, ind }) => {
-  const inputReference = useRef(null);
-
-  const fileUploadAction = () => inputReference.current.click();
-
-  return (
-    <div style={{ position: "relative" }} className="file-uploader">
-      <input
-        hidden
-        ref={inputReference}
-        type="file"
-        onChange={(e) => handleFileInput(e, ind)}
-      />
-      <div style={{ marginTop: 10 }}>
-        <FiEdit2 color={background_purple} onClick={fileUploadAction} />
-      </div>
-    </div>
-  );
-};
-
 const CoolImageFileUploader = ({
   handleFileInput,
   ind,
@@ -215,67 +213,64 @@ const CoolImageFileUploader = ({
   );
 };
 
-const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
-const PROFESSIONS = ["Singer", "Songwriter", "Audio Engineer", "Producer"];
+// const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
+// const PROFESSIONS = ["Singer", "Songwriter", "Audio Engineer", "Producer"];
+// var starterArrayGenres = new Array(GENRES.length);
+//   var starterArrayProfessions = new Array(PROFESSIONS.length);
 
 const EditableProfile = ({ nish }) => {
-  var starterArrayGenres = new Array(GENRES.length);
-  var starterArrayProfessions = new Array(PROFESSIONS.length);
-  const [picture, setPicture] = useState(null);
+  // const [genres, setGenres] = useState(starterArrayGenres.fill(false));
+  // const [professions, setProfessions] = useState(
+  //   starterArrayProfessions.fill(false)
+  // );
+  const [pageLoading, setPageLoading] = useState(true);
+  const [genres, setGenres] = useState(null);
+  const [professions, setProfessions] = useState(null);
+  const [name, setName] = useState("Jessica Smith");
   const [imageData, setImageData] = useState(nish);
   const [changeProfilePic, setChangeProfilePic] = useState(false);
-
   const [socialLinks, setSocialLinks] = useState({
     spotify: "",
     soundcloud: "",
     instagram: "",
   });
-
-  const [name, setName] = useState("Jessica Smith");
+  const [songs, setSongs] = useState([]);
+  const [accomplishments, setAccomplishments] = useState([]);
 
   const [socialPopUpOpen, setSocialPopUpOpen] = useState(false);
-
   const [namePopUpOpen, setNamePopUpOpen] = useState(false);
-
-  const [genres, setGenres] = useState(starterArrayGenres.fill(false));
   const [genrePopUpOpen, setGenrePopUpOpen] = useState(false);
-
-  const [professions, setProfessions] = useState(
-    starterArrayProfessions.fill(false)
-  );
   const [professionsPopUpOpen, setProfessionsPopUpOpen] = useState(false);
-
-  //   const [songSource, setSongSource] =
-  const [songs, setSongs] = useState([Eric, Eric]);
   const [songPopUpOpen, setSongPopUpOpen] = useState(false);
-  const [
-    accomplishmentEditPopUpOpen,
-    setAccomplishmentEditPopUpOpen,
-  ] = useState(false);
-  const [accomplishmentAddPopUpOpen, setAccomplishmentAddPopUpOpen] = useState(
-    false
-  );
-  const [accomplishments, setAccomplishments] = useState([
-    {
-      title: "1000+ views on Spotify single",
-      description:
-        "Released ‘Roses’ last October and marketed it through insta, tiktok. It was previewed by @newsongstoday!",
-      date: "1970-01-01",
-    },
-    {
-      title: "1000+ views on Spotify single",
-      description:
-        "Released ‘Roses’ last October and marketed it through insta, tiktok. It was previewed by @newsongstoday!",
-      date: "1970-01-01",
-    },
-    {
-      title: "1000+ views on Spotify single",
-      description:
-        "Released ‘Roses’ last October and marketed it through insta, tiktok. It was previewed by @newsongstoday!",
-      date: "1970-01-01",
-    },
-  ]);
+  const [accomplishmentEditPopUpOpen, setAccomplishmentEditPopUpOpen] =
+    useState(false);
+  const [accomplishmentAddPopUpOpen, setAccomplishmentAddPopUpOpen] =
+    useState(false);
   const [accomplishmentIndex, setAccomplishmentIndex] = useState(0);
+
+  useEffect(async () => {
+    console.log("useeffect");
+    const result = await retrieve_profile();
+    const profile = result.profile;
+    console.log(profile);
+
+    setName(profile.name);
+
+    setImageData(profile.profile_photo);
+    setSocialLinks({
+      instagram: profile.instagram,
+      soundcloud: profile.soundcloud,
+      spotify: profile.spotify,
+    });
+    setSongs(profile.songs);
+    console.log(profile.accomplishments);
+    setAccomplishments(profile.accomplishments);
+    setGenres(convertGenresDictToList(profile.genres));
+    setProfessions(convertProfessionsDictToList(profile.professions));
+    // setGenres(convertGenreTextToList(profile.genres));
+    // setProfessions(convertProfessionsTextToList(profile.professions));
+    setPageLoading(false);
+  }, []);
 
   useEffect(() => {
     setChangeProfilePic(false);
@@ -285,41 +280,17 @@ const EditableProfile = ({ nish }) => {
     setSongs(songs.filter((song, index) => index !== ind));
   };
 
-  const convertGenreToText = (options) => {
-    var genrestring = "";
-
-    for (var i = 0; i < GENRES.length; i++) {
-      if (options[i]) {
-        genrestring += GENRES[i] + ", ";
-      }
-    }
-    genrestring = genrestring.slice(0, -2);
-
-    return genrestring;
-  };
-
-  const convertProfessionToText = (options) => {
-    var professionstring = "";
-
-    for (var i = 0; i < PROFESSIONS.length; i++) {
-      if (options[i]) {
-        professionstring += PROFESSIONS[i] + ", ";
-      }
-    }
-    professionstring = professionstring.slice(0, -2);
-
-    return professionstring;
-  };
-
   const imageHandleFileInput = (e) => {
     console.log("trigged image func");
     if (e.target.files[0]) {
       if (
         e.target.files[0].type.includes("png") ||
-        e.target.files[0].type.includes("jpg")
+        e.target.files[0].type.includes("jpg") ||
+        e.target.files[0].type.includes("jpeg")
       ) {
         console.log("picture: ", e.target.files);
-        setPicture(e.target.files[0]);
+
+        edit_profilephoto(e.target.files[0]);
         const reader = new FileReader();
         reader.addEventListener("load", () => {
           setImageData(reader.result);
@@ -338,9 +309,12 @@ const EditableProfile = ({ nish }) => {
     setAccomplishments(accomplishments.filter((item, index) => index != ind));
   };
 
-  return (
+  return pageLoading ? (
+    <div>PageLoading</div>
+  ) : (
     <div>
       <Header />
+      <button onClick={retrieve_profile}>HIHIH</button>
       <div
         style={{
           display: "flex",
@@ -418,6 +392,7 @@ const EditableProfile = ({ nish }) => {
                     setPopUpOpen={setNamePopUpOpen}
                     setText={setName}
                     text={name}
+                    api_edit_call={edit_name}
                   />
                 </div>
                 <div
@@ -447,6 +422,8 @@ const EditableProfile = ({ nish }) => {
                     setSelectedOptions={setProfessions}
                     title={"Strengths"}
                     constantCategories={PROFESSIONS}
+                    convertToDictFunc={convertProfessionsListToDict}
+                    api_edit_call={edit_professions}
                   />
                 </div>
                 <div
@@ -476,6 +453,8 @@ const EditableProfile = ({ nish }) => {
                     setSelectedOptions={setGenres}
                     title={"Genres"}
                     constantCategories={GENRES}
+                    convertToDictFunc={convertGenresListToDict}
+                    api_edit_call={edit_genres}
                   />
                 </div>
               </div>
@@ -537,6 +516,7 @@ const EditableProfile = ({ nish }) => {
                   setPopUpOpen={setSocialPopUpOpen}
                   links={socialLinks}
                   setLinks={setSocialLinks}
+                  api_edit_call={edit_sociallinks}
                 />
               </div>
             </div>
@@ -567,18 +547,25 @@ const EditableProfile = ({ nish }) => {
                       date={val.date}
                       bar={ind < accomplishments.length - 1}
                       openPopUp={() => openSpecificMilestone(ind)}
-                      deleteSelf={() => deleteSelf(ind)}
+                      deleteSelf={() => {
+                        deleteSelf(ind);
+                        edit_deleteaccomplishment(1);
+                      }}
                     />
                   </div>
                 );
               })}
-              <ProfileEditMilestone
-                open={accomplishmentEditPopUpOpen}
-                setAccomplishments={setAccomplishments}
-                index={accomplishmentIndex}
-                accomplishments={accomplishments}
-                setPopUpOpen={setAccomplishmentEditPopUpOpen}
-              />
+              {accomplishments.length > 0 ? (
+                <ProfileEditMilestone
+                  open={accomplishmentEditPopUpOpen}
+                  setAccomplishments={setAccomplishments}
+                  index={accomplishmentIndex}
+                  accomplishments={accomplishments}
+                  setPopUpOpen={setAccomplishmentEditPopUpOpen}
+                  id={2}
+                  editToDatabase={edit_accomplishment}
+                />
+              ) : null}
             </div>
             <div
               style={{
@@ -601,6 +588,7 @@ const EditableProfile = ({ nish }) => {
               open={accomplishmentAddPopUpOpen}
               setAccomplishments={setAccomplishments}
               setPopUpOpen={setAccomplishmentAddPopUpOpen}
+              addToDatabase={edit_addaccomplishment}
             />
             <div>
               <div style={{ marginTop: 30 }}>
@@ -619,18 +607,22 @@ const EditableProfile = ({ nish }) => {
                   alignItems: "center",
                 }}
               >
+                {/* {dbID: int, data: {songname: name, data: songObj} */}
                 {songs.map((val, ind) => {
                   return (
                     <div
                       key={val}
                       style={{ marginRight: 15, alignItems: "left" }}
                     >
-                      <MiniPlayer song={val} />
+                      <MiniPlayer song={val.url} title={val.title} />
                       <div style={{ marginLeft: 10, marginTop: 10 }}>
                         <FaMinusCircle
                           color={light_purple}
                           size={19}
-                          onClick={() => deleteSong(ind)}
+                          onClick={() => {
+                            deleteSong(ind);
+                            edit_deletesong(1);
+                          }}
                         />
                       </div>
                     </div>

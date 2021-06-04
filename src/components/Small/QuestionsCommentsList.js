@@ -56,7 +56,7 @@ const QuestionsCommentsList = ({ comments, deleteComment }) => {
                 key={ind}
                 ind={ind}
                 deleteComment={deleteComment}
-                text={val.comment}
+                text={val.question}
                 timestamp={val.uitimestamp}
               />
             </li>

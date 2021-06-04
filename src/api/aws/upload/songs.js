@@ -1,4 +1,5 @@
 import axios from "axios";
+import { aws_upload_songs } from "../../urls/URLS";
 
 const upload_songs = async (songs = []) => {
   console.log(songs);
@@ -13,7 +14,7 @@ const upload_songs = async (songs = []) => {
   }
   formData.append("name", "songslol");
   const songResult = await axios
-    .post("http://localhost:4000/api/aws/uploadsongs", formData)
+    .post(aws_upload_songs, formData)
     .then((res) => {
       console.log(res);
       return res.data;
@@ -22,4 +23,4 @@ const upload_songs = async (songs = []) => {
   return songResult;
 };
 
-export default upload_songs;
+export { upload_songs };

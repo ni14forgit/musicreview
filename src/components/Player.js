@@ -12,6 +12,7 @@ import CommentBox from "./Small/CommentBox";
 import CommentsList from "./Small/ReviewCommentsList";
 import skrollTop from "skrolltop";
 import Text from "../components/Useful/Text";
+import { convertTime } from "../metafunctions/timestamp";
 import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
 
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
@@ -25,7 +26,7 @@ const getAudioContext = () => {
 
 let nonStateBufferSource;
 
-function Player() {
+function Player({ listOfComments, setListOfComments, song, title }) {
   const val = useRef();
   let audioContext;
   //   let durationOfSong = 10;
@@ -35,17 +36,15 @@ function Player() {
   const [timeOfSong, setTimeOfSong] = useState(0);
   const [designSongHeight, setDesignSongHeight] = useState([]);
   const [valOfBar, setValOfBar] = useState(2);
-  const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
   const [currentCommentValue, setCurrentCommentValue] = useState("");
-  const [listOfComments, setListOfComments] = useState([]);
 
   // const uncleanComments = [{ timestamp: 40, id: 1, photo: nish }];
 
   async function getSong() {
     const myurl =
       // "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3";
-      James;
+      song;
     const response = await axios.get(myurl, {
       responseType: "arraybuffer",
     });
@@ -60,16 +59,6 @@ function Player() {
 
     setBufferSource(audioBuffer);
   }
-
-  const convertTime = (seconds) => {
-    let secondsString;
-    if (seconds % 60 < 10) {
-      secondsString = "0" + (seconds % 60);
-    } else {
-      secondsString = seconds % 60;
-    }
-    return Math.floor(seconds / 60) + ":" + secondsString;
-  };
 
   const onEnded = () => {
     console.log("ended");
@@ -113,8 +102,8 @@ function Player() {
     setDesignSongHeight(arrayOfIndices);
   };
 
-  useEffect(() => {
-    getSong();
+  useEffect(async () => {
+    await getSong();
     createDesignArray();
     setLoading(false);
     console.log("MOUNTED!");
@@ -124,11 +113,6 @@ function Player() {
       if (nonStateBufferSource) {
         nonStateBufferSource.stop();
       }
-
-      console.log("UNMOUNTED!");
-      // pauseSong();
-      // playerSource.stop();
-      // val.source.stop();
     };
   }, []);
 
@@ -167,39 +151,6 @@ function Player() {
     }
   };
 
-  // const handleSpacePauseResume = (e) => {
-  //   console.log("pressed");
-  //   if (e.keyCode === 32) {
-  //     if (isPlaying) {
-  //       pauseSong();
-  //     } else {
-  //       playSong();
-  //     }
-  //   }
-  // };
-  // onKeyDown={handleSpacePauseResume}
-
-  // const convertCommentsToBarStamped = (timestampedComments) => {
-  //   let mapOfComments = new Map();
-  //   for (var i = 0; i < timestampedComments.length; i++) {
-  //     var index = Math.floor(timestampedComments[i].timestamp / valOfBar);
-  //     if (mapOfComments.has(index)) {
-  //       var currentCommentsAtIndex = mapOfComments.get(index);
-  //       currentCommentsAtIndex.push({
-  //         photo: timestampedComments[i].photo,
-  //         ind: i,
-  //       });
-  //       mapOfComments.set(index, currentCommentsAtIndex);
-  //     } else {
-  //       var newList = [];
-  //       newList.push({ photo: timestampedComments[i].photo, ind: i });
-  //       mapOfComments.set(index, newList);
-  //     }
-  //   }
-  //   console.log(mapOfComments);
-  //   return mapOfComments;
-  // };
-
   const submitComment = () => {
     if (currentCommentValue == "") {
       return;
@@ -212,6 +163,7 @@ function Player() {
         timestamp: timeOfSong,
         uitimestamp: convertTime(timeOfSong),
         photo: nish,
+        saved: false,
       },
     ];
 
@@ -295,12 +247,7 @@ function Player() {
           }}
         >
           <div style={{ marginRight: "10px" }}>
-            <Text
-              text="firsttake.mp4"
-              color={white}
-              fontsize={30}
-              bold={"bold"}
-            />
+            <Text text={title} color={white} fontsize={30} bold={"bold"} />
           </div>
           <Text text={convertTime(timeOfSong)} color={white} fontsize={20} />
         </div>

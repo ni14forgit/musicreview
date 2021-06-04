@@ -4,32 +4,55 @@ import SubmitMusic from "../Submission/SubmitMusic";
 import Header from "../Navigation/Header";
 import TextButton from "../Useful/TextButton";
 import ThankYou from "../Submission/ThankYou";
-
-const GENRES = ["Lofi", "Lofi", "Lofi", "Lofi", "Lofi", "Lofi", "Lofi"];
-const PROFESSIONS = ["Engineer", "Producer", "Lyricist", "Lyricist"];
+import {
+  GENRES,
+  PROFESSIONS,
+  starterArrayGenres,
+  starterArrayProfessions,
+  convertGenresListToDict,
+  convertProfessionsListToDict,
+} from "../../metafunctions/genProfHelper";
+import { submit_music } from "../../api/users/submissions/submit";
+import LoadingSpinner from "../Small/LoadingSpinner";
 
 const Submit = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [song, setSong] = useState(null);
   const [nextButtonEnable, setNextButtonEnable] = useState(false);
-  var starterArrayGenres = new Array(GENRES.length);
   const [genres, setGenres] = useState(starterArrayGenres.fill(false));
-
+  const [professions, setProfessions] = useState(
+    starterArrayProfessions.fill(false)
+  );
   // const [currentCommentValue, setCurrentCommentValue] = useState("");
   const [listOfComments, setListOfComments] = useState([]);
-  const listOfGenres = ["lo-fi", "lo-fi", "lo-fi", "lo-fi"];
-  var starterArray = new Array(listOfGenres.length);
-  const [canMoveOn, setCanMoveOn] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState(
-    starterArray.fill(false)
-  );
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  const nextStep = () => {
-    setStep(step + 1);
-  };
+  const submitSongFunc = async () => {
+    setIsSubmitLoading(true);
+    var today = new Date();
+    var dd = String(today.getDate());
+    var mm = String(today.getMonth() + 1); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + "/" + dd + "/" + yyyy;
 
-  const previousStep = () => {
-    setStep(step - 1);
+    // song, questions, genres, preferredProfessions
+    console.log("submission called");
+    submit_music(
+      song,
+      listOfComments,
+      convertGenresListToDict(genres),
+      convertProfessionsListToDict(professions),
+      today
+    ).then((res) => {
+      if (res.success) {
+        console.log("upload successful!");
+        setIsSubmitLoading(false);
+        setIsCompleted(true);
+      } else {
+        console.log("something wronog happened");
+      }
+    });
   };
 
   const renderStep = (stepAlongPath) => {
@@ -50,8 +73,8 @@ const Submit = () => {
           <AddQuestions
             listOfComments={listOfComments}
             setListOfComments={setListOfComments}
-            selectedOptions={genres}
-            setSelectedOptions={setGenres}
+            selectedOptions={professions}
+            setSelectedOptions={setProfessions}
             constantCategories={PROFESSIONS}
             enableNextButton={setNextButtonEnable}
           />
@@ -62,16 +85,16 @@ const Submit = () => {
   return (
     <div>
       <Header />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 70,
-        }}
-      >
-        {step < 2 ? (
+      {!(isCompleted || isSubmitLoading) ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 70,
+          }}
+        >
           <div>
             {renderStep(step)}
             <div
@@ -103,16 +126,18 @@ const Submit = () => {
                   <TextButton
                     text="Complete Submission"
                     disabled={!nextButtonEnable}
-                    onClick={() => setStep(step + 1)}
+                    onClick={submitSongFunc}
                   />
                 )}
               </div>
             </div>
           </div>
-        ) : (
-          <ThankYou />
-        )}
-      </div>
+        </div>
+      ) : isCompleted ? (
+        <ThankYou />
+      ) : (
+        <LoadingSpinner />
+      )}
     </div>
   );
 };

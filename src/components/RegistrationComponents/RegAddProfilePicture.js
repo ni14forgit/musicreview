@@ -169,28 +169,16 @@ const RegAddProfilePicture = ({ enableNextButton, setPicture, picture }) => {
                 </div>
               </div>
             )}
-            {/* {error ? (
-              <div
-                style={{
-                  backgroundColor: "gray",
-                  width: 200,
-                  height: 50,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 10,
-                  marginTop: 20,
-                }}
-              >
+            {error ? (
+              <div style={{ marginLeft: 50, marginTop: -20 }}>
                 <Text
-                  color={white}
-                  text="File must be .wav or mp3"
-                  fontsize={14}
+                  color={"red"}
+                  text="File must be .png or .jpg"
+                  // fontsize={14}
                   bold="bold"
                 />
               </div>
-            ) : null} */}
+            ) : null}
           </div>
         ) : (
           <Text color={white} text="loading..." fontsize={14} bold="bold" />

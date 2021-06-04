@@ -18,6 +18,7 @@ const ProfileEditSingleLine = ({
   text,
   setText,
   title,
+  api_edit_call,
 }) => {
   const [staleText, setStaleText] = useState(null);
 
@@ -90,7 +91,10 @@ const ProfileEditSingleLine = ({
             <div style={{ marginRight: 15 }}>
               <InvertedTextButton
                 text="Save"
-                onClick={() => setPopUpOpen(false)}
+                onClick={() => {
+                  api_edit_call(text);
+                  setPopUpOpen(false);
+                }}
               />
             </div>
           </div>

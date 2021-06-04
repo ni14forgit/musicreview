@@ -22,22 +22,28 @@ const ErrorMessage = () => {
 };
 
 const spotifychecker = (spotify_link) => {
+  // spotify_link.includes("spotify.com"))
+  const SPOTIFY_PREFIX = "https://open.spotify.com/artist/";
   return (
-    (validURL(spotify_link) && spotify_link.includes("spotify.com")) ||
+    (validURL(spotify_link) && spotify_link.indexOf(SPOTIFY_PREFIX) == 0) ||
     !spotify_link
   );
 };
 
 const soundcloudchecker = (soundcloud_link) => {
+  const SOUNDCLOUD_PREFIX = "https://soundcloud.com/";
   return (
-    (validURL(soundcloud_link) && soundcloud_link.includes("soundcloud.com")) ||
+    (validURL(soundcloud_link) &&
+      soundcloud_link.indexOf(SOUNDCLOUD_PREFIX) == 0) ||
     !soundcloud_link
   );
 };
 
 const instagramchecker = (instagram_link) => {
+  const INSTAGRAM_PREFIX = "https://www.instagram.com/";
   return (
-    (validURL(instagram_link) && instagram_link.includes("instagram.com")) ||
+    (validURL(instagram_link) &&
+      instagram_link.indexOf(INSTAGRAM_PREFIX) == 0) ||
     !instagram_link
   );
 };

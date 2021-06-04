@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { background_purple } from "../../constants";
 import ModifiableTextBox from "../Useful/ModifiableTextBox";
 import Text from "../Useful/Text";
 import { useHistory } from "react-router-dom";
-
-// import CommentBox from "../Small/CommentBox";
+import {
+  checkValidEmail,
+  checkPasswordsMatch,
+  checkValidPassword,
+} from "./authFunctionHelper";
 
 const AuthenticateButton = ({ backgroundColor, textColor, text, onClick }) => {
   return (
@@ -39,19 +43,70 @@ const Signup = ({
 }) => {
   const history = useHistory();
 
+  const [invalidPassword, setInvalidPassword] = useState(false);
+  const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
+  const [emailNotValid, setEmailNotValid] = useState(false);
+  const [passwordsDontMatch, setPasswordsDontMatch] = useState(false);
+
   const signupAfterChecking = async () => {
+    var everyThingWorks = true;
+
+    // if (!email || !passwordOne || !passwordTwo) {
+
+    //   console.log("please fill out all fields");
+    //   everyThingWorks = false;
+
+    // }
+
+    if (checkValidEmail) {
+      setEmailNotValid(false);
+    }
+    if (checkPasswordsMatch(passwordOne, passwordTwo)) {
+      setPasswordsDontMatch(false);
+    }
+    if (checkValidPassword(passwordOne)) {
+      setInvalidPassword(false);
+    }
+    // if (checkValidEmail) {
+    //   setEmailNotValid(false);
+    // }
+
     if (email && passwordOne && passwordTwo) {
-      if (passwordOne == passwordTwo) {
-        if (!(await signupAction({ email: email, password: passwordOne }))) {
-          console.log("user does not exist yay!");
-          history.push({
-            pathname: "/registerinitialprofile",
-            state: { email: email, password: passwordOne },
-          });
+      if (checkValidEmail(email)) {
+        // setEmailNotValid(false);
+        if (checkPasswordsMatch(passwordOne, passwordTwo)) {
+          // setPasswordsDontMatch(false);
+          if (checkValidPassword(passwordOne)) {
+            // setInvalidPassword(false);
+            const userDoesExist = await signupAction({
+              email: email,
+              password: passwordOne,
+            });
+            if (!userDoesExist) {
+              setAccountAlreadyExists(false);
+              console.log("user does not exist yay!");
+              history.push({
+                pathname: "/registerinitialprofile",
+                state: { email: email, password: passwordOne },
+              });
+            } else {
+              console.log("user already exists nay");
+              setAccountAlreadyExists(true);
+            }
+          } else {
+            console.log("password isn't valid");
+            setInvalidPassword(true);
+          }
         } else {
-          console.log("user already exists nay");
+          console.log("passwords do not match");
+          setPasswordsDontMatch(true);
         }
+      } else {
+        console.log("email is not valid");
+        setEmailNotValid(true);
       }
+    } else {
+      console.log("please fill out all fields");
     }
   };
   return (
@@ -79,6 +134,7 @@ const Signup = ({
           setCurrentValue={setPasswordOne}
           currentValue={passwordOne}
           fontSize={16}
+          isPassword={true}
           placeholder="password"
         />
       </div>
@@ -87,9 +143,61 @@ const Signup = ({
           setCurrentValue={setPasswordTwo}
           currentValue={passwordTwo}
           fontSize={16}
+          isPassword={true}
           placeholder="enter password again"
         />
       </div>
+
+      {accountAlreadyExists ? (
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text
+            text={"An account with this email already exists!"}
+            color="red"
+          />
+        </div>
+      ) : null}
+
+      {invalidPassword ? (
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text
+            text={"Password needs to be at least 8 characters!"}
+            color="red"
+          />
+        </div>
+      ) : null}
+
+      {emailNotValid ? (
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text text={"Email isn't valid."} color="red" />
+        </div>
+      ) : null}
+
+      {passwordsDontMatch ? (
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text text={"Passwords don't match"} color="red" />
+        </div>
+      ) : null}
+
       <div style={{ marginTop: 20 }}>
         <AuthenticateButton
           backgroundColor="#5988FF"

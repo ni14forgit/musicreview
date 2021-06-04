@@ -6,6 +6,7 @@ import FileUploader from "../../metafunctions/FileUploader";
 import FakeBarUI from "../Small/FakeBarUI";
 import ToggleSelectOption from "../Useful/ToggleSelectOption";
 import { IoMdClose } from "react-icons/io";
+import { DummySongToSend } from "../classes/Classes";
 
 const SubmitMusic = ({
   song,
@@ -49,16 +50,18 @@ const SubmitMusic = ({
         console.log(e.target.files[0]);
         setError(false);
         console.log(ind);
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setSong({ song: reader.result, name: e.target.files[0].name });
+        // const reader = new FileReader();
+        // reader.addEventListener("load", () => {
+        //   setSong(new DummySongToSend(e.target.files[0]));
 
-          setLoading(false);
-          enableNextButton(true);
-          setFileInRange(false);
-        });
-        reader.readAsDataURL(e.target.files[0]);
-        setLoading(true);
+        //   setLoading(false);
+        //   enableNextButton(true);
+        //   setFileInRange(false);
+        // });
+        // reader.readAsDataURL(e.target.files[0]);
+        // setLoading(true);
+        setSong(new DummySongToSend(e.target.files[0]));
+        setFileInRange(false);
       } else {
         console.log("error triggeered");
         setError(true);
@@ -73,16 +76,19 @@ const SubmitMusic = ({
     if (files && files.length > 0) {
       if (files[0].type.includes("wav") || files[0].type.includes("mp3")) {
         setError(false);
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-          setSong({ song: reader.result, name: files[0].name });
-          setLoading(false);
-          enableNextButton(true);
-          setFileInRange(false);
-        });
-        reader.readAsDataURL(files[0]);
-        // setPopUpOpen(false);
-        setLoading(true);
+        // const reader = new FileReader();
+        // reader.addEventListener("load", () => {
+        //   setSong({ song: reader.result, name: files[0].name });
+        //   setLoading(false);
+        //   enableNextButton(true);
+        //   setFileInRange(false);
+        // });
+        // reader.readAsDataURL(files[0]);
+        // // setPopUpOpen(false);
+        // setLoading(true);
+
+        setSong(new DummySongToSend(files[0]));
+        setFileInRange(false);
       } else {
         setError(true);
       }
@@ -184,7 +190,7 @@ const SubmitMusic = ({
                       }}
                     >
                       <div style={{ width: "80%" }}>
-                        <Text text={song.name} size={12} color="white" />
+                        <Text text={song.title} size={12} color="white" />
                       </div>
                       <div
                         style={{
@@ -235,7 +241,7 @@ const SubmitMusic = ({
           <div style={{ marginTop: -80 }}>
             <Text
               color={white}
-              text="drag/upload up to 3 songs or clips you're proud of!"
+              text="drag/upload a song or clip that you're proud of!"
               fontsize={18}
               bold="bold"
             />

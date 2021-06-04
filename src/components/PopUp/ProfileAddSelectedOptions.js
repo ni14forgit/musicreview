@@ -27,8 +27,17 @@ const ProfileAddSelectedOptions = ({
   setSelectedOptions,
   title,
   constantCategories,
+  convertToDictFunc,
+  api_edit_call,
 }) => {
   const [staleOptions, setStaleOptions] = useState(null);
+
+  const saveFunc = () => {
+    const convertedDict = convertToDictFunc(selectedOptions);
+    console.log("converted to dict");
+    api_edit_call(convertedDict);
+    setPopUpOpen(false);
+  };
 
   useEffect(() => {
     setStaleOptions(JSON.parse(JSON.stringify(selectedOptions)));
@@ -120,10 +129,7 @@ const ProfileAddSelectedOptions = ({
             }}
           >
             <div style={{ marginRight: 15 }}>
-              <InvertedTextButton
-                text="Save"
-                onClick={() => setPopUpOpen(false)}
-              />
+              <InvertedTextButton text="Save" onClick={saveFunc} />
             </div>
           </div>
         ) : null}

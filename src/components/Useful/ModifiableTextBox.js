@@ -8,6 +8,7 @@ const ModifiableTextBox = ({
   placeholder,
   expands,
   style,
+  isPassword = false,
 }) => {
   const defaultStyle = {
     backgroundColor: "transparent",
@@ -50,7 +51,7 @@ const ModifiableTextBox = ({
         ref={textareaRef}
         class="wideInput"
         style={defaultStyle}
-        type="text"
+        type={isPassword ? "password" : "text"}
         rows="3"
         placeholder={placeholder}
         className="Authenticate"

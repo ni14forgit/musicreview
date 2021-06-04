@@ -18,7 +18,7 @@ const getAudioContext = () => {
   return audioContent;
 };
 let nonStateBufferSource;
-function MiniPlayer({ song }) {
+function MiniPlayer({ song, title }) {
   let audioContext;
   const numberOfBars = 35;
   //   let durationOfSong = 10;
@@ -118,8 +118,8 @@ function MiniPlayer({ song }) {
     setDesignSongHeight(arrayOfIndices);
   };
 
-  useEffect(() => {
-    getSong();
+  useEffect(async () => {
+    await getSong();
     createDesignArray();
     setLoading(false);
     return () => {
@@ -201,12 +201,7 @@ function MiniPlayer({ song }) {
         }}
       >
         <div style={{ marginRight: 8 }}>
-          <Text
-            text={"examplesong.mp4"}
-            fontsize={13}
-            color={white}
-            bold="bold"
-          />
+          <Text text={title} fontsize={13} color={white} bold="bold" />
         </div>
         {isPlaying ? (
           <AiFillPauseCircle size={25} onClick={pauseSong} color={white} />

@@ -64,7 +64,7 @@ const AddQuestions = ({
     var updatedArray = [
       ...listOfComments,
       {
-        comment: currentCommentValue,
+        question: currentCommentValue,
         // timestamp: timeOfSong,
         // uitimestamp: convertTime(timeOfSong),
         // photo: nish,

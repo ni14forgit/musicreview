@@ -12,8 +12,9 @@ import CommentBox from "./Small/CommentBox";
 import CommentsList from "./Small/ReviewCommentsList";
 import skrollTop from "skrolltop";
 import Text from "../components/Useful/Text";
-import { convertTime } from "../metafunctions/timestamp";
+import { convertTime, sortByTimeStamp } from "../metafunctions/timestamp";
 import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
+import { Comment } from "./classes/Classes";
 
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]
@@ -26,7 +27,14 @@ const getAudioContext = () => {
 
 let nonStateBufferSource;
 
-function Player({ listOfComments, setListOfComments, song, title }) {
+function Player({
+  comments,
+  setComments,
+  deletedComments,
+  setDeletedComments,
+  song,
+  title,
+}) {
   const val = useRef();
   let audioContext;
   //   let durationOfSong = 10;
@@ -157,31 +165,35 @@ function Player({ listOfComments, setListOfComments, song, title }) {
     }
 
     var updatedArray = [
-      ...listOfComments,
-      {
-        comment: currentCommentValue,
-        timestamp: timeOfSong,
-        uitimestamp: convertTime(timeOfSong),
-        photo: nish,
-        saved: false,
-      },
+      ...comments,
+      // {
+      // comment: currentCommentValue,
+      // timestamp: timeOfSong,
+      // uitimestamp: convertTime(timeOfSong),
+      // photo: nish,
+      // saved: false,
+      // },
+      new Comment(
+        currentCommentValue,
+        timeOfSong,
+        convertTime(timeOfSong),
+        nish,
+        false
+      ),
     ];
 
-    updatedArray.sort((a, b) =>
-      a.timestamp < b.timestamp
-        ? -1
-        : a.timestamp === b.timestamp
-        ? true
-          ? 1
-          : -1
-        : 1
-    );
-    setListOfComments(updatedArray);
+    updatedArray.sort((a, b) => sortByTimeStamp(a, b));
+    setComments(updatedArray);
     setCurrentCommentValue("");
   };
 
   const deleteComment = (ind) => {
-    setListOfComments(listOfComments.filter((comment, index) => index !== ind));
+    if (comments[ind].saved) {
+      console.log("trigeged");
+      setDeletedComments([...deletedComments, comments[ind].id]);
+    }
+
+    setComments(comments.filter((comment, index) => index !== ind));
   };
 
   function getStyle(element) {
@@ -273,7 +285,7 @@ function Player({ listOfComments, setListOfComments, song, title }) {
           // border: "2px solid black",
         }}
       >
-        {listOfComments.map((val, ind) => {
+        {comments.map((val, ind) => {
           return (
             <div
               style={{
@@ -300,7 +312,7 @@ function Player({ listOfComments, setListOfComments, song, title }) {
         <TextButton text="comment" onClick={submitComment} />
       </div>
       <div style={{ border: "0px solid black", maxHeight: "100px" }}>
-        <CommentsList comments={listOfComments} deleteComment={deleteComment} />
+        <CommentsList comments={comments} deleteComment={deleteComment} />
       </div>
     </div>
   );

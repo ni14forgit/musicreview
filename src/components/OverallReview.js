@@ -2,9 +2,13 @@ import { background_purple } from "../constants";
 import Text from "./Useful/Text";
 import nish from "../nish.jpg";
 import RateFeedback from "./Small/RateFeedback";
-import { GrSoundcloud, GrSpotify } from "react-icons/gr";
+import { GrSoundcloud, GrSpotify, GrInstagram } from "react-icons/gr";
 import MiniPlayer from "./MiniPlayer";
 import Eric from "../Eric.wav";
+import {
+  convertProfessionsDictToList,
+  convertProfessionToText,
+} from "../metafunctions/genProfHelper";
 
 const ProfPic = ({ photo }) => {
   const size = 75;
@@ -43,7 +47,7 @@ const ProfPic = ({ photo }) => {
   );
 };
 
-const GeneralFeedback = ({ name, profession }) => {
+const GeneralFeedback = ({ review }) => {
   return (
     <div
       style={{
@@ -64,7 +68,7 @@ const GeneralFeedback = ({ name, profession }) => {
         }}
       >
         <div style={{ display: "flex", flexDirection: "horizontal" }}>
-          <ProfPic photo={nish} />
+          <ProfPic photo={review.reviewerProfile.profile_photo} />
           <div>
             <div
               style={{
@@ -80,8 +84,20 @@ const GeneralFeedback = ({ name, profession }) => {
                 // border: "2px solid black",
               }}
             >
-              <Text text={name} color={background_purple} fontsize={16} />
-              <Text text={profession} color={background_purple} fontsize={15} />
+              <Text
+                text={review.reviewerProfile.name}
+                color={background_purple}
+                fontsize={16}
+              />
+              <Text
+                text={convertProfessionToText(
+                  convertProfessionsDictToList(
+                    review.reviewerProfile.professions
+                  )
+                )}
+                color={background_purple}
+                fontsize={15}
+              />
               <div
                 style={{
                   display: "flex",
@@ -89,23 +105,46 @@ const GeneralFeedback = ({ name, profession }) => {
                   marginTop: 5,
                 }}
               >
-                <div>
-                  <GrSoundcloud
-                    onClick={() =>
-                      window.open("https://soundcloud.com/discover")
-                    }
-                    size={35}
-                    color={"#ff7700"}
-                  />
-                </div>
-                <div style={{ marginTop: 5, marginLeft: 8 }}>
-                  <GrSpotify size={25} color={"#1DB954"} />
-                </div>
+                {review.reviewerProfile.soundcloud != "" ? (
+                  <div style={{ marginRight: 8, marginBottom: 3 }}>
+                    <GrSoundcloud
+                      onClick={() =>
+                        window.open(review.reviewerProfile.soundcloud)
+                      }
+                      size={37}
+                      color={"#ff7700"}
+                    />
+                  </div>
+                ) : null}
+
+                {review.reviewerProfile.spotify != "" ? (
+                  <div style={{ marginTop: 6, marginRight: 8 }}>
+                    <GrSpotify
+                      onClick={() =>
+                        window.open(review.reviewerProfile.spotify)
+                      }
+                      size={26}
+                      color={"#1DB954"}
+                    />
+                  </div>
+                ) : null}
+
+                {review.reviewerProfile.instagram != "" ? (
+                  <div style={{ marginRight: 8, marginTop: 6 }}>
+                    <GrInstagram
+                      onClick={() =>
+                        window.open(review.reviewerProfile.instagram)
+                      }
+                      size={26}
+                      color={"#E1306C"}
+                    />
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
         </div>
-        <RateFeedback name={"Nishant"} score={3} />
+        <RateFeedback name={review.reviewerProfile.name} score={3} />
       </div>
       <div style={{ marginTop: 20 }}>
         <Text
@@ -116,7 +155,7 @@ const GeneralFeedback = ({ name, profession }) => {
         />
         <div style={{ marginTop: 10 }}>
           <Text
-            text={"feedback"}
+            text={review.generalOverview}
             color={background_purple}
             fontsize={14}
             // bold="bold"
@@ -137,10 +176,10 @@ const GeneralFeedback = ({ name, profession }) => {
             flexDirection: "horizontal",
           }}
         >
-          {[1, 2, 3].map((val, ind) => {
+          {review.reviewerSongs.map((val, ind) => {
             return (
               <div style={{ marginRight: 8 }}>
-                <MiniPlayer song={Eric} />
+                <MiniPlayer song={val.url} title={val.title} />
               </div>
             );
           })}

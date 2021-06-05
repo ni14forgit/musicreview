@@ -4,7 +4,7 @@ const submit_review = async (
   review_id,
   deletedComments,
   overview,
-  addedComments
+  comments
 ) => {
   console.log("submit review called");
   const result = await fetch(users_review_submit, {
@@ -20,7 +20,7 @@ const submit_review = async (
       review_id: review_id,
       deletedComments: deletedComments,
       overview: overview,
-      addedComments: addedComments,
+      comments: comments,
     }),
   })
     .then((data) => data.json())

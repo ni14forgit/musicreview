@@ -8,4 +8,14 @@ const convertTime = (seconds) => {
   return Math.floor(seconds / 60) + ":" + secondsString;
 };
 
-export { convertTime };
+const sortByTimeStamp = (a, b) => {
+  return a.timestamp < b.timestamp
+    ? -1
+    : a.timestamp === b.timestamp
+    ? true
+      ? 1
+      : -1
+    : 1;
+};
+
+export { convertTime, sortByTimeStamp };

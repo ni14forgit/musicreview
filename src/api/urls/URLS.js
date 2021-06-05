@@ -31,6 +31,7 @@ import {
   users_submission_submit,
   users_review_retrieve,
   users_review_submit,
+  users_review_statictotalretrieve,
 } from "./paths/users";
 
 export {
@@ -59,4 +60,5 @@ export {
   users_submission_submit,
   users_review_retrieve,
   users_review_submit,
+  users_review_statictotalretrieve,
 };

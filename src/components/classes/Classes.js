@@ -19,4 +19,30 @@ class DummySongToSend {
   }
 }
 
-export { SongToRetrieve, SongToSend, DummySongToSend };
+class Comment {
+  constructor(comment, timestamp, uitimestamp, photo, saved) {
+    this.comment = comment;
+    this.timestamp = timestamp;
+    this.uitimestamp = uitimestamp;
+    this.photo = photo;
+    this.saved = saved;
+  }
+}
+
+class OtherPersonComment {
+  constructor(comment, timestamp, uitimestamp, photo, userid) {
+    this.comment = comment;
+    this.timestamp = timestamp;
+    this.uitimestamp = uitimestamp;
+    this.photo = photo;
+    this.userid = userid;
+  }
+}
+
+export {
+  SongToRetrieve,
+  SongToSend,
+  DummySongToSend,
+  Comment,
+  OtherPersonComment,
+};

@@ -11,7 +11,7 @@ import { retrieve_review } from "../../api/users/reviews/retrieve";
 import { convertTime } from "../../metafunctions/timestamp";
 import nish from "../../nish.jpg";
 const OtherArtistsSong = ({ submission_id, review_id }) => {
-  const [listOfComments, setListOfComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const [generalOverview, setGeneralOverview] = useState({
     altered: false,
     value: "",
@@ -24,42 +24,57 @@ const OtherArtistsSong = ({ submission_id, review_id }) => {
   // const [addedComments, setAddedComments] = useState([]);
 
   // deletedComments, overview, addedComments;
-  const saveAndSubmit = async () => {
-    // submit_review(1, [1], { altered: true, value: "test1" }, [
-    //   { timestamp: 100, comment: "test3" },
-    // ])
-    submit_review(
-      review_id,
-      deletedComments,
-      generalOverview
-      // addedComments
-    ).then((res) => {
-      console.log(res);
-    });
-    // submit_review(review_id, deletedComments, generalOverview, addedComments);
-  };
 
-  useEffect(async () => {
-    const submissionResult = await retrieve_submission(1);
-    // console.log(result);
-    console.log(submissionResult.song.url);
-    setSong(submissionResult.song.url);
-    setTitle(submissionResult.song.title);
-    setQuestions(submissionResult.questions);
-
-    const reviewResult = await retrieve_review();
+  const retrieveReviewAndSet = async () => {
+    // const reviewResult = await retrieve_review(review_id);
+    const reviewResult = await retrieve_review(1);
 
     for (var i = 0; i < reviewResult.comments.length; i++) {
       reviewResult.comments[i].saved = true;
       reviewResult.comments[i].uitimestamp = convertTime(
         reviewResult.comments[i].timestamp
       );
-      // reviewResult.comments[i].uitimestamp = nish;
     }
 
+    setComments(reviewResult.comments);
+    setGeneralOverview({ altered: false, value: reviewResult.generalOverview });
+
+    console.log(reviewResult);
+  };
+
+  const retrieveSubmissionAndSet = async () => {
+    const submissionResult = await retrieve_submission(1);
+
+    setSong(submissionResult.song.url);
+    setTitle(submissionResult.song.title);
+    setQuestions(submissionResult.questions);
+  };
+
+  const saveAndSubmit = async () => {
+    // submit_review(1, [1], { altered: true, value: "test1" }, [
+    //   { timestamp: 100, comment: "test3" },
+    // ])
+    console.log(deletedComments);
+    submit_review(
+      1,
+      deletedComments,
+      generalOverview,
+      comments
+      // addedComments
+    ).then(async (res) => {
+      console.log(res);
+      setLoading(true);
+      await retrieveReviewAndSet();
+      setLoading(false);
+    });
+    // submit_review(review_id, deletedComments, generalOverview, addedComments);
+  };
+
+  useEffect(async () => {
+    await retrieveSubmissionAndSet();
+    await retrieveReviewAndSet();
+
     setLoading(false);
-    // setGeneralFeedback(result.generalfeedback);
-    // setListOfComments(listOfComments)
   }, []);
 
   const removeQuestionKey = (questions) => {
@@ -89,8 +104,8 @@ const OtherArtistsSong = ({ submission_id, review_id }) => {
             song={song}
             deletedComments={deletedComments}
             setDeletedComments={setDeletedComments}
-            listOfComments={[]}
-            setListOfComments={setListOfComments}
+            comments={comments}
+            setComments={setComments}
           />
         </div>
         <div style={{ marginBottom: 20, width: "90%" }}>

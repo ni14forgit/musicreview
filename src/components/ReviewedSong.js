@@ -14,6 +14,8 @@ import skrollTop from "skrolltop";
 import ToggleCommenter from "./Small/ToggleCommenter";
 import { FaFilter } from "react-icons/fa";
 import Text from "./Useful/Text";
+import { OtherPersonComment } from "./classes/Classes";
+import { sortByTimeStamp } from "../metafunctions/timestamp";
 // code adapted from https://apiko.com/blog/how-to-work-with-sound-java-script/
 // const comments = [{ timestamp: 40, photo: nish }]
 
@@ -24,8 +26,9 @@ const getAudioContext = () => {
 };
 
 let nonStateBufferSource;
-function ReviewedSong({ listOfComments }) {
+function ReviewedSong({ reviews }) {
   let audioContext;
+
   //   let durationOfSong = 10;
   const [bufferSource, setBufferSource] = useState(null);
   const [playerSource, setPlayerSource] = useState(null);
@@ -33,15 +36,11 @@ function ReviewedSong({ listOfComments }) {
   const [timeOfSong, setTimeOfSong] = useState(0);
   const [designSongHeight, setDesignSongHeight] = useState([]);
   const [valOfBar, setValOfBar] = useState(2);
-  const [commentsAfterFiltering, setCommentsAfterFiltering] = useState(
-    listOfComments
-  );
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [commentersSelected, setCommentersSelected] = useState([true, true]);
-  //   const [currentCommentValue, setCurrentCommentValue] = useState("");
-  //   const [listOfComments, setListOfComments] = useState([]);
-
-  // const uncleanComments = [{ timestamp: 40, id: 1, photo: nish }];
+  const [commentersSelected, setCommentersSelected] = useState(null);
+  const [mapOfComments, setMapOfComments] = useState();
+  // const [reviewerPictures, setReviewerPictures] = useState([])
 
   async function getSong() {
     const myurl =
@@ -118,21 +117,67 @@ function ReviewedSong({ listOfComments }) {
   useEffect(() => {
     getSong().then(setLoading(false));
     createDesignArray();
+
+    var tempListOfComments = [];
+    var tempMapOfComments = [];
+
+    for (var i = 0; i < reviews.length; i++) {
+      tempMapOfComments.push([]);
+      for (
+        var commentInd = 0;
+        commentInd < reviews[i].comments.length;
+        commentInd++
+      ) {
+        // console.log(reviews[i].comments[commentInd].comment);
+        // console.log(reviews[i].comments[commentInd].timestamp);
+        // console.log(convertTime(reviews[i].comments[commentInd].timestamp));
+        // console.log(reviews[i].reviewerProfile.profile_photo);
+        // console.log(reviews[i].reviewerProfile.id);
+        var newCommentToAdd = new OtherPersonComment(
+          reviews[i].comments[commentInd].comment,
+          reviews[i].comments[commentInd].timestamp,
+          convertTime(reviews[i].comments[commentInd].timestamp),
+          reviews[i].reviewerProfile.profile_photo,
+          reviews[i].reviewerProfile.id
+          // 5
+        );
+
+        // console.log(reviews[i].comments[commentInd].comment);
+        // console.log(newCommentToAdd);
+        // console.log(newCommentToAdd.userid);
+        // console.log(newCommentToAdd.comment);
+
+        tempListOfComments.push(newCommentToAdd);
+        tempMapOfComments[i].push(newCommentToAdd);
+      }
+    }
+
+    console.log(tempMapOfComments);
+    setMapOfComments(tempMapOfComments);
+
+    tempListOfComments.sort((a, b) => sortByTimeStamp(a, b));
+
+    var booleanTrues = [];
+
+    for (var k = 0; k < reviews.length; k++) {
+      booleanTrues.push({
+        selected: true,
+        userid: reviews[k].reviewerProfile.id,
+      });
+    }
+
+    setComments(tempListOfComments);
+    console.log(tempListOfComments);
+    setCommentersSelected(booleanTrues);
+
+    // sortByTimeStamp
+
     return () => {
       if (nonStateBufferSource) {
         nonStateBufferSource.stop();
       }
     };
   }, []);
-
-  // useEffect(() => {
-  //   setComments(convertCommentsToBarStamped(listOfComments));
-  // }, [listOfComments]);
-
-  // useEffect(() => {
-  //comments?
-
-  // }, )
 
   useInterval(() => {
     // Your custom logic here
@@ -198,15 +243,27 @@ function ReviewedSong({ listOfComments }) {
 
     for (var i = 0; i < commentersSelected.length; i++) {
       if (ind == i) {
-        copyOfCommenters[i] = !copyOfCommenters[i];
+        copyOfCommenters[i].selected = !copyOfCommenters[i].selected;
         break;
       }
     }
 
-    if (!copyOfCommenters[0]) {
-      setCommentsAfterFiltering([]);
+    console.log(mapOfComments);
+    console.log(ind);
+
+    if (copyOfCommenters[ind].selected) {
+      var tempComments = [...comments];
+      for (var j = 0; j < mapOfComments[ind].length; j++) {
+        tempComments.push(mapOfComments[ind][j]);
+      }
+      tempComments.sort((a, b) => sortByTimeStamp(a, b));
+      setComments(tempComments);
     } else {
-      setCommentsAfterFiltering(listOfComments);
+      setComments(
+        comments.filter(
+          (val, index) => val.userid != commentersSelected[ind].userid
+        )
+      );
     }
 
     setCommentersSelected(copyOfCommenters);
@@ -284,7 +341,7 @@ function ReviewedSong({ listOfComments }) {
             }}
           >
             {bufferSource
-              ? commentsAfterFiltering.map((val, ind) => {
+              ? comments.map((val, ind) => {
                   return (
                     <div
                       style={{
@@ -344,9 +401,9 @@ function ReviewedSong({ listOfComments }) {
               return (
                 <div style={{ marginBottom: 8 }}>
                   <ToggleCommenter
-                    photo={nish}
+                    photo={reviews[ind].reviewerProfile.profile_photo}
                     onChange={() => toggleCommenter(ind)}
-                    selected={commentersSelected[ind]}
+                    selected={val.selected}
                   />
                 </div>
               );
@@ -356,7 +413,7 @@ function ReviewedSong({ listOfComments }) {
         </div>
       </div>
       <div style={{ border: "0px solid black", maxHeight: "100px" }}>
-        <StaticCommentsList comments={commentsAfterFiltering} />
+        <StaticCommentsList comments={comments} />
       </div>
     </div>
   );

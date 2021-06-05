@@ -15,12 +15,13 @@ import RegisterInitialProfile from "./components/Pages/RegisterInitialProfile";
 function App() {
   const history = useHistory();
   useEffect(() => {
-    history.replace("/home");
+    // history.replace("/home");
     // history.replace("/visitprofile");
     // history.replace("/authenticate");
     // history.replace("registerinitialprofile");
     // history.push("/profile");
     // history.push("/submit");
+    history.push("/songfeedback");
   });
 
   //   <Route

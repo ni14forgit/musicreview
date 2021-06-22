@@ -5,9 +5,17 @@ import FeedbackBar from "../Small/Bars/FeedbackBar";
 import IconTextButton from "../Small/IconTextButton";
 import { useHistory } from "react-router-dom";
 import FeedbackHeader from "../Small/Bars/FeedbackHeader";
+import { useEffect, useState } from "react";
+import { feedback_menu } from "../../api/users/menu";
 
 const Feedback = () => {
   const history = useHistory();
+  const [feedbacks, setFeedbacks] = useState([]);
+
+  useEffect(async () => {
+    const results = await feedback_menu();
+    setFeedbacks(results.feedbacks);
+  }, []);
   return (
     <div>
       <Header />
@@ -31,13 +39,13 @@ const Feedback = () => {
         </div>
         <FeedbackHeader />
 
-        {[1, 2, 3, 4, 5, 6].map((val, ind) => {
+        {feedbacks.map((val, ind) => {
           return (
             <div style={{ marginBottom: 4 }}>
               <FeedbackBar
-                reviewers={1}
-                date="09/16/1999"
-                song_title="firsttake.mp4"
+                reviewers={val.reviewers}
+                date={val.date}
+                song_title={val.title}
                 isDoneStatus={ind > 1}
               />
             </div>

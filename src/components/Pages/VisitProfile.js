@@ -145,7 +145,6 @@ const VisitProfile = ({ match }) => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  // border: "4px solid black",
                 }}
               >
                 <div

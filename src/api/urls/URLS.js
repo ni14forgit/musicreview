@@ -32,6 +32,10 @@ import {
   users_review_retrieve,
   users_review_submit,
   users_review_statictotalretrieve,
+  users_review_submitfeedbackscore,
+  users_match,
+  users_menu_feeback,
+  users_menu_musictoreview,
 } from "./paths/users";
 
 export {
@@ -61,4 +65,8 @@ export {
   users_review_retrieve,
   users_review_submit,
   users_review_statictotalretrieve,
+  users_review_submitfeedbackscore,
+  users_match,
+  users_menu_feeback,
+  users_menu_musictoreview,
 };

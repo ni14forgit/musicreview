@@ -14,6 +14,7 @@ import {
 } from "../../metafunctions/genProfHelper";
 import { submit_music } from "../../api/users/submissions/submit";
 import LoadingSpinner from "../Small/LoadingSpinner";
+import { match } from "../../api/users/match";
 
 const Submit = () => {
   const [step, setStep] = useState(0);
@@ -37,22 +38,27 @@ const Submit = () => {
     today = mm + "/" + dd + "/" + yyyy;
 
     // song, questions, genres, preferredProfessions
+
+    const convertedGenresDict = convertGenresListToDict(genres);
+    const convertedProfessionsDict = convertProfessionsListToDict(professions);
     console.log("submission called");
-    submit_music(
-      song,
-      listOfComments,
-      convertGenresListToDict(genres),
-      convertProfessionsListToDict(professions),
-      today
-    ).then((res) => {
-      if (res.success) {
-        console.log("upload successful!");
-        setIsSubmitLoading(false);
-        setIsCompleted(true);
-      } else {
-        console.log("something wronog happened");
-      }
-    });
+    // submit_music(
+    //   song,
+    //   listOfComments,
+    //   convertedGenresDict,
+    //   convertedProfessionsDict,
+    //   today
+    // ).then((res) => {
+    //   if (res.success) {
+    //     console.log("upload successful!");
+    //     setIsSubmitLoading(false);
+    //     setIsCompleted(true);
+    //     console.log(res.submissionId);
+    //     match(res.submissionId, convertedGenresDict, convertedProfessionsDict);
+    //   } else {
+    //     console.log("something wronog happened");
+    //   }
+    // });
   };
 
   const renderStep = (stepAlongPath) => {
@@ -95,41 +101,39 @@ const Submit = () => {
             marginTop: 70,
           }}
         >
-          <div>
-            {renderStep(step)}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "horizontal",
-                justifyContent: "center",
-                marginTop: 20,
-                width: "100vw",
-              }}
-            >
-              <div style={{ marginRight: 30 }}>
-                {step != 0 ? (
-                  <TextButton
-                    text="Back"
-                    disabled={false}
-                    onClick={() => setStep(step - 1)}
-                  />
-                ) : null}
-              </div>
-              <div style={{ marginLeft: 30 }}>
-                {step < 1 ? (
-                  <TextButton
-                    text="Next"
-                    disabled={!nextButtonEnable}
-                    onClick={() => setStep(step + 1)}
-                  />
-                ) : (
-                  <TextButton
-                    text="Complete Submission"
-                    disabled={!nextButtonEnable}
-                    onClick={submitSongFunc}
-                  />
-                )}
-              </div>
+          {renderStep(step)}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "horizontal",
+              justifyContent: "center",
+              marginTop: 20,
+              width: "100vw",
+            }}
+          >
+            <div style={{ marginRight: 30 }}>
+              {step != 0 ? (
+                <TextButton
+                  text="Back"
+                  disabled={false}
+                  onClick={() => setStep(step - 1)}
+                />
+              ) : null}
+            </div>
+            <div style={{ marginLeft: 30 }}>
+              {step < 1 ? (
+                <TextButton
+                  text="Next"
+                  disabled={!nextButtonEnable}
+                  onClick={() => setStep(step + 1)}
+                />
+              ) : (
+                <TextButton
+                  text="Complete Submission"
+                  disabled={!nextButtonEnable}
+                  // onClick={submitSongFunc}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -223,6 +223,7 @@ const EditableProfile = ({ nish }) => {
   // const [professions, setProfessions] = useState(
   //   starterArrayProfessions.fill(false)
   // );
+  const [reviewerScore, setReviewerScore] = useState(-1);
   const [pageLoading, setPageLoading] = useState(true);
   const [genres, setGenres] = useState(null);
   const [professions, setProfessions] = useState(null);
@@ -267,6 +268,7 @@ const EditableProfile = ({ nish }) => {
     setAccomplishments(profile.accomplishments);
     setGenres(convertGenresDictToList(profile.genres));
     setProfessions(convertProfessionsDictToList(profile.professions));
+    setReviewerScore(profile.reviewer_score);
     // setGenres(convertGenreTextToList(profile.genres));
     // setProfessions(convertProfessionsTextToList(profile.professions));
     setPageLoading(false);
@@ -314,6 +316,7 @@ const EditableProfile = ({ nish }) => {
   ) : (
     <div>
       <Header />
+
       <button onClick={retrieve_profile}>HIHIH</button>
       <div
         style={{
@@ -476,7 +479,19 @@ const EditableProfile = ({ nish }) => {
                   bold={"bold"}
                 />
                 <div style={{ marginLeft: 5 }}>
-                  <Stars feedback_quality={3} color={background_purple} />
+                  {reviewerScore > 0 ? (
+                    <Stars
+                      feedback_quality={reviewerScore}
+                      color={background_purple}
+                    />
+                  ) : (
+                    <Text
+                      text="No Feedback Given Yet"
+                      fontsize={17}
+                      color={light_purple}
+                      bold={"bold"}
+                    />
+                  )}
                 </div>
               </div>
 

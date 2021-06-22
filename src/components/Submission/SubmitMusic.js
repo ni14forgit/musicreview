@@ -45,7 +45,8 @@ const SubmitMusic = ({
     if (e.target.files[0]) {
       if (
         e.target.files[0].type.includes("wav") ||
-        e.target.files[0].type.includes("mp3")
+        e.target.files[0].type.includes("mp3") ||
+        e.target.files[0].type.includes("ogg")
       ) {
         console.log(e.target.files[0]);
         setError(false);

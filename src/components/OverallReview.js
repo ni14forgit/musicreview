@@ -1,14 +1,15 @@
 import { background_purple } from "../constants";
 import Text from "./Useful/Text";
-import nish from "../nish.jpg";
+// import nish from "../nish.jpg";
 import RateFeedback from "./Small/RateFeedback";
 import { GrSoundcloud, GrSpotify, GrInstagram } from "react-icons/gr";
 import MiniPlayer from "./MiniPlayer";
-import Eric from "../Eric.wav";
+// import Eric from "../Eric.wav";
 import {
   convertProfessionsDictToList,
   convertProfessionToText,
 } from "../metafunctions/genProfHelper";
+import { useState } from "react";
 
 const ProfPic = ({ photo }) => {
   const size = 75;
@@ -48,6 +49,8 @@ const ProfPic = ({ photo }) => {
 };
 
 const GeneralFeedback = ({ review }) => {
+  const [score, setScore] = useState(review.reviewTable.feedback_quality);
+  // need to collect and set this value
   return (
     <div
       style={{
@@ -144,7 +147,12 @@ const GeneralFeedback = ({ review }) => {
             </div>
           </div>
         </div>
-        <RateFeedback name={review.reviewerProfile.name} score={3} />
+        <RateFeedback
+          name={review.reviewerProfile.name}
+          score={score}
+          setScore={setScore}
+          review_id={review.reviewTable.id}
+        />
       </div>
       <div style={{ marginTop: 20 }}>
         <Text
@@ -155,7 +163,7 @@ const GeneralFeedback = ({ review }) => {
         />
         <div style={{ marginTop: 10 }}>
           <Text
-            text={review.generalOverview}
+            text={review.reviewTable.general_overview}
             color={background_purple}
             fontsize={14}
             // bold="bold"

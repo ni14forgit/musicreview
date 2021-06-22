@@ -44,10 +44,10 @@ const BarToWebpage = ({ reviewers, date, song_title, isDoneStatus }) => {
           //   maxWidth: 40,
         }}
       >
-        {[nish, nish, nish].map((val, ind) => {
+        {reviewers.map((val, ind) => {
           return (
             <div style={{ marginRight: -10 }}>
-              <StaticProfileCommenter photo={val} size={30} />
+              <StaticProfileCommenter photo={val.photo} size={30} />
             </div>
           );
         })}

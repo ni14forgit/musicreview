@@ -80,13 +80,14 @@ const AddQuestions = ({
       style={{
         backgroundColor: background_purple,
         height: 400,
+        width: 960,
         borderRadius: 5,
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "center",
         flexDirection: "horizontal",
       }}
     >
-      <div style={{ marginLeft: 10, marginTop: 10, minWidth: "60%" }}>
+      <div style={{ marginLeft: 10, marginTop: 10, marginRight: 50 }}>
         <Text
           text="add questions about your music you want answered"
           bold="bold"
@@ -101,7 +102,7 @@ const AddQuestions = ({
             marginTop: 15,
           }}
         >
-          <div style={{ width: "90%" }}>
+          <div style={{ width: 550, border: "0px solid black" }}>
             <ModifiableTextBox
               currentValue={currentCommentValue}
               setCurrentValue={setCurrentCommentValue}
@@ -114,7 +115,7 @@ const AddQuestions = ({
             <FaCommentAlt color={white} size={21} onClick={submitComment} />
           </div>
         </div>
-        <div style={{ border: "0px solid black" }}>
+        <div style={{ border: "0px solid black", width: 550 }}>
           <QuestionsCommentsList
             comments={listOfComments}
             deleteComment={deleteComment}

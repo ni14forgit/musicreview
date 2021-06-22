@@ -11,17 +11,20 @@ import Submit from "./components/Pages/Submit";
 import VisitProfile from "./components/Pages/VisitProfile";
 import Authenticate from "./components/Pages/Authenticate";
 import RegisterInitialProfile from "./components/Pages/RegisterInitialProfile";
+import Test from "./test";
+import MainScreen from "./components/Pages/MainScreen";
 
 function App() {
   const history = useHistory();
   useEffect(() => {
     // history.replace("/home");
     // history.replace("/visitprofile");
+    // history.replace("/mainscreen");
     // history.replace("/authenticate");
     // history.replace("registerinitialprofile");
     // history.push("/profile");
-    // history.push("/submit");
-    history.push("/songfeedback");
+    history.push("/submit");
+    // history.push("/songfeedback");
   });
 
   //   <Route
@@ -56,9 +59,13 @@ function App() {
         <RegisterInitialProfile />
       </Route>
       <Switch>
-        <Route path="/songtoreview">
+        {/* <Route path="/songtoreview">
           <OtherArtistsSong />
-        </Route>
+        </Route> */}
+        <Route
+          path="/songtoreview/:submission_id/:review_id"
+          render={({ match }) => <OtherArtistsSong match={match} />}
+        />
         <Route path="/songfeedback">
           <YourSongReviewed />
         </Route>
@@ -66,7 +73,11 @@ function App() {
       <Route path="/submit">
         <Submit />
       </Route>
+      <Route path="/mainscreen">
+        <MainScreen />
+      </Route>
     </div>
+    // <Test />
   );
 }
 

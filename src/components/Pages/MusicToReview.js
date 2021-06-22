@@ -3,15 +3,17 @@ import Text from "../Useful/Text";
 import { background_purple, white } from "../../constants";
 import ToReviewBar from "../Small/Bars/ToReviewBar";
 import ReviewHeader from "../Small/Bars/ReviewHeader";
-
-// const first = 40;
-// const second = 200;
-// const third = 400;
-// const fourth = 600;
-// const fifth = 900;
-// const sixth = 1100;
+import { useEffect, useState } from "react";
+import { musictoreview_menu } from "../../api/users/menu";
 
 const MusicToReview = () => {
+  const [musicsToReview, setMusicsToReview] = useState([]);
+  useEffect(async () => {
+    const results = await musictoreview_menu();
+    // console.log(results);
+    setMusicsToReview(results.musictoreview);
+  }, []);
+
   return (
     <div>
       <Header />
@@ -22,24 +24,17 @@ const MusicToReview = () => {
           fontsize={24}
           bold={"bold"}
         />
-        {/* <div style={{ marginBottom: 10, marginTop: 15 }}>
-          <Text
-            text="March"
-            color={background_purple}
-            fontsize={24}
-            bold={"bold"}
-          />
-        </div> */}
         <ReviewHeader />
-        {[1, 2, 3, 4, 5, 6].map((val, ind) => {
+        {musicsToReview.map((val, ind) => {
           return (
             <div style={{ marginBottom: 4 }}>
               <ToReviewBar
-                reviewers={1}
-                date="09/16/1999"
-                song_title="firsttake.mp4"
+                date={val.date}
+                song_title={val.title}
+                submitter={val.submitter}
+                review_id={val.review_id}
                 isDoneStatus={ind > 1}
-                feedback_quality={3}
+                feedback_quality={val.feedback_quality}
               />
             </div>
           );

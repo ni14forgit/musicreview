@@ -12,7 +12,7 @@ const Authenticate = () => {
   const [passwordTwo, setPasswordTwo] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   // const [isAttemptingLogin, setIsAttemptingLogin] = useState(false);
-  const history = useHistory();
+  // const history = useHistory();
 
   // const loginWrapper = () => {
 
@@ -23,7 +23,16 @@ const Authenticate = () => {
   // }
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        border: "2px solid black",
+        height: "100vh",
+      }}
+    >
       {isLogin ? (
         <Login
           setEmail={setEmail}

@@ -2,6 +2,10 @@ import {
   accounts_checkexistence,
   accounts_login,
   accounts_logout,
+  accounts_count,
+  accounts_session_isloggedin,
+  accounts_session_accesssongfeedback,
+  accounts_session_accesssongtoreview,
 } from "./paths/accounts";
 import {
   aws_upload_photo,
@@ -24,6 +28,7 @@ import {
   profiles_edits_deleteaccomplishment,
   profiles_edits_accomplishment,
   profiles_retrieve,
+  profiles_retrieve_other,
 } from "./paths/profiles";
 
 import {
@@ -36,12 +41,19 @@ import {
   users_match,
   users_menu_feeback,
   users_menu_musictoreview,
+  users_review_seenupdate,
+  users_review_unopenedfeedbackcount,
+  users_review_todoreviewcount,
+  users_email_onsubmission,
+  users_email_onreviewupdate,
 } from "./paths/users";
 
 export {
   accounts_checkexistence,
   accounts_login,
   accounts_logout,
+  accounts_count,
+  accounts_session_isloggedin,
   aws_upload_photo,
   aws_upload_songs,
   aws_delete_photo,
@@ -60,6 +72,7 @@ export {
   profiles_edits_deleteaccomplishment,
   profiles_edits_accomplishment,
   profiles_retrieve,
+  profiles_retrieve_other,
   users_submission_retrieve,
   users_submission_submit,
   users_review_retrieve,
@@ -69,4 +82,11 @@ export {
   users_match,
   users_menu_feeback,
   users_menu_musictoreview,
+  users_review_seenupdate,
+  users_review_unopenedfeedbackcount,
+  users_review_todoreviewcount,
+  users_email_onsubmission,
+  users_email_onreviewupdate,
+  accounts_session_accesssongfeedback,
+  accounts_session_accesssongtoreview,
 };

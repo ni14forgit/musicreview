@@ -1,6 +1,6 @@
 import { aws_delete_song } from "../../urls/URLS";
 const delete_song = async (song_id) => {
-  console.log("delete song called");
+  // console.log("delete song called");
   const result = await fetch(aws_delete_song, {
     method: "POST",
     mode: "cors",

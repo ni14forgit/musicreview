@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { background_purple } from "../../constants";
+import { background_purple, white } from "../../constants";
 import ModifiableTextBox from "../Useful/ModifiableTextBox";
 import Text from "../Useful/Text";
 import { useHistory } from "react-router-dom";
@@ -84,29 +84,29 @@ const Signup = ({
             });
             if (!userDoesExist) {
               setAccountAlreadyExists(false);
-              console.log("user does not exist yay!");
+              // console.log("user does not exist yay!");
               history.push({
                 pathname: "/registerinitialprofile",
                 state: { email: email, password: passwordOne },
               });
             } else {
-              console.log("user already exists nay");
+              // console.log("user already exists nay");
               setAccountAlreadyExists(true);
             }
           } else {
-            console.log("password isn't valid");
+            // console.log("password isn't valid");
             setInvalidPassword(true);
           }
         } else {
-          console.log("passwords do not match");
+          // console.log("passwords do not match");
           setPasswordsDontMatch(true);
         }
       } else {
-        console.log("email is not valid");
+        // console.log("email is not valid");
         setEmailNotValid(true);
       }
     } else {
-      console.log("please fill out all fields");
+      // console.log("please fill out all fields");
     }
   };
   return (
@@ -117,11 +117,23 @@ const Signup = ({
         display: "flex",
         flexDirection: "column",
         height: 400,
+        width: "80%",
         padding: 20,
-        border: "2px solid black",
+        borderRadius: 5,
+        // border: "2px solid black",
       }}
     >
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 20 }}>
+        <Text
+          text={
+            "Please remember your password and enter email correctly, we haven't built password retrieval yet."
+          }
+          color={white}
+          fontsize={14}
+          bold={"bold"}
+        />
+      </div>
+      <div style={{ marginTop: 20 }}>
         <ModifiableTextBox
           setCurrentValue={setEmail}
           currentValue={email}

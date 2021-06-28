@@ -21,7 +21,7 @@ const RegAddProfilePicture = ({ enableNextButton, setPicture, picture }) => {
     if (picture) {
       enableNextButton(true);
     } else {
-      enableNextButton(true);
+      enableNextButton(false);
     }
   }, []);
 
@@ -33,7 +33,7 @@ const RegAddProfilePicture = ({ enableNextButton, setPicture, picture }) => {
         e.target.files[0].type.includes("jpg")
       ) {
         setError(false);
-        console.log(ind);
+        // console.log(ind);
         const reader = new FileReader();
         reader.addEventListener("load", () => {
           setPicture({ imgdata: reader.result, imgfile: e.target.files[0] });
@@ -51,7 +51,7 @@ const RegAddProfilePicture = ({ enableNextButton, setPicture, picture }) => {
   };
 
   const dragAddImageHandleFileInput = (e) => {
-    console.log("drag music triggered");
+    // console.log("drag music triggered");
     let files = [...e.dataTransfer.files];
     if (files && files.length > 0) {
       if (

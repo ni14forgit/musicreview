@@ -19,11 +19,11 @@ const getRequest = async (url) => {
 };
 
 const feedback_menu = async () => {
-  return getRequest(users_menu_feeback);
+  return await getRequest(users_menu_feeback);
 };
 
 const musictoreview_menu = async () => {
-  return getRequest(users_menu_musictoreview);
+  return await getRequest(users_menu_musictoreview);
 };
 
 export { feedback_menu, musictoreview_menu };

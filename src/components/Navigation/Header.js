@@ -2,6 +2,7 @@ import { background_purple, white } from "../../constants";
 import PlainTextButton from "../Useful/PlainTextButton";
 import { useHistory } from "react-router-dom";
 import Text from "../Useful/Text";
+import { logout } from "../../api/accounts/logout";
 
 const TextButton = ({ text, onClick, bold, color, fontsize, num }) => {
   return (
@@ -55,8 +56,13 @@ const TextButton = ({ text, onClick, bold, color, fontsize, num }) => {
   );
 };
 
-const Header = ({}) => {
+const Header = ({ numunopenedfeedback = 0, numfeedbacktogive = 0 }) => {
   const history = useHistory();
+
+  const logoutFunc = async () => {
+    logout().then((res) => history.replace("/mainscreen"));
+  };
+
   return (
     <div>
       <div
@@ -82,10 +88,10 @@ const Header = ({}) => {
         <div style={{ marginRight: 15 }}>
           <PlainTextButton
             color="white"
-            text="Logout"
+            text="logout"
             fontsize={16}
             bold="bold"
-            onClick={() => history.push("/home")}
+            onClick={logoutFunc}
           />
         </div>
       </div>
@@ -116,7 +122,7 @@ const Header = ({}) => {
             fontsize={16}
             bold="bold"
             onClick={() => history.push("/feedback")}
-            num={2}
+            num={numunopenedfeedback}
           />
         </div>
         <div style={{ marginRight: 25 }}>
@@ -126,7 +132,7 @@ const Header = ({}) => {
             fontsize={16}
             bold="bold"
             onClick={() => history.push("/musictoreview")}
-            num={1}
+            num={numfeedbacktogive}
           />
         </div>
       </div>

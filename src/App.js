@@ -13,19 +13,26 @@ import Authenticate from "./components/Pages/Authenticate";
 import RegisterInitialProfile from "./components/Pages/RegisterInitialProfile";
 import Test from "./test";
 import MainScreen from "./components/Pages/MainScreen";
+import { isLoggedIn } from "./api/accounts/session";
 
 function App() {
   const history = useHistory();
   useEffect(() => {
     // history.replace("/home");
-    // history.replace("/visitprofile");
+    // history.replace("/visitprofile/15");
     // history.replace("/mainscreen");
     // history.replace("/authenticate");
     // history.replace("registerinitialprofile");
     // history.push("/profile");
-    history.push("/submit");
+    // history.push("/submit");
     // history.push("/songfeedback");
-  });
+
+    isLoggedIn().then((res) => {
+      if (!res.loggedIn) {
+        history.replace("/mainscreen");
+      }
+    });
+  }, []);
 
   //   <Route
   //   path="/article/:id"
@@ -34,48 +41,50 @@ function App() {
   // history.replace("article/" + id);
   return (
     <div>
-      <Route
-        path="/home"
-        render={({ match }) => (
-          <Home list_of_artist_ids={[nish, nish, nish, nish]} />
-        )}
-      />
-      <Route path="/profile">
-        <EditableProfile nish={nish} />
-      </Route>
-      <Route path="/visitprofile">
-        <VisitProfile />
-      </Route>
-      <Route path="/feedback">
-        <Feedback />
-      </Route>
-      <Route path="/musictoreview">
-        <MusicToReview />
-      </Route>
-      <Route path="/authenticate">
-        <Authenticate />
-      </Route>
-      <Route path="/registerinitialprofile">
-        <RegisterInitialProfile />
-      </Route>
       <Switch>
-        {/* <Route path="/songtoreview">
-          <OtherArtistsSong />
-        </Route> */}
+        <Route
+          path="/home"
+          render={({ match }) => (
+            <Home list_of_artist_ids={[nish, nish, nish, nish]} />
+          )}
+        />
+        <Route path="/profile">
+          <EditableProfile nish={nish} />
+        </Route>
+        <Route
+          path="/visitprofile/:user_id/"
+          render={({ match }) => <VisitProfile match={match} />}
+        />
+        <Route exact path="/feedback">
+          <Feedback />
+        </Route>
+        <Route exact path="/musictoreview">
+          <MusicToReview />
+        </Route>
+        <Route exact path="/authenticate">
+          <Authenticate />
+        </Route>
+        <Route path="/registerinitialprofile">
+          <RegisterInitialProfile />
+        </Route>
         <Route
           path="/songtoreview/:submission_id/:review_id"
           render={({ match }) => <OtherArtistsSong match={match} />}
         />
-        <Route path="/songfeedback">
-          <YourSongReviewed />
+        <Route
+          path="/songfeedback/:submission_id"
+          render={({ match }) => <YourSongReviewed match={match} />}
+        />
+        <Route path="/submit">
+          <Submit />
+        </Route>
+        <Route path="/mainscreen">
+          <MainScreen />
+        </Route>
+        <Route path="*">
+          <MainScreen />
         </Route>
       </Switch>
-      <Route path="/submit">
-        <Submit />
-      </Route>
-      <Route path="/mainscreen">
-        <MainScreen />
-      </Route>
     </div>
     // <Test />
   );

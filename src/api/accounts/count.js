@@ -1,8 +1,7 @@
-import { accounts_logout } from "../urls/URLS";
-const logout = async () => {
-  // console.log("hi");
-  const result = await fetch(accounts_logout, {
-    method: "POST",
+import { accounts_count } from "../urls/URLS";
+const count = async () => {
+  const result = await fetch(accounts_count, {
+    method: "GET",
     mode: "cors",
     credentials: "include",
     headers: {
@@ -10,7 +9,6 @@ const logout = async () => {
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
-    body: JSON.stringify({}),
   })
     .then((data) => data.json())
     .then((response) => {
@@ -19,4 +17,4 @@ const logout = async () => {
   return result;
 };
 
-export { logout };
+export { count };

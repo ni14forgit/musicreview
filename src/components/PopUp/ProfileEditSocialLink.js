@@ -64,7 +64,7 @@ const ProfileEditSocialLink = ({
   useEffect(() => {
     const myCopy = { ...links };
     setstaleLinks(JSON.parse(JSON.stringify(myCopy)));
-    console.log("hshshshshh");
+    // console.log("hshshshshh");
     return () => {
       setstaleLinks(JSON.parse(JSON.stringify(myCopy)));
     };
@@ -72,8 +72,8 @@ const ProfileEditSocialLink = ({
 
   const closeAndRestore = () => {
     const copyOfLinks = { ...staleLinks };
-    console.log("copy of links \n");
-    console.log(copyOfLinks);
+    // console.log("copy of links \n");
+    // console.log(copyOfLinks);
     setLinks(copyOfLinks);
     setPopUpOpen(false);
   };

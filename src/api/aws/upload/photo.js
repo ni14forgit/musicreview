@@ -2,8 +2,8 @@ import axios from "axios";
 import { aws_upload_photo } from "../../urls/URLS";
 
 const upload_photo = async (photo = null) => {
-  console.log(photo);
-  console.log("UPLOAD PHOTO called");
+  // console.log(photo);
+  // console.log("UPLOAD PHOTO called");
   const formData = new FormData();
   formData.append("file", photo);
   formData.append("name", "image");

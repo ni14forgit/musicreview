@@ -34,7 +34,7 @@ const ProfileAddSelectedOptions = ({
 
   const saveFunc = () => {
     const convertedDict = convertToDictFunc(selectedOptions);
-    console.log("converted to dict");
+    // console.log("converted to dict");
     api_edit_call(convertedDict);
     setPopUpOpen(false);
   };

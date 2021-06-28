@@ -1,6 +1,6 @@
 import { aws_delete_photo } from "../../urls/URLS";
 const delete_photo = async () => {
-  console.log("delete photo called");
+  // console.log("delete photo called");
   const result = await fetch(aws_delete_photo, {
     method: "POST",
     mode: "cors",

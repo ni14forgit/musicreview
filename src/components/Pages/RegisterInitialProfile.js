@@ -24,7 +24,7 @@ const RegisterInitialProfile = () => {
   const [isAttemptingLogin, setIsAttemptingLogin] = useState(false);
 
   const registerUser = async () => {
-    // setIsAttemptingLogin(true);
+    setIsAttemptingLogin(true);
     register(imageData.imgfile, songs, {
       email: history.location.state.email,
       password: history.location.state.password,
@@ -36,6 +36,7 @@ const RegisterInitialProfile = () => {
       instagram: socialLinks.instagram,
     }).then((resp) => {
       setIsAttemptingLogin(false);
+      history.replace("/home");
       // move on to next page?
     });
   };
@@ -97,7 +98,7 @@ const RegisterInitialProfile = () => {
       case 2:
         return (
           <RegAddSelectedOptions
-            title="Genres"
+            title="Closest genre(s) to your music"
             enableNextButton={setNextButtonEnable}
             selectedOptions={genres}
             setSelectedOptions={setGenres}
@@ -133,9 +134,7 @@ const RegisterInitialProfile = () => {
     }
   };
 
-  return isAttemptingLogin ? (
-    <LoadingSpinner />
-  ) : (
+  return (
     <div
       style={{
         display: "flex",
@@ -146,43 +145,57 @@ const RegisterInitialProfile = () => {
         // border: "2px solid black",
       }}
     >
-      {renderStep(step)}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "horizontal",
-          justifyContent: "center",
-          marginTop: 20,
-          width: "100vw",
-        }}
-      >
-        <div style={{ marginRight: 30 }}>
-          {step != 0 ? (
-            <TextButton
-              text="Back"
-              disabled={false}
-              onClick={() => setStep(step - 1)}
-            />
-          ) : null}
-        </div>
+      {isAttemptingLogin ? (
+        <LoadingSpinner />
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 20,
+            width: "100vw",
+          }}
+        >
+          {renderStep(step)}
+          <div
+            style={{
+              marginTop: 20,
+              display: "flex",
+              flexDirection: "horizontal",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: 30 }}>
+              {step != 0 ? (
+                <TextButton
+                  text="Back"
+                  disabled={false}
+                  onClick={() => setStep(step - 1)}
+                />
+              ) : null}
+            </div>
 
-        <div style={{ marginLeft: 30 }}>
-          {step < 5 ? (
-            <TextButton
-              text="Next"
-              disabled={!nextButtonEnable}
-              onClick={() => setStep(step + 1)}
-            />
-          ) : (
-            <TextButton
-              text="Register Profile"
-              disabled={!nextButtonEnable}
-              // onClick={() => setStep(step + 1)}
-              onClick={registerUser}
-            />
-          )}
+            <div style={{ marginLeft: 30 }}>
+              {step < 5 ? (
+                <TextButton
+                  text="Next"
+                  disabled={!nextButtonEnable}
+                  onClick={() => setStep(step + 1)}
+                />
+              ) : (
+                <TextButton
+                  text="Register Profile"
+                  disabled={!nextButtonEnable}
+                  // onClick={() => setStep(step + 1)}
+                  onClick={registerUser}
+                />
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

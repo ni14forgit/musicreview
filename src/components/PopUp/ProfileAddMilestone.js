@@ -31,7 +31,7 @@ const ProfileAddMilestone = ({
       description: description,
       title: title,
     });
-    console.log(waiter.id);
+    // console.log(waiter.id);
     setAccomplishments((prevList) => [
       { id: waiter.id, date: date, description: description, title: title },
       ...prevList,

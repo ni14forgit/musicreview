@@ -5,7 +5,7 @@ const checkExistence = async (
     password: "default_password",
   }
 ) => {
-  console.log("checkExistnce called");
+  // console.log("checkExistnce called");
   const doesUserExist = await fetch(accounts_checkexistence, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin
@@ -22,8 +22,8 @@ const checkExistence = async (
   })
     .then((data) => data.json())
     .then((response) => {
-      console.log(response);
-      console.log(response.userAlreadyExists);
+      // console.log(response);
+      // console.log(response.userAlreadyExists);
       return response.userAlreadyExists;
     });
 

@@ -1,7 +1,6 @@
 import { accounts_login } from "../urls/URLS";
-const login = async (data = { email: "hi", password: "si" }) => {
-  console.log("LOGIN called");
-  console.log(accounts_login);
+const login = async (data) => {
+  // console.log(accounts_login);
   const result = await fetch(accounts_login, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin

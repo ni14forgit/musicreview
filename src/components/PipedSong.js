@@ -45,7 +45,7 @@ function PipedSong({ title = "hi" }) {
       response.data,
       (audioBuffer) => {
         setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
-        console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+        // console.log(Math.floor(audioBuffer.duration) / numberOfBars);
         setBufferSource(audioBuffer);
       },
       (e) => {
@@ -166,7 +166,7 @@ function PipedSong({ title = "hi" }) {
 
   const setMusicLocationClick = (ind) => {
     // console.log("base");
-    console.log(isPlaying);
+    // console.log(isPlaying);
     ind = ind + 1;
     setTimeOfSong(Math.floor(ind * valOfBar));
     if (isPlaying) {

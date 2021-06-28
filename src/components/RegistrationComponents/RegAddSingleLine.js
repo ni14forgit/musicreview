@@ -19,9 +19,9 @@ const RegAddSingleLine = ({
 }) => {
   const setTextAndEnable = (val) => {
     setText(val);
-    console.log(val);
+    // console.log(val);
     if (val) {
-      console.log("positive");
+      // console.log("positive");
       enableNextButton(true);
     } else {
       enableNextButton(false);

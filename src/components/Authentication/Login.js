@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { background_purple } from "../../constants";
 import ModifiableTextBox from "../Useful/ModifiableTextBox";
 import Text from "../Useful/Text";
+import { useHistory } from "react-router";
 
 // import CommentBox from "../Small/CommentBox";
 
@@ -33,6 +34,7 @@ const Login = ({
   setPasswordOne,
   loginAction,
 }) => {
+  const history = useHistory();
   const [incorrectPassword, setIncorrectPassword] = useState(false);
   const [accountNonexistent, setAccountNonexistent] = useState(false);
   // email is not valid
@@ -47,16 +49,18 @@ const Login = ({
       // setIsAttemptingLogin(true);
       loginAction({ email: email, password: passwordOne }).then((resp) => {
         // setIsAttemptingLogin(false);
-        console.log(resp);
+        // console.log(resp);
         if (!resp.success) {
-          console.log("not successful");
-          console.log(resp.errors.incorrectPasswordError);
+          // console.log("not successful");
+          // console.log(resp.errors.incorrectPasswordError);
           setAccountNonexistent(resp.errors.acountDoesNotExistError);
           setIncorrectPassword(resp.errors.incorrectPasswordError);
+        } else {
+          history.replace("/home");
         }
       });
     } else {
-      console.log("not correct?");
+      // console.log("not correct?");
     }
   };
   return (
@@ -68,7 +72,9 @@ const Login = ({
         flexDirection: "column",
         height: 400,
         padding: 20,
-        border: "2px solid black",
+        borderRadius: 5,
+        width: "80%",
+        // border: "2px solid black",
       }}
     >
       <div style={{ marginTop: 40 }}>

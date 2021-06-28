@@ -34,10 +34,11 @@ const GeneralFeedback = ({ setCurrentValue, currentValue }) => {
         style={defaultStyle}
         type="text"
         value={currentValue}
+        // placeholder="what are your general thoughts on the submission? try to be as detailed as possible on your advice!"
         onChange={(e) => {
           setCurrentValue({ altered: true, value: e.target.value });
         }}
-      />
+      ></textarea>
     </div>
   );
 };

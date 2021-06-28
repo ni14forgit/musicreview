@@ -4,15 +4,21 @@ import Header from "../Navigation/Header";
 import StaticProfileCommenter from "../Small/StaticProfileCommenter";
 import IconTextButton from "../Small/IconTextButton";
 import { useHistory } from "react-router-dom";
-import FeedbackBar from "../Small/Bars/FeedbackBar";
-import ToReviewBar from "../Small/Bars/ToReviewBar";
-import ReviewHeader from "../Small/Bars/ReviewHeader";
-import FeedbackHeader from "../Small/Bars/FeedbackHeader";
-import ArtistCard from "../Small/Social/ArtistCard";
-import musicianpic from "../../musicianpic.jpeg";
+// import FeedbackBar from "../Small/Bars/FeedbackBar";
+// import ToReviewBar from "../Small/Bars/ToReviewBar";
+// import ReviewHeader from "../Small/Bars/ReviewHeader";
+// import FeedbackHeader from "../Small/Bars/FeedbackHeader";
+// import ArtistCard from "../Small/Social/ArtistCard";
+// import musicianpic from "../../musicianpic.jpeg";
+import { useEffect, useState } from "react";
+import {
+  getUnopenedFeedbackCount,
+  getToDoReviewCount,
+} from "../../api/users/reviews/count";
+import { useStore } from "../../store/store";
 
 const RemainingTextTile = ({ remaining, receivedBoolean, onClick }) => {
-  const receivedSubtitle = "artists have completed or updated feedback!";
+  const receivedSubtitle = "artists have updated your feedback!";
   const givenSubtitle = "artists are waiting on your reviews!";
   return (
     <div
@@ -49,9 +55,26 @@ const RemainingTextTile = ({ remaining, receivedBoolean, onClick }) => {
 };
 const Home = ({ list_of_artist_ids }) => {
   const history = useHistory();
+  const [state, dispatch] = useStore();
+
+  const [numUnopenedFeedback, setNumUnopenedFeedback] = useState(-1);
+  const [numToDoReview, setNumToDoReview] = useState(-1);
+
+  useEffect(async () => {
+    const unopenedfeedback = await getUnopenedFeedbackCount();
+    const todoreviewcount = await getToDoReviewCount();
+    dispatch("SET_NUM_UNOPENED_FEEDBACK", unopenedfeedback.unopenedfeedback);
+    dispatch("SET_NUM_TODO_REVIEWCOUNT", todoreviewcount.todoreview);
+    setNumUnopenedFeedback(unopenedfeedback.unopenedfeedback);
+    setNumToDoReview(todoreviewcount.todoreview);
+  }, []);
+
   return (
     <div>
-      <Header />
+      <Header
+        numfeedbacktogive={numToDoReview}
+        numunopenedfeedback={numUnopenedFeedback}
+      />
       <div
         style={{
           display: "flex",
@@ -74,14 +97,14 @@ const Home = ({ list_of_artist_ids }) => {
           <div style={{ marginRight: 15 }}>
             <RemainingTextTile
               receivedBoolean={true}
-              remaining={"2"}
+              remaining={numUnopenedFeedback}
               onClick={() => history.push("/feedback")}
             />
           </div>
           <div style={{ marginLeft: 15 }}>
             <RemainingTextTile
               receivedBoolean={false}
-              remaining={"1"}
+              remaining={numToDoReview}
               onClick={() => history.push("/musictoreview")}
             />
           </div>

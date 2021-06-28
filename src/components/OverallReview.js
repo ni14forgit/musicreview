@@ -147,12 +147,14 @@ const GeneralFeedback = ({ review }) => {
             </div>
           </div>
         </div>
-        <RateFeedback
-          name={review.reviewerProfile.name}
-          score={score}
-          setScore={setScore}
-          review_id={review.reviewTable.id}
-        />
+        {review.reviewTable.touched ? (
+          <RateFeedback
+            name={review.reviewerProfile.name}
+            score={score}
+            setScore={setScore}
+            review_id={review.reviewTable.id}
+          />
+        ) : null}
       </div>
       <div style={{ marginTop: 20 }}>
         <Text
@@ -163,7 +165,11 @@ const GeneralFeedback = ({ review }) => {
         />
         <div style={{ marginTop: 10 }}>
           <Text
-            text={review.reviewTable.general_overview}
+            text={
+              review.reviewTable.general_overview
+                ? review.reviewTable.general_overview
+                : "No overview written yet."
+            }
             color={background_purple}
             fontsize={14}
             // bold="bold"

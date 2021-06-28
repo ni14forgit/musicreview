@@ -5,18 +5,26 @@ import ToReviewBar from "../Small/Bars/ToReviewBar";
 import ReviewHeader from "../Small/Bars/ReviewHeader";
 import { useEffect, useState } from "react";
 import { musictoreview_menu } from "../../api/users/menu";
+import { useStore } from "../../store/store";
+import { sortByDate } from "../../metafunctions/date";
 
 const MusicToReview = () => {
   const [musicsToReview, setMusicsToReview] = useState([]);
+  const [state, dispatch] = useStore();
   useEffect(async () => {
     const results = await musictoreview_menu();
     // console.log(results);
-    setMusicsToReview(results.musictoreview);
+    const musicsTemp = results.musictoreview;
+    musicsTemp.sort((a, b) => sortByDate(a.date, b.date));
+    setMusicsToReview(musicsTemp);
   }, []);
 
   return (
     <div>
-      <Header />
+      <Header
+        numunopenedfeedback={state.numunopenedfeedback}
+        numfeedbacktogive={state.numtodoreview}
+      />
       <div style={{ marginLeft: 20 }}>
         <Text
           text="Music To Review"
@@ -33,7 +41,7 @@ const MusicToReview = () => {
                 song_title={val.title}
                 submitter={val.submitter}
                 review_id={val.review_id}
-                isDoneStatus={ind > 1}
+                isDoneStatus={val.touched}
                 feedback_quality={val.feedback_quality}
               />
             </div>

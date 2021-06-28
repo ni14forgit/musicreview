@@ -126,6 +126,14 @@ const RegAddSocialLink = ({ enableNextButton, links, setLinks }) => {
           marginLeft: 10,
         }}
       >
+        <div style={{ marginBottom: 20 }}>
+          <Text
+            text="You're highly encouraged to add your artist/social profiles to make connections!"
+            color={white}
+            bold="bold"
+            fontsize={14}
+          />
+        </div>
         <div style={{ width: 500, marginBottom: 20 }}>
           <div style={{ marginBottom: 8 }}>
             <Text text="Spotify Profile" color={white} size={18} bold="bold" />

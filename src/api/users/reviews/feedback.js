@@ -1,6 +1,6 @@
 import { users_review_submitfeedbackscore } from "../../urls/URLS";
 const review_submitfeedbackscore = async (score, review_id) => {
-  console.log("submit feedback score called");
+  // console.log("submit feedback score called");
   const result = await fetch(users_review_submitfeedbackscore, {
     method: "POST",
     mode: "cors",

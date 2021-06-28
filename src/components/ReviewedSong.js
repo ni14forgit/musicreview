@@ -12,7 +12,7 @@ import CommentBox from "./Small/CommentBox";
 import StaticCommentsList from "./Small/StaticCommentsList";
 import skrollTop from "skrolltop";
 import ToggleCommenter from "./Small/ToggleCommenter";
-import { FaFilter } from "react-icons/fa";
+import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
 import Text from "./Useful/Text";
 import { OtherPersonComment } from "./classes/Classes";
 import { sortByTimeStamp } from "../metafunctions/timestamp";
@@ -25,8 +25,17 @@ const getAudioContext = () => {
   return audioContent;
 };
 
+const checkIsEmptyMap = (tempMap) => {
+  for (const property in tempMap) {
+    if (tempMap[property] && tempMap[property].length > 0) {
+      return false;
+    }
+  }
+  return true;
+};
+
 let nonStateBufferSource;
-function ReviewedSong({ reviews }) {
+function ReviewedSong({ reviews, song, title }) {
   let audioContext;
 
   //   let durationOfSong = 10;
@@ -45,7 +54,7 @@ function ReviewedSong({ reviews }) {
   async function getSong() {
     const myurl =
       // "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3";
-      Eric;
+      song;
     const response = await axios.get(myurl, {
       responseType: "arraybuffer",
     });
@@ -56,10 +65,10 @@ function ReviewedSong({ reviews }) {
     const audioBuffer = await audioContext.decodeAudioData(response.data);
     // setDurationOfSong(Math.floor(audioBuffer.duration));
     setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
-    console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+    // console.log(Math.floor(audioBuffer.duration) / numberOfBars);
 
     setBufferSource(audioBuffer);
-    console.log("review set source!");
+    // console.log("review set source!");
   }
 
   const convertTime = (seconds) => {
@@ -73,7 +82,7 @@ function ReviewedSong({ reviews }) {
   };
 
   const onEnded = () => {
-    console.log("ended");
+    // console.log("ended");
     // setIsPlaying(false);
   };
 
@@ -152,7 +161,7 @@ function ReviewedSong({ reviews }) {
       }
     }
 
-    console.log(tempMapOfComments);
+    // console.log(tempMapOfComments);
     setMapOfComments(tempMapOfComments);
 
     tempListOfComments.sort((a, b) => sortByTimeStamp(a, b));
@@ -167,13 +176,14 @@ function ReviewedSong({ reviews }) {
     }
 
     setComments(tempListOfComments);
-    console.log(tempListOfComments);
+    // console.log(tempListOfComments);
     setCommentersSelected(booleanTrues);
 
     // sortByTimeStamp
 
     return () => {
       if (nonStateBufferSource) {
+        // console.log("reviewed song stopped");
         nonStateBufferSource.stop();
       }
     };
@@ -195,7 +205,7 @@ function ReviewedSong({ reviews }) {
 
   const setMusicLocationClick = (ind) => {
     // console.log("base");
-    console.log(isPlaying);
+    // console.log(isPlaying);
     ind = ind + 1;
     setTimeOfSong(Math.floor(ind * valOfBar));
     if (isPlaying) {
@@ -239,7 +249,7 @@ function ReviewedSong({ reviews }) {
   const toggleCommenter = (ind) => {
     var copyOfCommenters = [...commentersSelected];
 
-    console.log(copyOfCommenters);
+    // console.log(copyOfCommenters);
 
     for (var i = 0; i < commentersSelected.length; i++) {
       if (ind == i) {
@@ -248,8 +258,8 @@ function ReviewedSong({ reviews }) {
       }
     }
 
-    console.log(mapOfComments);
-    console.log(ind);
+    // console.log(mapOfComments);
+    // console.log(ind);
 
     if (copyOfCommenters[ind].selected) {
       var tempComments = [...comments];
@@ -282,7 +292,7 @@ function ReviewedSong({ reviews }) {
       to: height,
       duration: 1000,
       callback: function () {
-        console.log("va");
+        // console.log("va");
       },
     });
   };
@@ -316,13 +326,24 @@ function ReviewedSong({ reviews }) {
             }}
           >
             <div style={{ marginRight: "10px" }}>
-              <h2 style={{ color: white }}>firsttake.mp4</h2>
+              <h2 style={{ color: white }}>{title}</h2>
             </div>
-            <TextButton
+            {/* <TextButton
               text={isPlaying ? "pause" : "play"}
               onClick={isPlaying ? pauseSong : playSong}
               fontWeight="bold"
-            />
+            /> */}
+            <div style={{ marginRight: 10, marginTop: 15 }}>
+              {isPlaying ? (
+                <AiFillPauseCircle
+                  onClick={pauseSong}
+                  color={white}
+                  size={45}
+                />
+              ) : (
+                <AiFillPlayCircle onClick={playSong} color={white} size={45} />
+              )}
+            </div>
           </div>
           <p style={{ color: "white" }}>{convertTime(timeOfSong)}</p>
           <BarUI
@@ -404,6 +425,7 @@ function ReviewedSong({ reviews }) {
                     photo={reviews[ind].reviewerProfile.profile_photo}
                     onChange={() => toggleCommenter(ind)}
                     selected={val.selected}
+                    user_id={reviews[ind].reviewerProfile.id}
                   />
                 </div>
               );
@@ -412,9 +434,13 @@ function ReviewedSong({ reviews }) {
           </div>
         </div>
       </div>
-      <div style={{ border: "0px solid black", maxHeight: "100px" }}>
-        <StaticCommentsList comments={comments} />
-      </div>
+      {checkIsEmptyMap(mapOfComments) ? (
+        <Text text="No comments made yet." color={white} />
+      ) : (
+        <div style={{ border: "0px solid black", maxHeight: "100px" }}>
+          <StaticCommentsList comments={comments} />
+        </div>
+      )}
     </div>
   );
 }

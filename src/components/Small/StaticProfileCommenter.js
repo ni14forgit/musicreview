@@ -1,4 +1,6 @@
-const StaticProfileCommenter = ({ size, photo }) => {
+import { useHistory, Route, Switch } from "react-router-dom";
+const StaticProfileCommenter = ({ size, photo, user_id }) => {
+  const history = useHistory();
   return (
     <div
       style={{
@@ -6,6 +8,7 @@ const StaticProfileCommenter = ({ size, photo }) => {
         justifyContent: "horizontal",
         alignContent: "center",
         alignItems: "center",
+        // border: "2px solid black",
       }}
     >
       <div
@@ -30,6 +33,10 @@ const StaticProfileCommenter = ({ size, photo }) => {
             zIndex: 100,
           }}
           src={photo}
+          // onClick={() => console.log("testagsadgsfg")}
+          onClick={() =>
+            user_id ? history.push("/visitprofile/" + user_id) : null
+          }
         ></img>
       </div>
     </div>

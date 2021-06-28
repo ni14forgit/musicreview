@@ -1,5 +1,5 @@
 import { purple, white } from "../../constants";
-const TextButton = ({ text, onClick, bold, color, fontsize }) => {
+const PlainTextButton = ({ text, onClick, bold, color, fontsize }) => {
   return (
     <button
       style={{
@@ -18,6 +18,7 @@ const TextButton = ({ text, onClick, bold, color, fontsize }) => {
         fontWeight: bold,
         outline: 0,
         fontSize: fontsize,
+        textDecoration: "underline",
       }}
       onClick={onClick}
     >
@@ -26,4 +27,4 @@ const TextButton = ({ text, onClick, bold, color, fontsize }) => {
   );
 };
 
-export default TextButton;
+export default PlainTextButton;

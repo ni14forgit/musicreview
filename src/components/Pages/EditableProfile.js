@@ -47,6 +47,7 @@ import {
   convertGenresDictToList,
   convertProfessionsDictToList,
 } from "../../metafunctions/genProfHelper";
+import { useStore } from "../../store/store";
 
 const Accomplishment = ({
   title,
@@ -223,6 +224,7 @@ const EditableProfile = ({ nish }) => {
   // const [professions, setProfessions] = useState(
   //   starterArrayProfessions.fill(false)
   // );
+  const [state, dispatch] = useStore();
   const [reviewerScore, setReviewerScore] = useState(-1);
   const [pageLoading, setPageLoading] = useState(true);
   const [genres, setGenres] = useState(null);
@@ -250,10 +252,10 @@ const EditableProfile = ({ nish }) => {
   const [accomplishmentIndex, setAccomplishmentIndex] = useState(0);
 
   useEffect(async () => {
-    console.log("useeffect");
+    // console.log("useeffect");
     const result = await retrieve_profile();
     const profile = result.profile;
-    console.log(profile);
+    // console.log(profile);
 
     setName(profile.name);
 
@@ -264,7 +266,7 @@ const EditableProfile = ({ nish }) => {
       spotify: profile.spotify,
     });
     setSongs(profile.songs);
-    console.log(profile.accomplishments);
+    // console.log(profile.accomplishments);
     setAccomplishments(profile.accomplishments);
     setGenres(convertGenresDictToList(profile.genres));
     setProfessions(convertProfessionsDictToList(profile.professions));
@@ -283,14 +285,14 @@ const EditableProfile = ({ nish }) => {
   };
 
   const imageHandleFileInput = (e) => {
-    console.log("trigged image func");
+    // console.log("trigged image func");
     if (e.target.files[0]) {
       if (
         e.target.files[0].type.includes("png") ||
         e.target.files[0].type.includes("jpg") ||
         e.target.files[0].type.includes("jpeg")
       ) {
-        console.log("picture: ", e.target.files);
+        // console.log("picture: ", e.target.files);
 
         edit_profilephoto(e.target.files[0]);
         const reader = new FileReader();
@@ -315,9 +317,10 @@ const EditableProfile = ({ nish }) => {
     <div>PageLoading</div>
   ) : (
     <div>
-      <Header />
-
-      <button onClick={retrieve_profile}>HIHIH</button>
+      <Header
+        numunopenedfeedback={state.numunopenedfeedback}
+        numfeedbacktogive={state.numtodoreview}
+      />
       <div
         style={{
           display: "flex",
@@ -325,7 +328,7 @@ const EditableProfile = ({ nish }) => {
           justifyContent: "space-between",
         }}
       >
-        <div style={{ width: "60%" }}>
+        <div style={{ width: "90%" }}>
           <div
             style={{
               display: "flex",
@@ -347,7 +350,7 @@ const EditableProfile = ({ nish }) => {
                 display: "flex",
                 flexDirection: "horizontal",
                 justifyContent: "flex-start",
-                width: 500,
+                width: 450,
                 // border: "2px solid black",
                 alignItems: "center",
                 marginRight: 30,
@@ -403,15 +406,20 @@ const EditableProfile = ({ nish }) => {
                     marginTop: 5,
                     display: "flex",
                     flexDirection: "horizontal",
+                    // justifyContent: "center",
+                    alignItems: "center",
+                    // border: "2px solid black",
                   }}
                 >
-                  <Text
-                    text={convertProfessionToText(professions)}
-                    fontsize={17}
-                    color={light_purple}
-                    bold={"bold"}
-                  />
-                  <div style={{ marginLeft: 10 }}>
+                  <div>
+                    <Text
+                      text={convertProfessionToText(professions)}
+                      fontsize={17}
+                      color={light_purple}
+                      bold={"bold"}
+                    />
+                  </div>
+                  <div style={{ marginLeft: 5 }}>
                     <FiEdit3
                       color={background_purple}
                       size={20}
@@ -463,7 +471,7 @@ const EditableProfile = ({ nish }) => {
               </div>
             </div>
 
-            <div>
+            <div style={{ marginLeft: 20 }}>
               <div
                 style={{
                   marginTop: 15,
@@ -538,7 +546,7 @@ const EditableProfile = ({ nish }) => {
           </div>
           {/* MILESTONES */}
 
-          <div style={{ marginLeft: 40, marginTop: 40, width: "90%" }}>
+          <div style={{ marginLeft: 40, marginTop: 40, width: "70%" }}>
             <Text
               text={"Milestones"}
               fontsize={20}
@@ -546,30 +554,40 @@ const EditableProfile = ({ nish }) => {
               bold={"bold"}
             />
             {/* Milestones Container */}
+
             <div
               style={{
-                backgroundColor: background_purple,
+                backgroundColor:
+                  accomplishments.length > 0 ? background_purple : null,
                 borderRadius: 5,
                 marginTop: 20,
               }}
             >
-              {accomplishments.map((val, ind) => {
-                return (
-                  <div>
-                    <Accomplishment
-                      title={val.title}
-                      description={val.description}
-                      date={val.date}
-                      bar={ind < accomplishments.length - 1}
-                      openPopUp={() => openSpecificMilestone(ind)}
-                      deleteSelf={() => {
-                        deleteSelf(ind);
-                        edit_deleteaccomplishment(1);
-                      }}
-                    />
-                  </div>
-                );
-              })}
+              {accomplishments && accomplishments.length > 0 ? (
+                <div>
+                  {accomplishments.map((val, ind) => {
+                    return (
+                      <div>
+                        <Accomplishment
+                          title={val.title}
+                          description={val.description}
+                          date={val.date}
+                          bar={ind < accomplishments.length - 1}
+                          openPopUp={() => openSpecificMilestone(ind)}
+                          deleteSelf={() => {
+                            deleteSelf(ind);
+                            edit_deleteaccomplishment(val.id);
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div style={{ marginTop: 20 }}>
+                  <Text text="No milestones posted." color={purple} />
+                </div>
+              )}
               {accomplishments.length > 0 ? (
                 <ProfileEditMilestone
                   open={accomplishmentEditPopUpOpen}
@@ -577,7 +595,6 @@ const EditableProfile = ({ nish }) => {
                   index={accomplishmentIndex}
                   accomplishments={accomplishments}
                   setPopUpOpen={setAccomplishmentEditPopUpOpen}
-                  id={2}
                   editToDatabase={edit_accomplishment}
                 />
               ) : null}
@@ -588,7 +605,7 @@ const EditableProfile = ({ nish }) => {
                 display: "flex",
                 flexDirection: "horizontal",
                 justifyContent: "flex-end",
-                width: "80%",
+                width: "70%",
               }}
             >
               {accomplishments.length < 5 ? (
@@ -623,26 +640,32 @@ const EditableProfile = ({ nish }) => {
                 }}
               >
                 {/* {dbID: int, data: {songname: name, data: songObj} */}
-                {songs.map((val, ind) => {
-                  return (
-                    <div
-                      key={val}
-                      style={{ marginRight: 15, alignItems: "left" }}
-                    >
-                      <MiniPlayer song={val.url} title={val.title} />
-                      <div style={{ marginLeft: 10, marginTop: 10 }}>
-                        <FaMinusCircle
-                          color={light_purple}
-                          size={19}
-                          onClick={() => {
-                            deleteSong(ind);
-                            edit_deletesong(1);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+                {songs && songs.length > 0 ? (
+                  <div>
+                    {songs.map((val, ind) => {
+                      return (
+                        <div
+                          key={val}
+                          style={{ marginRight: 15, alignItems: "left" }}
+                        >
+                          <MiniPlayer song={val.url} title={val.title} />
+                          <div style={{ marginLeft: 10, marginTop: 10 }}>
+                            <FaMinusCircle
+                              color={light_purple}
+                              size={19}
+                              onClick={() => {
+                                deleteSong(ind);
+                                edit_deletesong(val.id);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <Text text="No songs posted." color={purple} />
+                )}
                 {songs.length < 3 ? (
                   <div style={{ marginLeft: 20, marginBottom: 30 }}>
                     <FaPlusCircle
@@ -662,7 +685,7 @@ const EditableProfile = ({ nish }) => {
           </div>
         </div>
         {/* FRIENDS */}
-        <div
+        {/* <div
           style={{
             width: "27%",
             display: "flex",
@@ -704,7 +727,7 @@ const EditableProfile = ({ nish }) => {
           <FacebookFriends
             people={[nish, nish, nish, nish, nish, nish, nish, nish]}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

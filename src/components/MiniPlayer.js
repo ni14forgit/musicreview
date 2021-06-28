@@ -50,7 +50,7 @@ function MiniPlayer({ song, title }) {
       response.data,
       (audioBuffer) => {
         setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
-        console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+        // console.log(Math.floor(audioBuffer.duration) / numberOfBars);
 
         setBufferSource(audioBuffer);
       },
@@ -76,7 +76,7 @@ function MiniPlayer({ song, title }) {
   };
 
   const onEnded = () => {
-    console.log("ended");
+    // console.log("ended");
     // setIsPlaying(false);
   };
 
@@ -122,8 +122,18 @@ function MiniPlayer({ song, title }) {
     await getSong();
     createDesignArray();
     setLoading(false);
+    // return () => {
+    //   if (nonStateBufferSource) {
+    //     console.log("miniplayer stopped");
+    //     nonStateBufferSource.stop();
+    //   }
+    // };
+  }, []);
+
+  useEffect(() => {
     return () => {
       if (nonStateBufferSource) {
+        // console.log("miniplayer stopped");
         nonStateBufferSource.stop();
       }
     };
@@ -154,7 +164,7 @@ function MiniPlayer({ song, title }) {
 
   const setMusicLocationClick = (ind) => {
     // console.log("base");
-    console.log(isPlaying);
+    // console.log(isPlaying);
     ind = ind + 1;
     setTimeOfSong(Math.floor(ind * valOfBar));
     if (isPlaying) {

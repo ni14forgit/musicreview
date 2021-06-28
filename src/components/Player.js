@@ -34,6 +34,7 @@ function Player({
   setDeletedComments,
   song,
   title,
+  photo,
 }) {
   const val = useRef();
   let audioContext;
@@ -50,6 +51,7 @@ function Player({
   // const uncleanComments = [{ timestamp: 40, id: 1, photo: nish }];
 
   async function getSong() {
+    // console.log(song);
     const myurl =
       // "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3";
       song;
@@ -63,13 +65,13 @@ function Player({
     const audioBuffer = await audioContext.decodeAudioData(response.data);
     // setDurationOfSong(Math.floor(audioBuffer.duration));
     setValOfBar(Math.floor(audioBuffer.duration) / numberOfBars);
-    console.log(Math.floor(audioBuffer.duration) / numberOfBars);
+    // console.log(Math.floor(audioBuffer.duration) / numberOfBars);
 
     setBufferSource(audioBuffer);
   }
 
   const onEnded = () => {
-    console.log("ended");
+    // console.log("ended");
     // setIsPlaying(false);
   };
 
@@ -95,7 +97,7 @@ function Player({
     //   return;
     // }
     if (playerSource) {
-      console.log("stopped because not null");
+      // console.log("stopped because not null");
       playerSource.stop();
     }
     // setPausedAt(Date.now() - startedAt);
@@ -114,11 +116,13 @@ function Player({
     await getSong();
     createDesignArray();
     setLoading(false);
-    console.log("MOUNTED!");
-    return () => {
-      // pauseSong();
+    // console.log("MOUNTED!");
+  }, []);
 
+  useEffect(() => {
+    return () => {
       if (nonStateBufferSource) {
+        // console.log("miniplayer stopped");
         nonStateBufferSource.stop();
       }
     };
@@ -141,7 +145,7 @@ function Player({
 
   const setMusicLocationClick = (ind) => {
     // console.log("base");
-    console.log(isPlaying);
+    // console.log(isPlaying);
     ind = ind + 1;
     setTimeOfSong(Math.floor(ind * valOfBar));
     if (isPlaying) {
@@ -177,7 +181,7 @@ function Player({
         currentCommentValue,
         timeOfSong,
         convertTime(timeOfSong),
-        nish,
+        photo,
         false
       ),
     ];
@@ -189,7 +193,7 @@ function Player({
 
   const deleteComment = (ind) => {
     if (comments[ind].saved) {
-      console.log("trigeged");
+      // console.log("trigeged");
       setDeletedComments([...deletedComments, comments[ind].id]);
     }
 
@@ -216,7 +220,7 @@ function Player({
       to: height,
       duration: 1000,
       callback: function () {
-        console.log("va");
+        // console.log("va");
       },
     });
   };
@@ -309,7 +313,9 @@ function Player({
           currentValue={currentCommentValue}
           setCurrentValue={setCurrentCommentValue}
         />
-        <TextButton text="comment" onClick={submitComment} />
+        <div style={{ marginLeft: 10 }}>
+          <TextButton text="comment" onClick={submitComment} />
+        </div>
       </div>
       <div style={{ border: "0px solid black", maxHeight: "100px" }}>
         <CommentsList comments={comments} deleteComment={deleteComment} />

@@ -6,7 +6,7 @@ const submit_review = async (
   overview,
   comments
 ) => {
-  console.log("submit review called");
+  // console.log("submit review called");
   const result = await fetch(users_review_submit, {
     method: "POST",
     mode: "cors",

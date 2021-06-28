@@ -23,7 +23,7 @@ const IndividualComment = ({ text, timestamp, photo, ind, deleteComment }) => {
             //   border: "2px solid black",
           }}
         >
-          <ProfileCommenter profile_source={nish} size={15} />
+          <ProfileCommenter profile_source={photo} size={15} />
           <p
             style={{
               marginLeft: "10px",
@@ -98,6 +98,7 @@ const CommentsList = ({ comments, deleteComment }) => {
                 deleteComment={deleteComment}
                 text={val.comment}
                 timestamp={val.uitimestamp}
+                photo={val.photo}
               />
             </li>
           );

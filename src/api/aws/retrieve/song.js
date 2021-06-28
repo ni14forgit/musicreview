@@ -1,6 +1,6 @@
 const retrieve_song = async () => {
   //   console.log(song);
-  console.log("Retrieve SONG called");
+  // console.log("Retrieve SONG called");
   const data = await fetch("http://localhost:4000/users/retrievesong", {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin
@@ -16,7 +16,7 @@ const retrieve_song = async () => {
   })
     .then((data) => data.json())
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       return response;
     });
   //   console.log(data.photo.Body);

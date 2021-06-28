@@ -1,10 +1,10 @@
 import Switch from "react-switch";
 import StaticProfileCommenter from "./StaticProfileCommenter";
-const ToggleCommenter = ({ onChange, selected, photo }) => {
+const ToggleCommenter = ({ onChange, selected, photo, user_id }) => {
   const size = 25;
   return (
     <div style={{ display: "flex", flexDirection: "horizontal" }}>
-      <StaticProfileCommenter photo={photo} size={size} />
+      <StaticProfileCommenter photo={photo} size={size} user_id={user_id} />
       <Switch
         onChange={onChange}
         checked={selected}

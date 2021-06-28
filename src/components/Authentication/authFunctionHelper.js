@@ -11,7 +11,7 @@ const checkPasswordsMatch = (passwordOne, passwordTwo) => {
 const checkValidPassword = (password) => {
   // need to improve
 
-  if (password.length >= 1) {
+  if (password.length >= 8) {
     return true;
   }
   return false;

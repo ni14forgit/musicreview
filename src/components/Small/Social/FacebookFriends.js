@@ -28,7 +28,7 @@ const FacebookFriends = ({ people }) => {
               photo={val}
               name={"artist #1 dfdfhd "}
               borderRadius={10}
-              onClick={() => console.log("hi")}
+              // onClick={() => console.log("hi")}
             />
           </div>
         );

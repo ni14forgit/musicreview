@@ -48,10 +48,6 @@ const AddQuestions = ({
     setSelectedOptions(copyOfOptions);
   };
 
-  useEffect(() => {
-    console.log(selectedOptions);
-  }, []);
-
   const deleteComment = (ind) => {
     setListOfComments(listOfComments.filter((comment, index) => index !== ind));
   };

@@ -19,6 +19,7 @@ const profiles_edits_accomplishment = PROFILES_EDITS + "/accomplishment";
 // RETRIEVE
 
 const profiles_retrieve = PROFILES_URL + "/retrieve";
+const profiles_retrieve_other = PROFILES_URL + "/retrieve/other";
 
 export {
   profiles_register,
@@ -33,4 +34,5 @@ export {
   profiles_edits_deleteaccomplishment,
   profiles_edits_accomplishment,
   profiles_retrieve,
+  profiles_retrieve_other,
 };

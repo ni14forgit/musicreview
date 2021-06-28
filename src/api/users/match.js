@@ -4,7 +4,7 @@ const match = async (
   submitted_genres,
   submitted_professions
 ) => {
-  console.log("match users");
+  // console.log("match users");
   const result = await fetch(users_match, {
     method: "POST",
     mode: "cors",

@@ -15,8 +15,11 @@ import {
 import { submit_music } from "../../api/users/submissions/submit";
 import LoadingSpinner from "../Small/LoadingSpinner";
 import { match } from "../../api/users/match";
+import { useStore } from "../../store/store";
+import { send_email_onsubmission } from "../../api/users/email";
 
 const Submit = () => {
+  const [state, dispatch] = useStore();
   const [step, setStep] = useState(0);
   const [song, setSong] = useState(null);
   const [nextButtonEnable, setNextButtonEnable] = useState(false);
@@ -41,24 +44,51 @@ const Submit = () => {
 
     const convertedGenresDict = convertGenresListToDict(genres);
     const convertedProfessionsDict = convertProfessionsListToDict(professions);
-    console.log("submission called");
-    // submit_music(
-    //   song,
-    //   listOfComments,
-    //   convertedGenresDict,
-    //   convertedProfessionsDict,
-    //   today
-    // ).then((res) => {
-    //   if (res.success) {
-    //     console.log("upload successful!");
-    //     setIsSubmitLoading(false);
-    //     setIsCompleted(true);
-    //     console.log(res.submissionId);
-    //     match(res.submissionId, convertedGenresDict, convertedProfessionsDict);
-    //   } else {
-    //     console.log("something wronog happened");
-    //   }
-    // });
+    // console.log("submission called");
+    submit_music(
+      song,
+      listOfComments,
+      convertedGenresDict,
+      convertedProfessionsDict,
+      today
+    ).then((res) => {
+      if (res.success) {
+        match(
+          res.submissionId,
+          convertedGenresDict,
+          convertedProfessionsDict
+        ).then((matchRes) => {
+          if (matchRes.success) {
+            // console.log("upload successful!");
+            setIsSubmitLoading(false);
+            setIsCompleted(true);
+            // console.log(matchRes);
+
+            send_email_onsubmission(
+              matchRes.reviews,
+              matchRes.submissionId,
+              matchRes.submitterName,
+              matchRes.submitterEmail
+            );
+
+            // send email
+          } else {
+            // console.log("something wrong happened");
+          }
+        });
+      } else {
+        // console.log("something wronog happened");
+      }
+    });
+  };
+
+  const fakeSubmit = () => {
+    setIsSubmitLoading(true);
+    const afterTimer = () => {
+      setIsSubmitLoading(false);
+      setIsCompleted(true);
+    };
+    setTimeout(afterTimer, 2000);
   };
 
   const renderStep = (stepAlongPath) => {
@@ -90,7 +120,10 @@ const Submit = () => {
 
   return (
     <div>
-      <Header />
+      <Header
+        numunopenedfeedback={state.numunopenedfeedback}
+        numfeedbacktogive={state.numtodoreview}
+      />
       {!(isCompleted || isSubmitLoading) ? (
         <div
           style={{
@@ -131,7 +164,8 @@ const Submit = () => {
                 <TextButton
                   text="Complete Submission"
                   disabled={!nextButtonEnable}
-                  // onClick={submitSongFunc}
+                  onClick={submitSongFunc}
+                  // onClick={fakeSubmit}
                 />
               )}
             </div>
@@ -140,7 +174,16 @@ const Submit = () => {
       ) : isCompleted ? (
         <ThankYou />
       ) : (
-        <LoadingSpinner />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "horizontal",
+          }}
+        >
+          <LoadingSpinner />
+        </div>
       )}
     </div>
   );

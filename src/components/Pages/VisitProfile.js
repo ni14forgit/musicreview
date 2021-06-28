@@ -1,15 +1,31 @@
 import StaticProfileCommenter from "../Small/StaticProfileCommenter";
-import musicianpic from "../../musicianpic.jpeg";
+// import musicianpic from "../../musicianpic.jpeg";
 import Text from "../Useful/Text";
-import { background_purple, light_purple, white } from "../../constants";
+import {
+  background_purple,
+  light_purple,
+  purple,
+  white,
+} from "../../constants";
 import { GrSoundcloud, GrSpotify, GrInstagram } from "react-icons/gr";
 
 import Header from "../Navigation/Header";
 import Stars from "../Small/Feedback/Stars";
 import MiniPlayer from "../MiniPlayer";
 import Eric from "../../Eric.wav";
-import FacebookFriends from "../Small/Social/FacebookFriends";
+// import FacebookFriends from "../Small/Social/FacebookFriends";
 import nish from "../../nish.jpg";
+import { useEffect, useState } from "react";
+import { retrieve_other_profile } from "../../api/profiles/retrieve";
+import {
+  GENRES,
+  PROFESSIONS,
+  convertGenresDictToList,
+  convertProfessionsDictToList,
+  convertProfessionToText,
+  convertGenreToText,
+} from "../../metafunctions/genProfHelper";
+import { useStore } from "../../store/store";
 
 const Accomplishment = ({ title, description, date, bar }) => {
   return (
@@ -51,65 +67,49 @@ const Accomplishment = ({ title, description, date, bar }) => {
   );
 };
 
-const convertProfessionToText = (options) => {
-  var professionstring = "";
-
-  for (var i = 0; i < PROFESSIONS.length; i++) {
-    if (options[i]) {
-      professionstring += PROFESSIONS[i] + ", ";
-    }
-  }
-  professionstring = professionstring.slice(0, -2);
-
-  return professionstring;
-};
-
-const convertGenreToText = (options) => {
-  var genrestring = "";
-
-  for (var i = 0; i < GENRES.length; i++) {
-    if (options[i]) {
-      genrestring += GENRES[i] + ", ";
-    }
-  }
-  genrestring = genrestring.slice(0, -2);
-
-  return genrestring;
-};
-
-const GENRES = ["R&B", "R&B", "R&B", "R&B", "R&B"];
-const PROFESSIONS = ["Singer", "Songwriter", "Audio Engineer", "Producer"];
-
 const VisitProfile = ({ match }) => {
-  // var id = match.params.id;
-
-  //   if (id) {
-  //     localStorage.setItem("id", id);
-  //   } else {
-  //     id = localStorage.getItem("id");
-  //   }
-
-  const name = "Nishant Iyengar";
-  const professions = [false, false, true, true];
-  const genres = [false, false, true, true];
-  const accomplishments = [
-    {
-      date: "02-04-2021",
-      title: "Accomplishment Title",
-      description: "description",
-    },
-  ];
-  const songs = [Eric];
-  const photo = nish;
-  const socialLinks = {
-    spotify:
-      "https://open.spotify.com/artist/0jNDKefhfSbLR9sFvcPLHo?si=QbDGF97jRB-J9O7f7qIoNQ",
-    soundcloud: "https://soundcloud.com/james-music-24",
-    instagram: "https://www.instagram.com/james__music/",
-  };
+  const [state, dispatch] = useStore();
+  const [name, setName] = useState("");
+  const [professions, setProfessions] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [accomplishments, setAccomplishments] = useState([]);
+  const [songs, setSongs] = useState([]);
+  const [photo, setPhoto] = useState("");
+  const [socialLinks, setSocialLinks] = useState({
+    spotify: "",
+    soundcloud: "",
+    instagram: "",
+  });
+  const [reviewerScore, setReviewerScore] = useState(0);
+  const [pageLoading, setPageLoading] = useState(false);
+  useEffect(async () => {
+    // console.log("useeffect");
+    // console.log(match.params.user_id);
+    const result = await retrieve_other_profile(match.params.user_id);
+    const profile = result.profile;
+    // console.log(profile);
+    setName(profile.name);
+    setPhoto(profile.profile_photo);
+    setSocialLinks({
+      instagram: profile.instagram,
+      soundcloud: profile.soundcloud,
+      spotify: profile.spotify,
+    });
+    setSongs(profile.songs);
+    // console.log(profile.accomplishments);
+    setAccomplishments(profile.accomplishments);
+    setGenres(convertGenresDictToList(profile.genres));
+    setProfessions(convertProfessionsDictToList(profile.professions));
+    setReviewerScore(profile.reviewer_score);
+    setPageLoading(false);
+  }, []);
   return (
     <div>
-      <Header />
+      <Header
+        numunopenedfeedback={state.numunopenedfeedback}
+        numfeedbacktogive={state.numtodoreview}
+      />
+
       <div
         style={{
           display: "flex",
@@ -117,7 +117,7 @@ const VisitProfile = ({ match }) => {
           justifyContent: "space-between",
         }}
       >
-        <div style={{ width: "60%" }}>
+        <div style={{ width: "80%" }}>
           <div
             style={{
               display: "flex",
@@ -191,7 +191,6 @@ const VisitProfile = ({ match }) => {
                 </div>
               </div>
             </div>
-
             <div>
               <div
                 style={{
@@ -199,7 +198,7 @@ const VisitProfile = ({ match }) => {
                   display: "flex",
                   flexDirection: "horizontal",
                   marginBottom: 10,
-                  // border: "2px solid green",
+                  // border: "2px solid black",
                 }}
               >
                 <Text
@@ -209,50 +208,69 @@ const VisitProfile = ({ match }) => {
                   bold={"bold"}
                 />
                 <div style={{ marginLeft: 5 }}>
-                  <Stars feedback_quality={3} color={background_purple} />
+                  {reviewerScore > 0 ? (
+                    <Stars
+                      feedback_quality={reviewerScore}
+                      color={background_purple}
+                    />
+                  ) : (
+                    <Text
+                      text="No Feedback Given Yet"
+                      fontsize={17}
+                      color={light_purple}
+                      // bold={"bold"}
+                    />
+                  )}
                 </div>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "horizontal",
-                  alignItems: "center",
-                  // border: "2px solid black",
-                }}
-              >
-                {socialLinks.soundcloud ? (
-                  <div style={{ marginRight: 7 }}>
-                    <GrSoundcloud
-                      onClick={() => window.open(socialLinks.soundcloud)}
-                      size={48}
-                      color={"#ff7700"}
-                    />
-                  </div>
-                ) : null}
-                {socialLinks.spotify ? (
-                  <div style={{ marginRight: 7 }}>
-                    <GrSpotify
-                      size={35}
-                      color={"#1DB954"}
-                      onClick={() => window.open(socialLinks.spotify)}
-                    />
-                  </div>
-                ) : null}
-                {socialLinks.instagram ? (
-                  <div style={{ marginRight: 7 }}>
-                    <GrInstagram
-                      size={34}
-                      color={"#E1306C"}
-                      onClick={() => window.open(socialLinks.instagram)}
-                    />
-                  </div>
-                ) : null}
-              </div>
+              {!(
+                socialLinks.instagram ||
+                socialLinks.soundcloud ||
+                socialLinks.spotify
+              ) ? (
+                <Text text="No social media available." color={purple} />
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "horizontal",
+                    alignItems: "center",
+                    // border: "2px solid black",
+                  }}
+                >
+                  {socialLinks.soundcloud ? (
+                    <div style={{ marginRight: 7 }}>
+                      <GrSoundcloud
+                        onClick={() => window.open(socialLinks.soundcloud)}
+                        size={48}
+                        color={"#ff7700"}
+                      />
+                    </div>
+                  ) : null}
+                  {socialLinks.spotify ? (
+                    <div style={{ marginRight: 7 }}>
+                      <GrSpotify
+                        size={35}
+                        color={"#1DB954"}
+                        onClick={() => window.open(socialLinks.spotify)}
+                      />
+                    </div>
+                  ) : null}
+                  {socialLinks.instagram ? (
+                    <div style={{ marginRight: 7 }}>
+                      <GrInstagram
+                        size={34}
+                        color={"#E1306C"}
+                        onClick={() => window.open(socialLinks.instagram)}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              )}
             </div>
           </div>
           {/* MILESTONES */}
-
           <div style={{ marginLeft: 40, marginTop: 40, width: "90%" }}>
             <Text
               text={"Milestones"}
@@ -261,26 +279,32 @@ const VisitProfile = ({ match }) => {
               bold={"bold"}
             />
             {/* Milestones Container */}
-            <div
-              style={{
-                backgroundColor: background_purple,
-                borderRadius: 5,
-                marginTop: 20,
-              }}
-            >
-              {accomplishments.map((val, ind) => {
-                return (
-                  <div>
-                    <Accomplishment
-                      title={val.title}
-                      description={val.description}
-                      date={val.date}
-                      bar={ind < accomplishments.length - 1}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+            {accomplishments && accomplishments.length > 0 ? (
+              <div
+                style={{
+                  backgroundColor: background_purple,
+                  borderRadius: 5,
+                  marginTop: 20,
+                }}
+              >
+                {accomplishments.map((val, ind) => {
+                  return (
+                    <div>
+                      <Accomplishment
+                        title={val.title}
+                        description={val.description}
+                        date={val.date}
+                        bar={ind < accomplishments.length - 1}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ marginTop: 20 }}>
+                <Text text="No milestones posted." color={purple} />
+              </div>
+            )}
             <div
               style={{
                 marginTop: 15,
@@ -314,7 +338,7 @@ const VisitProfile = ({ match }) => {
                       key={val}
                       style={{ marginRight: 15, alignItems: "left" }}
                     >
-                      <MiniPlayer song={val} />
+                      <MiniPlayer song={val.url} title={val.title} />
                     </div>
                   );
                 })}
@@ -323,7 +347,7 @@ const VisitProfile = ({ match }) => {
           </div>
         </div>
         {/* FRIENDS */}
-        <div
+        {/* <div
           style={{
             width: "27%",
             display: "flex",
@@ -375,7 +399,7 @@ const VisitProfile = ({ match }) => {
               photo,
             ]}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

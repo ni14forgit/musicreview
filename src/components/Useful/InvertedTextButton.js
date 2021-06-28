@@ -1,5 +1,5 @@
 import { purple, white } from "../../constants";
-const TextButton = ({ text, onClick, fontWeight }) => {
+const InvertedTextButton = ({ text, onClick, fontWeight }) => {
   return (
     <button
       style={{
@@ -24,4 +24,4 @@ const TextButton = ({ text, onClick, fontWeight }) => {
   );
 };
 
-export default TextButton;
+export default InvertedTextButton;

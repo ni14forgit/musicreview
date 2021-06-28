@@ -10,7 +10,7 @@ const ReviewHeader = () => {
   return (
     <div
       style={{
-        width: "90%",
+        minWidth: "90%",
         height: 30,
         display: "flex",
         alignItems: "center",
@@ -19,15 +19,7 @@ const ReviewHeader = () => {
         // justifyContent: "space-around",
       }}
     >
-      <div style={{ position: "absolute", left: first }}>
-        <Text
-          color={background_purple}
-          text={"Submission"}
-          fontsize={15}
-          bold="bold"
-        />
-      </div>
-      <div style={{ position: "absolute", left: second }}>
+      <div style={{ minWidth: 50 }}>
         <Text
           color={background_purple}
           text={"Artist"}
@@ -35,7 +27,15 @@ const ReviewHeader = () => {
           bold="bold"
         />
       </div>
-      <div style={{ position: "absolute", left: third }}>
+      <div style={{ marginLeft: 20, minWidth: 160 }}>
+        <Text
+          color={background_purple}
+          text={"Submission"}
+          fontsize={15}
+          bold="bold"
+        />
+      </div>
+      <div style={{ minWidth: 200 }}>
         <Text
           color={background_purple}
           text={"Status"}
@@ -51,16 +51,16 @@ const ReviewHeader = () => {
             bold="bold"
           />
         </div> */}
-      <div style={{ position: "absolute", left: fifth }}>
+      <div style={{ minWidth: 200 }}>
         <Text
           color={background_purple}
-          text={"Do By"}
+          text={"Submitted On"}
           fontsize={15}
           bold="bold"
         />
       </div>
 
-      <div style={{ position: "absolute", left: sixth }}>
+      <div style={{ minWidth: 200 }}>
         <Text
           color={background_purple}
           text={"Your Feedback Quality"}

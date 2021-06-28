@@ -15,22 +15,21 @@ const ProfileEditMilestone = ({
   accomplishments,
   index,
   editToDatabase,
-  id,
 }) => {
   //   const [startDate, setStartDate] = useState(new Date());
 
   const [staleAccomplishment, setStaleAccomplishment] = useState(null);
 
   const saveFunc = () => {
-    editToDatabase(id, accomplishments[index]);
+    editToDatabase(accomplishments[index].id, accomplishments[index]);
     setPopUpOpen(false);
   };
 
   useEffect(() => {
     const myCopy = [...accomplishments];
-    console.log(myCopy[index]);
+    // console.log(myCopy[index]);
     setStaleAccomplishment(JSON.parse(JSON.stringify(myCopy[index])));
-    console.log("ran");
+    // console.log("ran");
     return () => {
       setStaleAccomplishment(JSON.parse(JSON.stringify(myCopy[index])));
     };

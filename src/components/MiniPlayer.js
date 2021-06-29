@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import MiniBarUI from "./Small/MiniBarUI";
 import { background_purple, white } from "../constants";
-import Eric from "../Eric.wav";
 import useInterval from "../metafunctions/useInterval";
 import TextButton from "./Useful/TextButton";
 import Text from "./Useful/Text";

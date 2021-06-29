@@ -4,7 +4,6 @@ import Text from "./Useful/Text";
 import RateFeedback from "./Small/RateFeedback";
 import { GrSoundcloud, GrSpotify, GrInstagram } from "react-icons/gr";
 import MiniPlayer from "./MiniPlayer";
-// import Eric from "../Eric.wav";
 import {
   convertProfessionsDictToList,
   convertProfessionToText,

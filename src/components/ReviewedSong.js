@@ -2,8 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import BarUI from "./Small/BarUI";
 import { numberOfBars, background_purple, white } from "../constants";
-import James from "../James.wav";
-import Eric from "../Eric.wav";
 import useInterval from "../metafunctions/useInterval";
 import nish from "../nish.jpg";
 import ProfileCommenter from "./Small/ProfileCommenter";

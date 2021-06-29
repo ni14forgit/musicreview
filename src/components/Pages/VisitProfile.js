@@ -12,7 +12,6 @@ import { GrSoundcloud, GrSpotify, GrInstagram } from "react-icons/gr";
 import Header from "../Navigation/Header";
 import Stars from "../Small/Feedback/Stars";
 import MiniPlayer from "../MiniPlayer";
-import Eric from "../../Eric.wav";
 // import FacebookFriends from "../Small/Social/FacebookFriends";
 import nish from "../../nish.jpg";
 import { useEffect, useState } from "react";

@@ -48,26 +48,37 @@ const Feedback = () => {
         </div> */}
         <FeedbackHeader />
 
-        {feedbacks.map((val, ind) => {
-          var isDoneStatus = true;
-          for (var i = 0; i < val.reviewers.length; i++) {
-            if (!val.reviewers[i].touched) {
-              isDoneStatus = false;
+        {feedbacks.length > 0 ? (
+          feedbacks.map((val, ind) => {
+            var isDoneStatus = true;
+            for (var i = 0; i < val.reviewers.length; i++) {
+              if (!val.reviewers[i].touched) {
+                isDoneStatus = false;
+              }
             }
-          }
 
-          return (
-            <div style={{ marginBottom: 4 }}>
-              <FeedbackBar
-                reviewers={val.reviewers}
-                date={val.date}
-                submissionId={val.submission_id}
-                song_title={val.title}
-                isDoneStatus={isDoneStatus}
-              />
-            </div>
-          );
-        })}
+            return (
+              <div style={{ marginBottom: 4 }}>
+                <FeedbackBar
+                  reviewers={val.reviewers}
+                  date={val.date}
+                  submissionId={val.submission_id}
+                  song_title={val.title}
+                  isDoneStatus={isDoneStatus}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <div style={{ marginTop: 20 }}>
+            <Text
+              text={"Go ahead and submit some music!"}
+              color={background_purple}
+              bold={"bold"}
+              fontsize={20}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

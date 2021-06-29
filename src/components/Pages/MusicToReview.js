@@ -33,20 +33,31 @@ const MusicToReview = () => {
           bold={"bold"}
         />
         <ReviewHeader />
-        {musicsToReview.map((val, ind) => {
-          return (
-            <div style={{ marginBottom: 4 }}>
-              <ToReviewBar
-                date={val.date}
-                song_title={val.title}
-                submitter={val.submitter}
-                review_id={val.review_id}
-                isDoneStatus={val.touched}
-                feedback_quality={val.feedback_quality}
-              />
-            </div>
-          );
-        })}
+        {musicsToReview.length > 0 ? (
+          musicsToReview.map((val, ind) => {
+            return (
+              <div style={{ marginBottom: 4 }}>
+                <ToReviewBar
+                  date={val.date}
+                  song_title={val.title}
+                  submitter={val.submitter}
+                  review_id={val.review_id}
+                  isDoneStatus={val.touched}
+                  feedback_quality={val.feedback_quality}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <div style={{ marginTop: 20 }}>
+            <Text
+              text={"You haven't been selected to review music yet"}
+              color={background_purple}
+              bold={"bold"}
+              fontsize={20}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

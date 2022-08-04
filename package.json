@@ -38,8 +38,7 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start-server": "node server.js & npm start",
+    "start": "node server.js & react-scripts start",
     "api": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
